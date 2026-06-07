@@ -2,6 +2,7 @@
 
 namespace App\Concerns;
 
+use App\Enums\RoleEnum;
 use App\Models\User;
 use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Validation\Rule;
@@ -47,5 +48,13 @@ trait ProfileValidationRules
                 ? Rule::unique(User::class)
                 : Rule::unique(User::class)->ignore($userId),
         ];
+    }
+
+    /**
+     * Get the validation rules used to validate user roles.
+     */
+    protected function roleRules(): array
+    {
+        return ['required', Rule::in(array_column(RoleEnum::cases(), 'value'))];
     }
 }

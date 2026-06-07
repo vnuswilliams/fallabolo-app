@@ -1,12 +1,19 @@
 <x-layouts::auth :title="__('Register')">
     <div class="flex flex-col gap-6">
-        <x-auth-header :title="__('Create an account')" :description="__('Enter your details below to create your account')" />
+        <x-auth-header :title="__('Créer un compte MatchRH')" :description="__('Rejoignez la plateforme de recrutement au mérite du Cameroun')" />
 
         <!-- Session Status -->
         <x-auth-session-status class="text-center" :status="session('status')" />
 
         <form method="POST" action="{{ route('register.store') }}" class="flex flex-col gap-6">
             @csrf
+
+            <flux:radio.group variant="segmented" name="role" required>
+                <flux:radio value="{{ App\Enums\RoleEnum::RECRUITER->value }}" icon="building-office" checked>{{ App\Enums\RoleEnum::RECRUITER->label() }}</flux:radio>
+                <flux:radio value="{{ App\Enums\RoleEnum::CANDIDATE->value }}" icon="user">{{ App\Enums\RoleEnum::CANDIDATE->label() }}</flux:radio>
+            </flux:radio.group>
+
+
             <!-- Name -->
             <flux:input
                 name="name"
@@ -55,7 +62,7 @@
             />
 
             <div class="flex items-center justify-end">
-                <flux:button type="submit" variant="primary" class="w-full" data-test="register-user-button">
+                <flux:button type="submit" class="w-full" data-test="register-user-button">
                     {{ __('Create account') }}
                 </flux:button>
             </div>
