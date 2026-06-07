@@ -15,19 +15,46 @@
                     <flux:sidebar.item icon="home" :href="route('dashboard')" :current="request()->routeIs('dashboard')" wire:navigate>
                         {{ __('Dashboard') }}
                     </flux:sidebar.item>
+
+                    @hasrole(\App\Enums\RoleEnum::CANDIDATE)
+                    <flux:sidebar.item :href="route('candidate.offers.index')" icon="magnifying-glass" wire:navigate>
+                        Parcourir les offres
+                    </flux:sidebar.item>
+                    <flux:sidebar.item :href="route('candidate.applications.index')" icon="document-text" wire:navigate>
+                        Mes candidatures
+                    </flux:sidebar.item>
+                    <flux:sidebar.item :href="route('candidate.profile.index')" icon="user" wire:navigate>
+                        Voir mon profil
+                    </flux:sidebar.item>
+
+                    @endhasrole
+
+                    @hasrole(\App\Enums\RoleEnum::RECRUITER)
+                   <flux:sidebar.item :href="route('recruiter.offers.create')" icon="plus" wire:navigate>
+                        {{ __('Créer une offre') }}
+                    </flux:sidebar.item>
+                    <flux:sidebar.item :href="route('recruiter.offers.index')" icon="briefcase" wire:navigate>
+                        {{ __('Mes offres') }}
+                    </flux:sidebar.item>
+                    <flux:sidebar.item :href="route('recruiter.profile.index')" icon="user" wire:navigate>
+                        {{ __('Profil Entreprise') }}
+                    </flux:sidebar.item>
+
+                    @endhasrole
                 </flux:sidebar.group>
             </flux:sidebar.nav>
 
             <flux:spacer />
 
             <flux:sidebar.nav>
+                {{--
                 <flux:sidebar.item icon="folder-git-2" href="https://github.com/laravel/livewire-starter-kit" target="_blank">
                     {{ __('Repository') }}
                 </flux:sidebar.item>
 
                 <flux:sidebar.item icon="book-open-text" href="https://laravel.com/docs/starter-kits#livewire" target="_blank">
                     {{ __('Documentation') }}
-                </flux:sidebar.item>
+                </flux:sidebar.item> --}}
             </flux:sidebar.nav>
 
             <x-desktop-user-menu class="hidden lg:block" :name="auth()->user()->name" />

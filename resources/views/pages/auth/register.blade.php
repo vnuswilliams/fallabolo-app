@@ -9,8 +9,8 @@
             @csrf
 
             <flux:radio.group variant="segmented" name="role" required>
-                <flux:radio value="{{ App\Enums\RoleEnum::RECRUITER->value }}" icon="building-office" checked>{{ App\Enums\RoleEnum::RECRUITER->label() }}</flux:radio>
-                <flux:radio value="{{ App\Enums\RoleEnum::CANDIDATE->value }}" icon="user">{{ App\Enums\RoleEnum::CANDIDATE->label() }}</flux:radio>
+                <flux:radio value="{{ \App\Enums\RoleEnum::RECRUITER->value }}" icon="building-office" checked>{{ __('I am a recruiter') }}</flux:radio>
+                <flux:radio value="{{ \App\Enums\RoleEnum::CANDIDATE->value }}" icon="user">{{ __('I am a candidate') }}</flux:radio>
             </flux:radio.group>
 
 
@@ -62,7 +62,7 @@
             />
 
             <div class="flex items-center justify-end">
-                <flux:button type="submit" class="w-full" data-test="register-user-button">
+                <flux:button type="submit" variant="primary" class="w-full" data-test="register-user-button">
                     {{ __('Create account') }}
                 </flux:button>
             </div>

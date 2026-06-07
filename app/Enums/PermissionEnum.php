@@ -11,10 +11,7 @@ enum PermissionEnum: string
     // Recruiter Permissions
     case POST_JOB = 'post_job';
     case VIEW_CANDIDATES = 'view_candidates';
-    case CREATE_OFFERS = 'create_offers';
-    case DELETE_OFFERS = 'delete_offers';
-    case UPDATE_OFFERS = 'update_offers';
-
+    case MANAGE_OFFERS = 'manage_offers';
 
     // Candidate Permissions
     case APPLY_JOB = 'apply_job';
@@ -26,13 +23,10 @@ enum PermissionEnum: string
         return match($this) {
             self::POST_JOB => 'Publier une offre',
             self::VIEW_CANDIDATES => 'Voir les candidats',
-            self::CREATE_OFFERS => 'Créer des offres',
-            self::DELETE_OFFERS => 'Supprimer les offres',
-            self::UPDATE_OFFERS => 'Mettre à jour les offres',
+            self::MANAGE_OFFERS => 'Gérer les offres',
             self::APPLY_JOB => 'Postuler à une offre',
             self::UPDATE_PROFILE => 'Mettre à jour le profil',
             self::VIEW_MATCHES => 'Voir les scores de matching',
-
         };
     }
 }

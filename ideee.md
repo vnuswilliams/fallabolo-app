@@ -27,93 +27,8 @@ Tu développes **fallabolo**, une plateforme SaaS de recrutement intelligent qui
 - **Cache & Queues :** database
 - **Jobs asynchrones :** Laravel Queue (driver Redis)
 - **Auth :** Laravel fortify
-- **Email :** Laravel Mail + MailChimp
-- **Paiement :** optionnel MVP
-
------
-
-## 2. ARCHITECTURE LARAVEL — STRUCTURE DES DOSSIERS
-
-Respecte strictement la structure Laravel standard avec les ajouts suivants, (a noter que cette structure n'est qu'un exemple et n'est pas source de verite absolue) :
-
-```
-app/
-├── Http/
-│   │   ├── Middleware/
-│   │   ├── EnsureProfileComplete.php   # Redirige si profil incomplet
-│   │   ├── EnsureRecruiter.php
-│   │   ├── EnsureCandidate.php
-│   │   └── CheckSubscriptionLimit.php  # Freemium : limites d'usage
-│   ├── Models/
-│   ├── User.php
-│   ├── RecruiterProfile.php
-│   ├── CandidateProfile.php
-│   ├── JobOffer.php
-│   ├── BlockingCriterion.php
-│   ├── BonusCriterion.php
-│   ├── CandidateSkill.php
-│   ├── Application.php
-│   └── Subscription.php
-├── Services/
-│   ├── Matching/
-│   │   ├── MatchingEngine.php          # Orchestrateur principal — NE PAS exposer la logique
-│   │   ├── BlockingCriteriaChecker.php # Couche 1
-│   │   ├── ScoreCalculator.php         # Couche 2 — Score principal pondéré
-│   │   └── BonusDetector.php           # Couche 3 — Atouts informatifs
-│   ├── NotificationService.php
-│   └── SubscriptionService.php
-├── Jobs/
-│   └── CalculateMatchScoreJob.php      # Job asynchrone — dispatché en queue
-├── Policies/
-│   ├── JobOfferPolicy.php
-│   └── ApplicationPolicy.php
-└── Enums/
-    ├── JobTemplate.php                 # Les 5 templates de poste
-    ├── ExperiencePalier.php
-    ├── FormationLevel.php
-    ├── DisponibilitePalier.php
-    └── SubscriptionPlan.php
-
-database/
-├── migrations/
-│   ├── create_recruiter_profiles_table.php
-│   ├── create_candidate_profiles_table.php
-│   ├── create_job_offers_table.php
-│   ├── create_blocking_criteria_table.php
-│   ├── create_bonus_criteria_table.php
-│   ├── create_candidate_skills_table.php
-│   ├── create_applications_table.php
-│   └── create_subscriptions_table.php
-└── seeders/
-    ├── SkillLibrarySeeder.php          # Bibliothèque de compétences fixe
-    ├── CriteriaLibrarySeeder.php       # Bibliothèque de critères bloquants
-    └── BonusLibrarySeeder.php          # Bibliothèque d'atouts
-
-resources/
-├── views/
-│   ├── layouts/
-│   │   ├── app.blade.php               # Layout principal connecté
-│   │   └── guest.blade.php             # Layout public/auth
-│   ├── recruiter/
-│   │   ├── dashboard.blade.php
-│   │   ├── job-offers/
-│   │   │   ├── index.blade.php
-│   │   │   ├── create.blade.php
-│   │   │   └── show.blade.php
-│   │   └── applications/
-│   │       └── index.blade.php         # Liste candidats classés par score
-│   └── candidate/
-│       ├── dashboard.blade.php
-│       ├── profile/
-│       │   └── edit.blade.php
-│       └── offers/
-│           ├── index.blade.php         # Offres compatibles avec score affiché
-│           └── show.blade.php          # Détail offre + score détaillé avant candidature
-└── livewire/                           # Composants Livewire si utilisés
-    ├── skill-picker.blade.php
-    ├── blocking-criteria-builder.blade.php
-    └── match-score-display.blade.php
-```
+- **Email :** Laravel Mail + MailChimp (a voir avec l'evolution du projet)
+- **Paiement :** optionnel MVP pas encore de methode de paiement gratuit pour le moment que ce soit pour le recruteur ou le candidat
 
 -----
 
@@ -125,6 +40,8 @@ resources/
 // Champs additionnels à ajouter via migration
 $table->string('role')->after('email'); //sera un enum 
 ```
+
+pour ce qui est des autrres tables nous evoluerons au fur et a mesure et creer les migrations necessaires enfonction des besoin et de l'evolution
 
 
 ## 4. L’ALGORITHME DE MATCHING — RÈGLES ABSOLUES
@@ -191,22 +108,6 @@ Si chevauchement < 0 → écart_normalisé = |chevauchement| / budget_max
 
 ## 5. FONCTIONNALITÉS DÉTAILLÉES ET RÈGLES MÉTIER
 
-### Module 5.1 — Authentification & Rôles
-
-**Implémentation Laravel :**
-
-- Utiliser Laravel Breeze (simple) ou Jetstream (si 2FA requis)
-- Middleware custom `EnsureRecruiter` et `EnsureCandidate` — utiliser `$request->user()->role`
-- Après inscription, rediriger vers la completion de profil obligatoire
-
-**Règles métier :**
-
-- Email unique, vérifié avant accès complet
-- Mot de passe : min 8 caractères (adapter selon politique locale)
-- Un user a soit un `RecruiterProfile` soit un `CandidateProfile` — jamais les deux
-- Rate limiting sur login : `RateLimiter::for('login', ...)` dans `AppServiceProvider`
-
-**Routes à protéger :**
 
 ```php
 // routes/web.php
@@ -234,10 +135,6 @@ Route::middleware(['auth', 'verified'])->group(function () {
 - Nom de l’entreprise, Ville, Pays
 - L’offre elle-même doit avoir au moins 1 compétence requise et 1 critère bloquant
 
-**Middleware `EnsureProfileComplete` :**
-
-- Vérifie `candidate_profiles.profile_complete = true` avant d’accéder aux offres
-- Si incomplet → redirect vers `candidate.profile.edit` avec message flash
 
 -----
 
@@ -254,7 +151,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
 **Règles métier :**
 
-- Un recruteur FREE peut publier **2 offres actives** simultanément
+- Un recruteur FREE peut publier **2 offres actives** simultanément (pour le moment peut mettre des offres illimites jusqua ce que les regles soit valider)
 - Un recruteur PRO : **illimité**
 - Une offre publiée déclenche automatiquement le calcul de matching (`CalculateMatchScoreJob::dispatch($jobOffer)`)
 - Une offre fermée (`status = closed`) n’apparaît plus dans les résultats candidats
@@ -313,7 +210,7 @@ $schedule->job(new SendRecruiterDailyDigest)->dailyAt('08:00');
 
 ### Module 5.6 — Freemium & Abonnements
 
-**Plans MVP :**
+**Plans MVP (pour le moment illimite je suis en MVP) :**
 
 |Feature                    |Gratuit|Pro (49 000 FCFA/mois)|Entreprise|
 |---------------------------|-------|----------------------|----------|
@@ -337,9 +234,7 @@ $schedule->job(new SendRecruiterDailyDigest)->dailyAt('08:00');
 
 ### Validation
 
-- **Toujours** utiliser des `FormRequest` pour toute requête POST/PUT — jamais valider dans le controller
-- Utiliser `$table->unsignedTinyInteger()` pour les niveaux et paliers — rejeter toute valeur hors plage
-- Sanitiser toutes les entrées texte libres avec `strip_tags()`
+- **Toujours** utiliser des `livewire Form` pour tous les formulaires — jamais valider dans le controller
 
 ### Autorisation
 
@@ -361,81 +256,17 @@ $schedule->job(new SendRecruiterDailyDigest)->dailyAt('08:00');
 - `APP_ENV=production` et `APP_DEBUG=false` en production — vérifier avant déploiement
 - Headers de sécurité dans la config Nginx (X-Frame-Options, X-Content-Type-Options, etc.)
 
------
-
-## 7. PERFORMANCE & ARCHITECTURE
-
-### Indexation base de données (à ajouter dans les migrations)
-
-```php
-// Table applications — requêtes fréquentes
-$table->index(['job_offer_id', 'score_principal']); // Classement par score
-$table->index(['candidate_profile_id', 'status']);
-
-// Table candidate_skills
-$table->index(['candidate_profile_id', 'skill_id']);
-
-// Table job_offers
-$table->index(['status', 'created_at']);
-$table->index(['recruiter_profile_id', 'status']);
-```
-
-### Cache Redis
-
-```php
-// Mettre en cache les résultats de matching 6h
-// Invalider si candidat modifie son profil
-Cache::tags(['matching', "candidate_{$candidateId}"])->remember(
-    "score_{$offerId}_{$candidateId}",
-    now()->addHours(6),
-    fn() => $this->matchingEngine->calculate($offer, $candidate)
-);
-```
-
 ### Queues pour les calculs lourds
 
 ```php
 // Dispatcher le calcul en queue — ne jamais bloquer la requête HTTP
 CalculateMatchScoreJob::dispatch($jobOffer)
-    ->onQueue('matching')
     ->delay(now()->addSeconds(5)); // Petit délai pour laisser la transaction se finaliser
-```
-
-### Configuration Supervisor (production)
-
-```ini
-[program:matchrh-worker]
-command=php /var/www/matchrh/artisan queue:work redis --queue=matching,default --tries=3
-numprocs=2
-autostart=true
-autorestart=true
 ```
 
 -----
 
 ## 8. DESIGN SYSTEM — IDENTITÉ VISUELLE
-
-### Palette (cohérente avec la landing page)
-
-```css
-/* Variables CSS — à inclure dans app.blade.php */
-:root {
-    --color-bg-primary: #0a0a0f;          /* Fond principal sombre */
-    --color-bg-secondary: #12121a;         /* Cartes et sections */
-    --color-bg-tertiary: #1a1a26;          /* Inputs, tableaux */
-    --color-accent-gold: #c9a84c;          /* Or — accent principal */
-    --color-accent-amber: #e8c46a;         /* Ambre — hover états */
-    --color-text-primary: #f5f0e8;         /* Blanc cassé */
-    --color-text-secondary: #a89880;       /* Gris doré */
-    --color-border: rgba(201, 168, 76, 0.2); /* Bordures subtiles */
-
-    /* Sémantique matching */
-    --color-score-high: #10b981;           /* Score ≥ 70% — vert */
-    --color-score-mid: #f59e0b;            /* Score 50-70% — ambre */
-    --color-score-low: #ef4444;            /* Score < 50% — rouge */
-    --color-blocked: #6b7280;              /* Candidature bloquée — gris */
-}
-```
 
 ### Typographie
 
@@ -463,76 +294,14 @@ Le score doit toujours être affiché avec :
 
 ### Nommage
 
-- **Models** : PascalCase singulier (`JobOffer`, `CandidateProfile`)
-- **Controllers** : PascalCase + `Controller` (`JobOfferController`)
 - **Routes** : kebab-case (`/offres-emploi/{id}`)
 - **Variables** : camelCase dans PHP, snake_case dans les migrations et colonnes DB
 - **Routes nommées** : `recruiter.offers.index`, `candidate.profile.edit`
 
-### Controllers — Règle de légèreté
-
-- Le controller ne contient PAS de logique métier — il délègue au Service
-- Maximum : récupérer la requête, appeler le service, retourner la vue
-
-```php
-// ✅ Correct
-public function store(StoreJobOfferRequest $request, JobOfferService $service)
-{
-    $offer = $service->create($request->validated(), auth()->user());
-    return redirect()->route('recruiter.offers.show', $offer)->with('success', 'Offre publiée.');
-}
-
-// ❌ Incorrect — logique métier dans le controller
-public function store(Request $request)
-{
-    $lambda = config('matching.templates.cadre.competences.lambda');
-    // ... 50 lignes de calcul ici
-}
-```
 
 ### Services — Responsabilité unique
 
-- `MatchingEngine` : orchestre uniquement, ne calcule pas lui-même
-- `ScoreCalculator` : calcule uniquement le score principal, ne dispatche pas de job
-- `BonusDetector` : détecte uniquement les atouts, n’accède pas au score
-
-### Gestion des erreurs
-
-- Utiliser les **Laravel Exception Handlers** pour les erreurs métier custom
-- Logger les erreurs de matching dans un channel dédié (`config/logging.php`)
-- Ne jamais retourner de stack trace à l’utilisateur final
-
------
-
-## 10. COMMANDES ARTISAN UTILES
-
-```bash
-# Recalculer le score d'une offre spécifique (debug)
-php artisan matching:recalculate --offer=ID
-
-# Générer le digest quotidien recruteur (peut être appelé manuellement)
-php artisan notifications:recruiter-digest
-
-# Vérifier la cohérence des scores (audit)
-php artisan matching:audit --date=2026-06-01
-
-# Importer la bibliothèque de compétences depuis un CSV
-php artisan import:skills-library storage/skills.csv
-```
-
------
-
-## 11. CE QUE TU NE DOIS JAMAIS FAIRE
-
-- ❌ Suggérer Node.js, Next.js, React, Vue (standalone), TypeScript, Prisma, ou tout autre stack non-Laravel
-- ❌ Proposer de la logique de matching dans un controller ou une vue Blade
-- ❌ Exposer les valeurs lambda ou les formules dans les réponses JSON ou les vues front
-- ❌ Utiliser `DB::statement()` brut pour des requêtes qui peuvent être faites avec Eloquent
-- ❌ Mettre des clés d’API ou secrets dans le code — toujours via `.env`
-- ❌ Créer des relations Eloquent sans les index correspondants dans les migrations
-- ❌ Retourner des données d’un autre utilisateur (vérifier ownership dans chaque policy)
-- ❌ Modifier les pondérations ou lambda sans mise à jour explicite de `config/matching.php`
-- ❌ Permettre la suppression physique des candidatures (`softDeletes` obligatoire sur `applications`)
+Chaque service que tu creer dois avoir une responsbilite unique ne pas le surcharger avec differentes logique 
 
 -----
 
