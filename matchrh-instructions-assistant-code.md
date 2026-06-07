@@ -26,6 +26,7 @@ L’objectif est que le product owner puisse naviguer dans l’application, voir
 - ✅ Tu crées toutes les migrations décrites dans ce document
 - ✅ Tu crées les Seeders avec des données fictives réalistes pour le marché camerounais
 - ✅ Tu crées les Models Eloquent avec leurs relations (sans logique métier)
+- ca doit etre mobile first livewire 4 sfc, tailwindcss 
 
 -----
 
@@ -186,7 +187,7 @@ Le routing Laravel distingue deux espaces via middleware Spatie :
 ```
 /recruteur/*   → middleware role:recruteur
 /candidat/*    → middleware role:candidat
-/admin/*       → middleware role:admin
+/admin/*       → middleware role:admin // ajoute ce role dans les enums RoleEnum
 ```
 
 Après connexion, la redirection est automatique selon le rôle :
@@ -194,6 +195,7 @@ Après connexion, la redirection est automatique selon le rôle :
 - Recruteur → `/recruteur/dashboard`
 - Candidat → `/candidat/dashboard`
 - Admin → `/admin/dashboard`
+- verifie le fichier web.php pour voir les routes deja creer 
 
 -----
 
@@ -670,7 +672,7 @@ L’identité visuelle de MatchRH est établie sur une esthétique **dark luxury
 - **Statuts positifs :** vert sobre (pas de vert fluo)
 - **Statuts d’alerte :** ambre
 - **Statuts négatifs :** rouge sobre
-- **Typographie :** cohérente avec la landing page existante
+- **Typographie :** cohérente avec la landing page existante sur welcome.blade
 
 **Cohérence obligatoire :** les dashboards et vues internes doivent être visuellement cohérents avec la landing page déjà validée.
 
