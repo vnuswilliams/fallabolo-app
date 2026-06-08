@@ -17,16 +17,15 @@ new #[Title('Offres disponibles')] class extends Component {
 
     {{-- Filtres --}}
     <flux:card class="p-4 flex flex-wrap gap-4 items-center border-zinc-200 dark:border-zinc-800">
-        <flux:input placeholder="Rechercher un poste..." class="flex-1 min-w-[200px]" icon="magnifying-glass" />
-        <flux:select placeholder="Ville" class="w-40">
+        <flux:input placeholder="Rechercher un poste..." class="flex-1" icon="magnifying-glass" />
+        <flux:select placeholder="Ville">
             <flux:select.option>Douala</flux:select.option>
             <flux:select.option>Yaoundé</flux:select.option>
         </flux:select>
-        <flux:select placeholder="Secteur" class="w-48">
+        <flux:select placeholder="Secteur">
             <flux:select.option>Informatique</flux:select.option>
             <flux:select.option>Finance</flux:select.option>
         </flux:select>
-        <flux:button variant="primary">Filtrer</flux:button>
     </flux:card>
 
     <div class="space-y-4">
@@ -70,6 +69,6 @@ new #[Title('Offres disponibles')] class extends Component {
     </div>
 
     <div class="flex justify-center pt-8">
-        <flux:pagination />
+      {{--   <flux:pagination /> --}}
     </div>
 </div>

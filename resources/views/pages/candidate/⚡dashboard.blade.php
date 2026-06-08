@@ -11,7 +11,7 @@ new #[Title('Dashboard Candidat')] class extends Component {
 }; ?>
 
 <div class="flex flex-col gap-8 pb-12">
-    {{-- Header --}}
+        {{-- Header --}}
     <div>
         <flux:heading size="xl" level="1">Tableau de bord</flux:heading>
         <flux:subheading>Bienvenue sur votre espace MatchRH, Jean !</flux:subheading>
