@@ -9,6 +9,7 @@ enum RoleEnum: string
 
     case RECRUITER = 'recruiter';
     case CANDIDATE = 'candidate';
+    case ADMIN = 'admin';
 
 
     public function label(): string
@@ -16,6 +17,7 @@ enum RoleEnum: string
         return match($this) {
             self::RECRUITER => 'Recruteur',
             self::CANDIDATE => 'Candidat',
+            self::ADMIN => 'Administrateur',
         };
     }
 
@@ -24,6 +26,7 @@ enum RoleEnum: string
         return match($this) {
             self::RECRUITER => 'Je souhaite recruter les meilleurs talents',
             self::CANDIDATE => 'Je recherche les meilleures opportunités professionnelles',
+            self::ADMIN => 'Gestion de la plateforme',
         };
     }
 
@@ -32,6 +35,7 @@ enum RoleEnum: string
         return match($this) {
             self::RECRUITER => 'user',
             self::CANDIDATE => 'building-office',
+            self::ADMIN => 'shield-check',
         };
     }
 

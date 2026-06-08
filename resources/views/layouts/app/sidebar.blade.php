@@ -17,28 +17,33 @@
                     </flux:sidebar.item>
 
                     @hasrole(\App\Enums\RoleEnum::CANDIDATE)
-                    <flux:sidebar.item :href="route('candidate.offers.index')" icon="magnifying-glass" wire:navigate>
-                        Parcourir les offres
-                    </flux:sidebar.item>
-                    <flux:sidebar.item :href="route('candidate.applications.index')" icon="document-text" wire:navigate>
-                        Mes candidatures
-                    </flux:sidebar.item>
-                    <flux:sidebar.item :href="route('candidate.profile.index')" icon="user" wire:navigate>
-                        Voir mon profil
-                    </flux:sidebar.item>
+                        <flux:sidebar.item :href="route('candidate.offers.index')" icon="magnifying-glass" wire:navigate>
+                            Parcourir les offres
+                        </flux:sidebar.item>
+                        <flux:sidebar.item :href="route('candidate.applications.index')" icon="document-text" wire:navigate>
+                            Mes candidatures
+                        </flux:sidebar.item>
+                        <flux:sidebar.item :href="route('candidate.profile.index')" icon="user" wire:navigate>
+                            Voir mon profil
+                        </flux:sidebar.item>
 
                     @endhasrole
 
-                    @hasrole(\App\Enums\RoleEnum::RECRUITER)
-                   <flux:sidebar.item :href="route('recruiter.offers.create')" icon="plus" wire:navigate>
-                        {{ __('Créer une offre') }}
-                    </flux:sidebar.item>
-                    <flux:sidebar.item :href="route('recruiter.offers.index')" icon="briefcase" wire:navigate>
-                        {{ __('Mes offres') }}
-                    </flux:sidebar.item>
-                    <flux:sidebar.item :href="route('recruiter.profile.index')" icon="user" wire:navigate>
-                        {{ __('Profil Entreprise') }}
-                    </flux:sidebar.item>
+                    @hasanyrole(\App\Enums\RoleEnum::RECRUITER)
+                         <flux:sidebar.item :href="route('recruiter.offers.create')" icon="plus" wire:navigate>
+                            {{ __('Créer une offre') }}
+                        </flux:sidebar.item>
+                        <flux:sidebar.item :href="route('recruiter.offers.index')" icon="briefcase" wire:navigate>
+                            {{ __('Mes offres') }}
+                        </flux:sidebar.item>
+                        <flux:sidebar.item :href="route('recruiter.profile.index')" icon="user" wire:navigate>
+                            {{ __('Profil Entreprise') }}
+                        </flux:sidebar.item>
+
+                    @endhasrole
+
+                    @hasrole(\App\Enums\RoleEnum::ADMIN)
+
 
                     @endhasrole
                 </flux:sidebar.group>

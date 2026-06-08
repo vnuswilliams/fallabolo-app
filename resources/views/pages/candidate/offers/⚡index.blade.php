@@ -1,100 +1,75 @@
 <?php
 
-use Livewire\Component;
 use Livewire\Attributes\Title;
+use Livewire\Component;
 
-use App\Models\Application;
-use App\Models\CandidateProfile;
-new #[Title('Offres d\'emploi')] class extends Component {
-    public int $applicationsCount = 0;
-    public int $skillsCount = 0;
-    public int $profileCompletion = 0;
+new #[Title('Offres disponibles')] class extends Component {
+    public bool $is_profile_complete = true;
 
-  public function mount()
-  {
-    $candidateProfile = auth()->user()->candidateProfile;
-
-        if ($candidateProfile) {
-            $this->applicationsCount = Application::whereHas('matchResult', function ($query) use ($candidateProfile) {
-                $query->where('candidate_profile_id', $candidateProfile->id);
-            })->count();
-
-            $this->skillsCount = $candidateProfile->candidateSkills()->count();
-
-            // Basic calculation for profile completion
-            $fields = [
-                $candidateProfile->phone,
-                $candidateProfile->city,
-                $candidateProfile->education_level,
-                $candidateProfile->experience_tier,
-                $candidateProfile->language_profile,
-                $candidateProfile->cv_path
-            ];
-            $filled = count(array_filter($fields));
-            $this->profileCompletion = ($filled / count($fields)) * 100;
-        }
-  }
-
+    // Hardcoded data for UI scaffolding
 }; ?>
 
-<div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-    <div class="mb-8">
-        <flux:heading class="text-3xl font-serif font-semibold">Offres d'Emploi</flux:heading>
-        <p class="mt-2">Découvrez les opportunités qui vous correspondent</p>
+<div class="max-w-5xl mx-auto space-y-8 pb-12">
+    <div>
+        <flux:heading size="xl">Offres d'emploi</flux:heading>
+        <flux:subheading>Découvrez les opportunités qui correspondent à votre profil.</flux:subheading>
     </div>
 
-    <!-- Filtres -->
-    <div class="sticky mb-6">
-        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-3">
-            <flux:input type="text" placeholder="Chercher..." />
-            <flux:select >
-                <option value="">Tous les templates</option>
-                <option value="manoeuvre">Manœuvre</option>
-                <option value="technicien">Technicien</option>
-                <option value="agent_maitrise">Agent de maîtrise</option>
-                <option value="cadre">Cadre</option>
-                <option value="dirigeant">Dirigeant</option>
-            </flux:select>
-            <flux:select >
-                <option value="">Trier par</option>
-                <option value="score">Meilleur score</option>
-                <option value="recent">Plus récentes</option>
-                <option value="salary">Salaire</option>
-            </flux:select>
-            <flux:button variant="primary">
-                Filtrer
-            </flux:button>
-        </div>
-    </div>
-  <flux:card variant="outline" class="mb-5 bg-linear-to-r from-brand-50 to-brand-100 dark:from-brand-900/10 dark:to-brand-800/10 border-brand-200 dark:border-brand-800">
-            <div class="flex items-center justify-between mb-4">
-                <div>
-                    <flux:heading size="lg" class="text-brand-900 dark:text-brand-100">Complétez votre profil</flux:heading>
-                    <flux:subheading class="text-brand-700 dark:text-brand-300">Essentiel pour calculer votre compatibilité avec les offres.</flux:subheading>
-                </div>
-                <div class="text-right">
-                    <flux:heading size="xl" class="text-brand-600 dark:text-brand-400">{{ round($profileCompletion) }}%</flux:heading>
-                    <flux:subheading class="text-brand-700 dark:text-brand-300">Complété</flux:subheading>
-                </div>
-            </div>
-            <div class="bg-white dark:bg-zinc-800 rounded-full h-2 overflow-hidden mb-4">
-                <div class="bg-brand-500 h-full rounded-full transition-all duration-500" style="width: {{ $profileCompletion }}%"></div>
-            </div>
-            <flux:button variant="primary" :href="route('candidate.profile.edit')" icon="chevron-right" icon-trailing wire:navigate>
-                Compléter mon profil
-            </flux:button>
-        </flux:card>
-    <!-- Liste des offres -->
-        <flux:card variant="outline" class="bg-linear-to-r from-brand-50 to-brand-100 dark:from-brand-900/10 dark:to-brand-800/10 border-brand-200 dark:border-brand-800">
+    {{-- Filtres --}}
+    <flux:card class="p-4 flex flex-wrap gap-4 items-center border-zinc-200 dark:border-zinc-800">
+        <flux:input placeholder="Rechercher un poste..." class="flex-1 min-w-[200px]" icon="magnifying-glass" />
+        <flux:select placeholder="Ville" class="w-40">
+            <flux:select.option>Douala</flux:select.option>
+            <flux:select.option>Yaoundé</flux:select.option>
+        </flux:select>
+        <flux:select placeholder="Secteur" class="w-48">
+            <flux:select.option>Informatique</flux:select.option>
+            <flux:select.option>Finance</flux:select.option>
+        </flux:select>
+        <flux:button variant="primary">Filtrer</flux:button>
+    </flux:card>
 
-        <!-- État vide -->
-        <div class=" rounded-2xl   p-12">
-            <div class="text-center">
-                <svg class="w-16 h-16  mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/>
-                </svg>
-                <h3 class="text-lg font-semibold mb-2">Aucune offre disponible pour le moment</h3>
-            </div>
-        </div>
-        </flux:card>
+    <div class="space-y-4">
+        @foreach ([
+            ['id' => 1, 'title' => 'Développeur Laravel Senior', 'company' => 'TechCorp', 'city' => 'Douala', 'score' => 92, 'date' => '02 juin 2026'],
+            ['id' => 2, 'title' => 'Développeur Full Stack', 'company' => 'StartupCM', 'city' => 'Douala', 'score' => 88, 'date' => '01 juin 2026'],
+            ['id' => 3, 'title' => 'Intégrateur Web', 'company' => 'AgenceDig', 'city' => 'Yaoundé', 'score' => 81, 'date' => '30 mai 2026'],
+            ['id' => 4, 'title' => 'Comptable Senior', 'company' => 'FinGroup', 'city' => 'Yaoundé', 'score' => 75, 'date' => '28 mai 2026'],
+        ] as $offer)
+            <flux:card class="p-6 hover:border-emerald-500/50 transition-colors group">
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-6">
+                    <div class="flex gap-4">
+                        <div class="w-14 h-14 rounded-xl bg-zinc-100 dark:bg-zinc-800 flex items-center justify-center shrink-0 border border-zinc-200 dark:border-zinc-700">
+                            <flux:icon.building-office class="size-6 text-zinc-400" />
+                        </div>
+                        <div class="space-y-1">
+                            <flux:heading size="md" class="group-hover:text-emerald-500 transition-colors">{{ $offer['title'] }}</flux:heading>
+                            <flux:text  class="flex items-center gap-2">
+                                {{ $offer['company'] }} · {{ $offer['city'] }}
+                            </flux:text>
+                            <flux:text size="xs" >Publiée le {{ $offer['date'] }}</flux:text>
+                        </div>
+                    </div>
+
+                    <div class="flex items-center gap-8 self-end sm:self-center">
+                        <div class="text-right">
+                            <flux:text size="xs"  class="uppercase tracking-widest font-bold">Compatibilité</flux:text>
+                            @if (!$is_profile_complete)
+                                <div class="mt-1 flex flex-col items-end">
+                                    <div class="h-8 w-16 bg-zinc-200 dark:bg-zinc-800 rounded blur-sm"></div>
+                                </div>
+                            @else
+                                <flux:heading size="lg" class="text-emerald-500">{{ $offer['score'] }}%</flux:heading>
+                            @endif
+                        </div>
+                        <flux:button variant="ghost" icon-trailing="chevron-right" :href="route('candidate.offers.show', ['offer' => $offer['id']])" wire:navigate>Voir l'offre</flux:button>
+                    </div>
+                </div>
+            </flux:card>
+        @endforeach
+    </div>
+
+    <div class="flex justify-center pt-8">
+        <flux:pagination />
+    </div>
 </div>

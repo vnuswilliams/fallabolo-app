@@ -18,7 +18,7 @@ use Laravel\Fortify\TwoFactorAuthenticatable;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Spatie\Permission\Traits\HasRoles;
 
-#[Fillable(['name', 'email', 'password', 'role'])]
+#[Fillable(['name', 'email', 'password', 'role', 'agree', 'agreed_at', 'updates'])]
 #[Hidden(['password', 'two_factor_secret', 'two_factor_recovery_codes', 'remember_token'])]
 class User extends Authenticatable implements PasskeyUser
 {
@@ -52,6 +52,9 @@ class User extends Authenticatable implements PasskeyUser
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
             'role' => RoleEnum::class,
+            'agree' => 'boolean',
+            'agreed_at' => 'datetime',
+            'updates' => 'boolean',
         ];
     }
 
@@ -65,5 +68,15 @@ class User extends Authenticatable implements PasskeyUser
             ->take(2)
             ->map(fn ($word) => Str::substr($word, 0, 1))
             ->implode('');
+    }
+
+     protected static function booted()
+    {
+        static::creating(function ($user) {
+
+            if (empty($user->agreed_at)) {
+                $user->agreed_at = now();
+            }
+        });
     }
 }

@@ -3,6 +3,9 @@
 use Illuminate\Support\Facades\Route;
 
 Route::middleware(['auth', 'verified', 'role:candidate'])->prefix('candidate')->name('candidate.')->group(function () {
+    // Onboarding
+    Route::livewire('onboarding', 'pages::candidate.onboarding')->name('onboarding');
+
     // Dashboard
     Route::livewire('/', 'pages::candidate.dashboard')->name('dashboard');
 

@@ -6,6 +6,11 @@ use App\Models\JobOffer;
 use App\Models\Application;
 
 new #[Title('Dashboard Recruteur')] class extends Component {
+public function mount()
+    {
+        // dd(auth()->user()->getRoleNames());
+        // This is where you would normally fetch real data, but we'll use hardcoded values for UI scaffolding
+    }
     // We'll use hardcoded data as requested for UI Scaffolding
 }; ?>
 
@@ -72,7 +77,8 @@ new #[Title('Dashboard Recruteur')] class extends Component {
                 <flux:link :href="route('recruiter.offers.index')" size="sm">Voir toutes les offres</flux:link>
             </div>
 
-            <flux:card class=" overflow-hidden border-zinc-200 dark:border-zinc-800 p-4">
+                <flux:card class=" overflow-hidden border-zinc-200 dark:border-zinc-800 p-4">
+
                 <flux:table>
                     <flux:table.columns>
                         <flux:table.column>Poste</flux:table.column>

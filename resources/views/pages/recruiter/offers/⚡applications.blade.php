@@ -1,48 +1,71 @@
 <?php
 
+use Livewire\Attributes\Title;
 use Livewire\Component;
 
-new #[Title('Tableau de Bord Candidat')] class extends Component {
-
+new #[Title('Candidats qualifiés')] class extends Component {
+    // Hardcoded data for UI scaffolding
 }; ?>
-<div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-    <div class="mb-8">
-        <a href="{{ route('recruiter.offers.index') }}" class="text-sm text-gray-600 hover:text-gray-900 font-medium flex items-center gap-1 mb-4">
-            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
-            </svg>
-            Retour aux offres
-        </a>
-        <div class="flex items-center justify-between">
-            <div>
-                <h1 class="text-3xl font-serif font-semibold text-gray-900">Candidatures reçues</h1>
-                <p class="text-gray-600 mt-2">Pour l'offre: Développeur Laravel Senior</p>
-            </div>
+
+<div class="max-w-5xl mx-auto space-y-8">
+    <div class="flex items-center justify-between">
+        <div>
+            <flux:link :href="route('recruiter.offers.index')" icon="chevron-left" variant="ghost" class="mb-4">Retour aux offres</flux:link>
+            <flux:heading size="xl">Développeur Laravel Senior</flux:heading>
+            <flux:subheading>12 candidats qualifiés classés par score de compatibilité</flux:subheading>
+        </div>
+        <div class="flex gap-2">
+            <flux:button icon="printer" variant="ghost" size="sm" />
+            <flux:button icon="arrow-down-tray" variant="ghost" size="sm" />
         </div>
     </div>
 
     <div class="space-y-4">
-        <!-- Filtres -->
-        <div class="bg-white rounded-2xl border border-gray-100 shadow-sm p-4 flex gap-3 items-center">
-            <input type="text" placeholder="Chercher un candidat..." class="flex-1 px-4 py-2 rounded-lg border border-gray-200 focus:outline-none focus:border-brand-500">
-            <select class="px-4 py-2 rounded-lg border border-gray-200 focus:outline-none focus:border-brand-500">
-                <option value="">Tous les statuts</option>
-                <option value="new">Nouveaux</option>
-                <option value="viewed">Consultés</option>
-                <option value="shortlisted">Présélectionnés</option>
-                <option value="rejected">Rejetés</option>
-            </select>
-        </div>
+        @foreach ([
+            ['id' => 1, 'name' => 'Jean Ekotto', 'score' => 94, 'assets' => '3/5', 'skills' => 2, 'city' => 'Douala', 'status' => 'Nouveau'],
+            ['id' => 2, 'name' => 'Marie Mballa', 'score' => 89, 'assets' => '2/5', 'skills' => 1, 'city' => 'Yaoundé', 'status' => 'Nouveau'],
+            ['id' => 3, 'name' => 'Alain Nkodo', 'score' => 85, 'assets' => '4/5', 'skills' => 3, 'city' => 'Douala', 'status' => 'Consulté'],
+            ['id' => 4, 'name' => 'Sophie Biyong', 'score' => 79, 'assets' => '1/5', 'skills' => 0, 'city' => 'Douala', 'status' => 'Consulté'],
+            ['id' => 5, 'name' => 'Paul Essomba', 'score' => 71, 'assets' => '2/5', 'skills' => 1, 'city' => 'Yaoundé', 'status' => 'Nouveau'],
+        ] as $candidate)
+            <flux:card class="p-4 hover:border-emerald-500/50 transition-colors cursor-pointer group"
+                onclick="window.location.href='/recruiter/offers/1/applications/{{ $candidate['id'] }}'">
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                    <div class="flex items-center gap-4">
+                        <div class="w-12 h-12 rounded-xl bg-zinc-100 dark:bg-zinc-800 flex items-center justify-center font-bold text-lg text-zinc-500">
+                            {{ substr($candidate['name'], 0, 1) }}{{ substr(explode(' ', $candidate['name'])[1] ?? '', 0, 1) }}
+                        </div>
+                        <div>
+                            <flux:heading size="md" class="group-hover:text-emerald-500 transition-colors">{{ $candidate['name'] }}</flux:heading>
+                            <div class="flex flex-wrap gap-x-4 gap-y-1 mt-1">
+                                <flux:text size="xs"  class="flex items-center gap-1">
+                                    <flux:icon.map-pin class="size-3" /> {{ $candidate['city'] }}
+                                </flux:text>
+                                <flux:text size="xs"  class="flex items-center gap-1">
+                                    <flux:icon.star class="size-3" /> Atouts: {{ $candidate['assets'] }}
+                                </flux:text>
+                                <flux:text size="xs"  class="flex items-center gap-1">
+                                    <flux:icon.cpu-chip class="size-3" /> Compétences supp: {{ $candidate['skills'] }}
+                                </flux:text>
+                            </div>
+                        </div>
+                    </div>
 
-        <!-- Liste des candidatures -->
-        <div class="bg-white rounded-2xl border border-gray-100 shadow-sm">
-            <div class="text-center py-12">
-                <svg class="w-12 h-12 text-gray-300 mx-auto mb-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z"/>
-                </svg>
-                <p class="text-gray-500">Aucune candidature pour le moment</p>
-            </div>
-        </div>
-    </div>
+                    <div class="flex items-center gap-6">
+                        <div class="text-right">
+                            <flux:text size="xs"  class="uppercase tracking-wider font-semibold">Compatibilité</flux:text>
+                            <div class="flex items-center gap-2">
+                                <flux:heading size="lg" class="text-emerald-500">{{ $candidate['score'] }}%</flux:heading>
+                            </div>
+                        </div>
+                        <flux:button variant="ghost" icon="chevron-right" />
+                    </div>
+                </div>
+            </flux:card>
+        @endforeach
     </div>
 
+    <div class="flex justify-center pt-4">
+        <flux:button variant="ghost" size="sm">Charger plus de candidats</flux:button>
+    </div>
+</div>

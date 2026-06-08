@@ -19,6 +19,10 @@ class RoleRedirectMiddleware
         if (auth()->check()) {
             $user = auth()->user();
 
+            if ($user->hasRole(RoleEnum::ADMIN->value)) {
+                return redirect()->route('admin.dashboard');
+            }
+
             if ($user->hasRole(RoleEnum::RECRUITER->value)) {
                 return redirect()->route('recruiter.dashboard');
             }

@@ -3,6 +3,9 @@
 use Illuminate\Support\Facades\Route;
 
 Route::middleware(['auth', 'verified', 'role:recruiter'])->prefix('recruiter')->name('recruiter.')->group(function () {
+    // Onboarding
+    Route::livewire('onboarding', 'pages::recruiter.onboarding')->name('onboarding');
+
     // Dashboard
     Route::livewire('/', 'pages::recruiter.dashboard')->name('dashboard');
 
@@ -12,6 +15,7 @@ Route::middleware(['auth', 'verified', 'role:recruiter'])->prefix('recruiter')->
         Route::livewire('create', 'pages::recruiter.offers.create')->name('create');
         Route::livewire('{offer}/edit', 'pages::recruiter.offers.edit')->name('edit');
         Route::livewire('{offer}/applications', 'pages::recruiter.offers.applications')->name('applications');
+        Route::livewire('{offer}/applications/{application}', 'pages::recruiter.offers.application-detail')->name('application-detail');
     });
 
     // Profil recruteur

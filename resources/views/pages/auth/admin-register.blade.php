@@ -8,11 +8,9 @@
         <form method="POST" action="{{ route('register.store') }}" class="flex flex-col gap-6">
             @csrf
 
-            <flux:radio.group variant="segmented" name="role" >
-                <flux:radio value="{{ \App\Enums\RoleEnum::RECRUITER->value }}" icon="building-office" checked>{{ __('I am a recruiter') }}</flux:radio>
-                <flux:radio value="{{ \App\Enums\RoleEnum::CANDIDATE->value }}" icon="user">{{ __('I am a candidate') }}</flux:radio>
+            <flux:radio.group variant="segmented"  name="role">
+                <flux:radio  value="{{ \App\Enums\RoleEnum::ADMIN->value }}" icon="shield-check" checked>{{ __('I am the admin') }}</flux:radio>
             </flux:radio.group>
-
 
             <!-- Name -->
             <flux:input
@@ -82,7 +80,7 @@
                 </flux:checkbox>
             </flux:checkbox.group>
 
-           
+
             <div class="flex items-center justify-end">
                 <flux:button type="submit" variant="primary" class="w-full" data-test="register-user-button">
                     {{ __('Create account') }}
