@@ -43,8 +43,18 @@
                     @endhasrole
 
                     @hasrole(\App\Enums\RoleEnum::ADMIN)
-
-
+                        <flux:sidebar.item :href="route('admin.reports.index')" icon="exclamation-triangle" wire:navigate>
+                            {{ __('Modération') }}
+                        </flux:sidebar.item>
+                        <flux:sidebar.item :href="route('admin.users.index')" icon="users" wire:navigate>
+                            {{ __('Utilisateurs') }}
+                        </flux:sidebar.item>
+                        <flux:sidebar.item :href="route('admin.offers.index')" icon="list-bullet" wire:navigate>
+                            {{ __('Toutes les offres') }}
+                        </flux:sidebar.item>
+                        <flux:sidebar.item :href="route('admin.settings.index')" icon="cog-6-tooth" wire:navigate>
+                            {{ __('Paramètres') }}
+                        </flux:sidebar.item>
                     @endhasrole
                 </flux:sidebar.group>
             </flux:sidebar.nav>

@@ -2,7 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 
-Route::middleware(['auth', 'verified', 'role:recruiter'])->prefix('recruiter')->name('recruiter.')->group(function () {
+Route::middleware(['auth', 'verified', 'role:recruiter', 'check_suspension'])->prefix('recruiter')->name('recruiter.')->group(function () {
     // Onboarding
     Route::livewire('onboarding', 'pages::recruiter.onboarding')->name('onboarding');
 

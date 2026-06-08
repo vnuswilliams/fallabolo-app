@@ -4,8 +4,9 @@ use Illuminate\Support\Facades\Route;
 
 Route::redirect('/', 'login')->name('home');
 Route::view('/admin-register', 'pages.auth.admin-register')->name('admin.register');
+Route::livewire('/suspended', 'pages.suspended')->name('suspended');
 
-Route::middleware(['auth', 'verified', 'role_redirect'])->group(function () {
+Route::middleware(['auth', 'verified', 'check_suspension', 'role_redirect'])->group(function () {
     Route::view('dashboard', 'dashboard')->name('dashboard');
 });
 

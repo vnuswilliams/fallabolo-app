@@ -134,7 +134,11 @@ new #[Title('Détail de l\'offre')] class extends Component {
         {{-- Actions --}}
         <div class="p-8 bg-zinc-50 dark:bg-zinc-900/50 flex flex-wrap gap-4 border-t border-zinc-200 dark:border-zinc-800">
             <flux:button variant="primary" class="flex-1 bg-emerald-500 hover:bg-emerald-600 text-zinc-950 font-bold">Je suis intéressé</flux:button>
-            <flux:button variant="ghost" icon="exclamation-triangle" class="text-amber-600">Signaler l'offre</flux:button>
+            <flux:modal.trigger name="report-modal">
+                <flux:button variant="ghost" icon="exclamation-triangle" class="text-amber-600">Signaler l'offre</flux:button>
+            </flux:modal.trigger>
         </div>
     </flux:card>
+
+    <livewire:report-modal type="offer" />
 </div>

@@ -132,7 +132,11 @@ new #[Title('Détail Candidat')] class extends Component {
         <div class="p-8 bg-zinc-50 dark:bg-zinc-900/50 flex flex-wrap gap-4 border-t border-zinc-200 dark:border-zinc-800">
             <flux:button variant="primary" icon="check" class="flex-1">Shortlister</flux:button>
             <flux:button variant="danger" icon="x-mark" class="flex-1">Rejeter</flux:button>
-            <flux:button variant="ghost" icon="exclamation-triangle" class="text-amber-600">Signaler</flux:button>
+            <flux:modal.trigger name="report-modal">
+                <flux:button variant="ghost" icon="exclamation-triangle" class="text-amber-600">Signaler</flux:button>
+            </flux:modal.trigger>
         </div>
     </flux:card>
+
+    <livewire:report-modal type="candidate" />
 </div>

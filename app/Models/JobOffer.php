@@ -44,6 +44,15 @@ class JobOffer extends Model
         'expires_at' => 'datetime',
     ];
 
+    protected static function booted(): void
+    {
+        static::addGlobalScope('not_suspended', function (\Illuminate\Database\Eloquent\Builder $query) {
+            $query->whereHas('recruiterProfile', function ($q) {
+                $q->where('is_suspended', false);
+            });
+        });
+    }
+
     public function recruiterProfile(): BelongsTo
     {
         return $this->belongsTo(RecruiterProfile::class);
