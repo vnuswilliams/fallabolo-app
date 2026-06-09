@@ -31,6 +31,7 @@ Route::middleware(['auth', 'verified', 'role:candidate', 'check_suspension'])->p
         Route::livewire('/', 'pages::candidate.settings')->name('index');
     });
 
+
     // Avis
     Route::livewire('testimonial', 'pages::candidate.testimonial')->name('testimonial');
 });

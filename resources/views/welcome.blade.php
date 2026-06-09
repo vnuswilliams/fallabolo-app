@@ -539,42 +539,42 @@
           <div class="flex items-center gap-3">
             <div class="text-sm w-24 shrink-0" :class="dark ? 'text-zinc-400' : 'text-zinc-500'">Compétences</div>
             <div class="flex-1 h-2 rounded-full overflow-hidden" :class="dark ? 'bg-zinc-800' : 'bg-zinc-200'">
-              <div class="bar-fill h-full rounded-full bg-gradient-to-r from-emerald-600 to-emerald-400" data-w="50" style="--w:50%"></div>
+              <div class="bar-fill h-full rounded-full bg-linear-to-r from-emerald-600 to-emerald-400" data-w="50" style="--w:50%"></div>
             </div>
             <div class="text-sm font-bold font-display w-9 text-right" :class="dark ? 'text-emerald-400' : 'text-emerald-600'">50%</div>
           </div>
           <div class="flex items-center gap-3">
             <div class="text-sm w-24 shrink-0" :class="dark ? 'text-zinc-400' : 'text-zinc-500'">Expérience</div>
             <div class="flex-1 h-2 rounded-full overflow-hidden" :class="dark ? 'bg-zinc-800' : 'bg-zinc-200'">
-              <div class="bar-fill h-full rounded-full bg-gradient-to-r from-emerald-600 to-emerald-400" data-w="20" style="--w:20%"></div>
+              <div class="bar-fill h-full rounded-full bg-linear-to-r from-emerald-600 to-emerald-400" data-w="20" style="--w:20%"></div>
             </div>
             <div class="text-sm font-bold font-display w-9 text-right" :class="dark ? 'text-emerald-400' : 'text-emerald-600'">20%</div>
           </div>
           <div class="flex items-center gap-3">
             <div class="text-sm w-24 shrink-0" :class="dark ? 'text-zinc-400' : 'text-zinc-500'">Formation</div>
             <div class="flex-1 h-2 rounded-full overflow-hidden" :class="dark ? 'bg-zinc-800' : 'bg-zinc-200'">
-              <div class="bar-fill h-full rounded-full bg-gradient-to-r from-emerald-600 to-emerald-400" data-w="10" style="--w:10%"></div>
+              <div class="bar-fill h-full rounded-full bg-linear-to-r from-emerald-600 to-emerald-400" data-w="10" style="--w:10%"></div>
             </div>
             <div class="text-sm font-bold font-display w-9 text-right" :class="dark ? 'text-emerald-400' : 'text-emerald-600'">10%</div>
           </div>
           <div class="flex items-center gap-3">
             <div class="text-sm w-24 shrink-0" :class="dark ? 'text-zinc-400' : 'text-zinc-500'">Langues</div>
             <div class="flex-1 h-2 rounded-full overflow-hidden" :class="dark ? 'bg-zinc-800' : 'bg-zinc-200'">
-              <div class="bar-fill h-full rounded-full bg-gradient-to-r from-emerald-600 to-emerald-400" data-w="10" style="--w:10%"></div>
+              <div class="bar-fill h-full rounded-full bg-linear-to-r from-emerald-600 to-emerald-400" data-w="10" style="--w:10%"></div>
             </div>
             <div class="text-sm font-bold font-display w-9 text-right" :class="dark ? 'text-emerald-400' : 'text-emerald-600'">10%</div>
           </div>
           <div class="flex items-center gap-3">
             <div class="text-sm w-24 shrink-0" :class="dark ? 'text-zinc-400' : 'text-zinc-500'">Disponibilité</div>
             <div class="flex-1 h-2 rounded-full overflow-hidden" :class="dark ? 'bg-zinc-800' : 'bg-zinc-200'">
-              <div class="bar-fill h-full rounded-full bg-gradient-to-r from-emerald-600 to-emerald-400" data-w="5" style="--w:5%"></div>
+              <div class="bar-fill h-full rounded-full bg-linear-to-r from-emerald-600 to-emerald-400" data-w="5" style="--w:5%"></div>
             </div>
             <div class="text-sm font-bold font-display w-9 text-right" :class="dark ? 'text-emerald-400' : 'text-emerald-600'">5%</div>
           </div>
           <div class="flex items-center gap-3">
             <div class="text-sm w-24 shrink-0" :class="dark ? 'text-zinc-400' : 'text-zinc-500'">Localisation</div>
             <div class="flex-1 h-2 rounded-full overflow-hidden" :class="dark ? 'bg-zinc-800' : 'bg-zinc-200'">
-              <div class="bar-fill h-full rounded-full bg-gradient-to-r from-emerald-600 to-emerald-400" data-w="5" style="--w:5%"></div>
+              <div class="bar-fill h-full rounded-full bg-linear-to-r from-emerald-600 to-emerald-400" data-w="5" style="--w:5%"></div>
             </div>
             <div class="text-sm font-bold font-display w-9 text-right" :class="dark ? 'text-emerald-400' : 'text-emerald-600'">5%</div>
           </div>
@@ -906,7 +906,7 @@
         </div>
         <div class="flex items-center gap-3">
           <div class="hidden sm:block w-20 h-1.5 rounded-full overflow-hidden" :class="dark ? 'bg-zinc-800' : 'bg-zinc-100'">
-            <div class="h-full rounded-full bg-gradient-to-r from-emerald-600 to-emerald-400" style="width:92%"></div>
+            <div class="h-full rounded-full bg-linear-to-r from-emerald-600 to-emerald-400" style="width:92%"></div>
           </div>
           <span class="font-display font-bold text-sm" :class="dark ? 'text-emerald-400' : 'text-emerald-600'">92%</span>
         </div>
@@ -922,7 +922,7 @@
         </div>
         <div class="flex items-center gap-3">
           <div class="hidden sm:block w-20 h-1.5 rounded-full overflow-hidden" :class="dark ? 'bg-zinc-800' : 'bg-zinc-100'">
-            <div class="h-full rounded-full bg-gradient-to-r from-emerald-600 to-emerald-400" style="width:89%"></div>
+            <div class="h-full rounded-full bg-linear-to-r from-emerald-600 to-emerald-400" style="width:89%"></div>
           </div>
           <span class="font-display font-bold text-sm" :class="dark ? 'text-emerald-400' : 'text-emerald-600'">89%</span>
         </div>
@@ -938,7 +938,7 @@
         </div>
         <div class="flex items-center gap-3">
           <div class="hidden sm:block w-20 h-1.5 rounded-full overflow-hidden" :class="dark ? 'bg-zinc-800' : 'bg-zinc-100'">
-            <div class="h-full rounded-full bg-gradient-to-r from-emerald-600 to-emerald-400" style="width:85%"></div>
+            <div class="h-full rounded-full bg-linear-to-r from-emerald-600 to-emerald-400" style="width:85%"></div>
           </div>
           <span class="font-display font-bold text-sm" :class="dark ? 'text-emerald-400' : 'text-emerald-600'">85%</span>
         </div>
@@ -954,7 +954,7 @@
         </div>
         <div class="flex items-center gap-3">
           <div class="hidden sm:block w-20 h-1.5 rounded-full overflow-hidden" :class="dark ? 'bg-zinc-800' : 'bg-zinc-100'">
-            <div class="h-full rounded-full bg-gradient-to-r from-emerald-600 to-emerald-400" style="width:78%"></div>
+            <div class="h-full rounded-full bg-linear-to-r from-emerald-600 to-emerald-400" style="width:78%"></div>
           </div>
           <span class="font-display font-bold text-sm" :class="dark ? 'text-emerald-400' : 'text-emerald-600'">78%</span>
         </div>
@@ -1521,6 +1521,7 @@ $palette = [
                                 @foreach ([
                                     ['label' => 'CGU',               'slug' => 'cgu'],
                                     ['label' => 'CGV',               'slug' => 'cgv'],
+                                    ['label' => 'Politique de confidentialité','slug' => 'confidentialite'],
                                     ['label' => 'Politique de cookies','slug' => 'cookies'],
                                 ] as $link)
                                     <li>

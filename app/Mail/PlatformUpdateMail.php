@@ -9,21 +9,15 @@ use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
 
-class PlatformUpdateMail extends Mailable
+class PlatformUpdateMail extends Mailable implements ShouldQueue
 {
     use Queueable, SerializesModels;
 
-    /**
-     * Create a new message instance.
-     */
     public function __construct(
-        public string $subjectText,
-        public string $messageContent,
+        public readonly string $subjectText,
+        public readonly string $messageContent,
     ) {}
 
-    /**
-     * Get the message envelope.
-     */
     public function envelope(): Envelope
     {
         return new Envelope(
@@ -31,23 +25,14 @@ class PlatformUpdateMail extends Mailable
         );
     }
 
-    /**
-     * Get the message content definition.
-     */
     public function content(): Content
     {
         return new Content(
             markdown: 'emails.platform-update',
+            with: [
+                'subjectText'     => $this->subjectText,
+                'messageContent'  => $this->messageContent,
+            ],
         );
-    }
-
-    /**
-     * Get the attachments for the message.
-     *
-     * @return array<int, \Illuminate\Mail\Mailables\Attachment>
-     */
-    public function attachments(): array
-    {
-        return [];
     }
 }

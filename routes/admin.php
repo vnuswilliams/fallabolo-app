@@ -31,6 +31,12 @@ Route::middleware(['auth', 'verified', 'role:admin', 'check_suspension'])->prefi
     });
 
 
+    Route::livewire('/testimonials', 'pages::admin.testimonials.index')
+    ->name('testimonials.index');
+
+Route::livewire('/communications', 'pages::admin.communications.index')
+    ->name('communications.index');
+
     // Paramètres
     Route::livewire('/settings', 'pages::admin.settings')->name('settings.index');
 });

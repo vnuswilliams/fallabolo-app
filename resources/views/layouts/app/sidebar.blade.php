@@ -26,6 +26,9 @@
                         <flux:sidebar.item :href="route('candidate.profile.index')" icon="user" wire:navigate>
                             Voir mon profil
                         </flux:sidebar.item>
+                        <flux:sidebar.item :href="route('candidate.testimonial')" icon="star" wire:navigate>
+    Mon Avis
+</flux:sidebar.item>
 
                     @endhasrole
 
@@ -39,7 +42,9 @@
                         <flux:sidebar.item :href="route('recruiter.profile.index')" icon="user" wire:navigate>
                             {{ __('Profil Entreprise') }}
                         </flux:sidebar.item>
-
+<flux:sidebar.item :href="route('recruiter.testimonial')" icon="star" wire:navigate>
+    Mon Avis
+</flux:sidebar.item>
                     @endhasrole
 
                     @hasrole(\App\Enums\RoleEnum::ADMIN)
@@ -58,6 +63,14 @@
                         <flux:sidebar.item :href="route('admin.settings.index')" icon="cog-6-tooth" wire:navigate>
                             {{ __('Paramètres') }}
                         </flux:sidebar.item>
+
+<flux:sidebar.item :href="route('admin.testimonials.index')" icon="chat-bubble-left-right" wire:navigate>
+    {{ __('Avis & Témoignages') }}
+</flux:sidebar.item>
+
+<flux:sidebar.item :href="route('admin.communications.index')" icon="envelope" wire:navigate>
+    {{ __('Communications') }}
+</flux:sidebar.item>
                     @endhasrole
                 </flux:sidebar.group>
             </flux:sidebar.nav>
