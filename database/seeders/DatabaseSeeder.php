@@ -15,7 +15,7 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        $this->call([
+       /* $this->call([
             RoleAndPermissionSeeder::class,
             UserSeeder::class,
             SkillSeeder::class,
@@ -25,6 +25,7 @@ class DatabaseSeeder extends Seeder
             JobOfferSeeder::class,
             ApplicationSeeder::class,
             MatchRhSeeder::class,
-        ]);
+        ]);*/
+        $this->call(TestimonialSeeder::class);
     }
 }
