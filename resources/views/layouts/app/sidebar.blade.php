@@ -49,8 +49,11 @@
                         <flux:sidebar.item :href="route('admin.users.index')" icon="users" wire:navigate>
                             {{ __('Utilisateurs') }}
                         </flux:sidebar.item>
-                        <flux:sidebar.item :href="route('admin.offers.index')" icon="list-bullet" wire:navigate>
+                        <flux:sidebar.item :href="route('admin.jobs.index')" icon="list-bullet" wire:navigate>
                             {{ __('Toutes les offres') }}
+                        </flux:sidebar.item>
+                        <flux:sidebar.item :href="route('admin.recruitment.index')" icon="briefcase" wire:navigate>
+                            {{ __('Mes offres') }}
                         </flux:sidebar.item>
                         <flux:sidebar.item :href="route('admin.settings.index')" icon="cog-6-tooth" wire:navigate>
                             {{ __('Paramètres') }}

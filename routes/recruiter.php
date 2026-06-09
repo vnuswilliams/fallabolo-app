@@ -28,4 +28,7 @@ Route::middleware(['auth', 'verified', 'role:recruiter', 'check_suspension'])->p
     Route::prefix('settings')->name('settings.')->group(function () {
         Route::livewire('/', 'pages::recruiter.settings')->name('index');
     });
+
+    // Avis
+    Route::livewire('testimonial', 'pages::recruiter.testimonial')->name('testimonial');
 });

@@ -67,7 +67,7 @@ new #[Title('Toutes les Offres')] class extends Component {
                             <flux:menu>
                                 <flux:menu.item icon="eye">Voir l'offre</flux:menu.item>
                                 <flux:menu.item icon="pencil">Modifier</flux:menu.item>
-                                <flux:menu.item icon="archive">Clôturer</flux:menu.item>
+                                <flux:menu.item icon="inbox">Clôturer</flux:menu.item>
                                 <flux:menu.separator />
                                 <flux:menu.item icon="trash" class="text-rose-500">Supprimer</flux:menu.item>
                             </flux:menu>
@@ -97,7 +97,7 @@ new #[Title('Toutes les Offres')] class extends Component {
                             <flux:menu>
                                 <flux:menu.item icon="eye">Voir l'offre</flux:menu.item>
                                 <flux:menu.item icon="pencil">Modifier</flux:menu.item>
-                                <flux:menu.item icon="archive">Clôturer</flux:menu.item>
+                                <flux:menu.item icon="inbox">Clôturer</flux:menu.item>
                                 <flux:menu.separator />
                                 <flux:menu.item icon="trash" class="text-rose-500">Supprimer</flux:menu.item>
                             </flux:menu>

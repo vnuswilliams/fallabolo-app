@@ -42,6 +42,14 @@ class User extends Authenticatable implements PasskeyUser
     }
 
     /**
+     * Get the testimonials for the user.
+     */
+    public function testimonials(): \Illuminate\Database\Eloquent\Relations\HasMany
+    {
+        return $this->hasMany(Testimonial::class);
+    }
+
+    /**
      * Get the attributes that should be cast.
      *
      * @return array<string, string>

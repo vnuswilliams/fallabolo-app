@@ -78,7 +78,7 @@ new #[Title('Dashboard Admin')] class extends Component {
                 <flux:button variant="ghost" size="sm">Tout voir</flux:button>
             </div>
 
-            <flux:card class="p-0 overflow-hidden border-zinc-200 dark:border-zinc-800">
+            <flux:card class="overflow-hidden border-zinc-200 dark:border-zinc-800 p-4">
                 <flux:table>
                     <flux:table.columns>
                         <flux:table.column>Élément</flux:table.column>

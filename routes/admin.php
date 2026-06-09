@@ -12,8 +12,24 @@ Route::middleware(['auth', 'verified', 'role:admin', 'check_suspension'])->prefi
     // Gestion des Utilisateurs
     Route::livewire('/users', 'pages::admin.users.index')->name('users.index');
 
-    // Gestion des Offres
-    Route::livewire('/offers', 'pages::admin.offers.index')->name('offers.index');
+    // Gestion des Offres (Globale)
+    Route::livewire('/jobs', 'pages::admin.jobs.index')->name('jobs.index');
+
+    // Avis / Témoignages
+    Route::livewire('/testimonials', 'pages::admin.testimonials.index')->name('testimonials.index');
+
+    // Communications / Updates
+    Route::livewire('/communications', 'pages::admin.communications.index')->name('communications.index');
+
+     // Recrutement Admin (Comme un recruteur)
+    Route::prefix('recruitment')->name('recruitment.')->group(function () {
+        Route::livewire('/', 'pages::admin.recruitment.index')->name('index');
+        Route::livewire('/create', 'pages::admin.recruitment.create')->name('create');
+        Route::livewire('/{offer}/edit', 'pages::admin.recruitment.edit')->name('edit');
+        Route::livewire('/{offer}/applications', 'pages::admin.recruitment.applications')->name('applications');
+        Route::livewire('/{offer}/applications/{application}', 'pages::admin.recruitment.application-detail')->name('application-detail');
+    });
+
 
     // Paramètres
     Route::livewire('/settings', 'pages::admin.settings')->name('settings.index');
