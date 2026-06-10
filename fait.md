@@ -3,3 +3,4 @@
 - j'ai creer la table faqs, donc commente la comme prevu dans la @migrations.md
 - j'ai publier les fichiers de configuration de la boite modale de fluxui, j'aimerais que tu ajoute un fond d'ecran flou lorsque la modale est ouverte
 - Dans welcome.blade, avant la section valeur j'aimerais que tu creer une section quel est le probleme, ce qui rappelera au recruteurs et au candidats quel probleme il ont concretements ici tu mettra en lumiere les maux des 2 camps de maniere cru et brut  
+- installer cette depedance et configurer la comme sa dépendance le veux 
