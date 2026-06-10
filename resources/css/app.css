@@ -60,7 +60,10 @@ textarea:focus[data-flux-control],
 select:focus[data-flux-control] {
     @apply outline-hidden ring-2 ring-accent ring-offset-2 ring-offset-accent-foreground;
 }
-
+html
+{
+    scroll-behavior: smooth;
+}
 button, a {
     @apply  cursor-pointer;
 }

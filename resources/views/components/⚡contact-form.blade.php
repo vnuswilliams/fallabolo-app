@@ -25,10 +25,10 @@ new class extends Component
     #[Validate('required|email')]
     public string $email = '';
 
-    #[Validate('required|string|min:5')]
+    #[Validate('required|string|max:20')]
     public string $subject = '';
 
-    #[Validate('required|string|min:10')]
+    #[Validate('required|string|max:200')]
     public string $message = '';
 
     public function save()
@@ -56,7 +56,7 @@ new class extends Component
         } catch (\Exception $e) {
              Flux::toast(
                 heading: 'Erreur',
-                description: 'Une erreur est survenue lors de l\'envoi. Veuillez réessayer plus tard.',
+                text: 'Une erreur est survenue lors de l\'envoi. Veuillez réessayer plus tard.',
                 variant: 'danger',
             );
         }
@@ -105,10 +105,10 @@ new class extends Component
         />
 
         <div class="flex justify-center">
-            <button type="submit"
-                    class="w-full sm:w-auto px-8 py-3.5 rounded-xl font-display font-bold bg-emerald-400 text-zinc-900 hover:bg-emerald-500 transition-all hover:-translate-y-0.5 hover:shadow-xl hover:shadow-emerald-500/20">
+            <flux:button type="submit" variant="primary" color="emerald "
+                    class="w-full sm:w-auto px-8 py-3.5 font-display font-bold bg-emerald-400 text-zinc-900 hover:bg-emerald-500 transition-all hover:-translate-y-0.5 hover:shadow-xl hover:shadow-emerald-500/20">
                 Envoyer le message
-            </button>
+            </flux:button>
         </div>
     </form>
 </div>

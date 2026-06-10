@@ -1,0 +1,5 @@
+- dans faq.blade le composant livewire 4, j'ai creer un lien loadMore mais je n'ai pas ecris la logique le but est de montrer plus de question, attention si toute les question presente dans la base de données faq sont montrer alors afficher un toast qui dit plus d'autre question
+- dans views/pages/admin ajoute les routes, les vues de traitements des questions, voir les question qui ont ete pose, y repondre, la possibilite de reformuler une question possé, et ensuite un tableau qui montrera l'ensemble des question dans la tables faq et pouvoir les supprimer, modifier etc 
+- j'ai creer la table faqs, donc commente la comme prevu dans la @migrations.md
+- j'ai publier les fichiers de configuration de la boite modale de fluxui, j'aimerais que tu ajoute un fond d'ecran flou lorsque la modale est ouverte
+- Dans welcome.blade, avant la section valeur j'aimerais que tu creer une section quel est le probleme, ce qui rappelera au recruteurs et au candidats quel probleme il ont concretements ici tu mettra en lumiere les maux des 2 camps de maniere cru et brut  

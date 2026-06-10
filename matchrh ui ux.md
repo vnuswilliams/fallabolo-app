@@ -113,8 +113,7 @@ Composants Flux à utiliser obligatoirement :
 - `<flux:badge>` → badges de statut
 - `<flux:modal>` → toutes les modales
 - `<flux:card>` → conteneur de carte (si disponible dans la version installée)
-- `<flux:tabs>` → navigation par onglets
-- `<flux:toast>` / `<flux:notification>` → feedbacks flash
+- `<flux:toast>`  → feedbacks flash
 
 **Règle Flux :** ne jamais modifier les styles internes de Flux avec `!important` ou `@apply` sauf dans un fichier `resources/css/flux-overrides.css` dédié et commenté.
 

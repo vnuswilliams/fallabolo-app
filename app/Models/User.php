@@ -49,6 +49,15 @@ class User extends Authenticatable implements PasskeyUser
         return $this->hasMany(Testimonial::class);
     }
 
+
+    /**
+     * Get the Faq for the user.
+     */
+    public function faqs(): \Illuminate\Database\Eloquent\Relations\HasMany
+    {
+        return $this->hasMany(Faq::class);
+    }
+
     /**
      * Get the attributes that should be cast.
      *

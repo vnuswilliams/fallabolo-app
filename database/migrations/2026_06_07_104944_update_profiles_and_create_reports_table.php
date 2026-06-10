@@ -28,7 +28,7 @@ return new class extends Migration
             $table->morphs('reportable');
             $table->string('reason'); // Using string for Enum flexibility
             $table->text('comment')->nullable();
-            $table->string('status')->default('pending');
+            $table->string('status');
             $table->foreignId('reviewed_by')->nullable()->constrained('users');
             $table->timestamp('reviewed_at')->nullable();
             $table->timestamps();

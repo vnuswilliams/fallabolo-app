@@ -22,40 +22,7 @@
         @endif
 
        @php
-    $faqs = [
-        [
-            'question' => 'Dois-je obligatoirement envoyer un CV pour postuler ?',
-            'answer'   => 'Non, le CV est entièrement optionnel sur MatchRH. Vous créez un profil structuré (compétences notées /5, expériences vérifiables, langues, disponibilité) et c\'est lui qui génère votre score de compatibilité. Si vous avez un CV, vous pouvez l\'attacher, mais il n\'est jamais un prérequis pour postuler.',
-        ],
-        [
-            'question' => 'Comment est calculé mon score de compatibilité ?',
-            'answer'   => 'Le score est entièrement transparent et déterministe pas de boîte noire. Il repose sur 6 dimensions pondérées : compétences (50 %), expérience (20 %), formation (10 %), langues (10 %), disponibilité (5 %) et localisation (5 %). Des points bonus s\'ajoutent pour les certifications et expertises rares. Chaque critère est visible avant même que vous postuliez.',
-        ],
-        [
-            'question' => 'Puis-je voir mon score avant de postuler à une offre ?',
-            'answer'   => 'Oui, c\'est l\'une des fonctionnalités clés de MatchRH. Avant chaque candidature, vous voyez votre compatibilité estimée et sa décomposition détaillée. Vous pouvez ainsi postuler en connaissance de cause ou améliorer votre profil pour augmenter votre score.',
-        ],
-        [
-            'question' => 'Je suis recruteur : combien coûte la plateforme ?',
-            'answer'   => 'MatchRH est entièrement gratuit, sans limite cachée. Offres illimitées, candidatures illimitées, classement automatique, notifications temps réel tout est inclus sans carte bancaire requise. La gratuité totale est notre avantage stratégique : elle permet d\'agréger rapidement la masse critique de candidats et de recruteurs.',
-        ],
-        [
-            'question' => 'Qu\'est-ce qu\'un critère bloquant et comment ça fonctionne ?',
-            'answer'   => 'Un critère bloquant est une exigence non-négociable définie par le recruteur permis de conduire, niveau d\'expérience minimum, localisation, etc. Si le candidat ne satisfait pas ce critère, son score tombe automatiquement à 0 et sa candidature n\'apparaît pas dans le classement. Les recruteurs ne voient que des profils réellement éligibles.',
-        ],
-        [
-            'question' => 'Comment MatchRH protège-t-il mes données personnelles ?',
-            'answer'   => 'Vos données sont hébergées conformément à la loi camerounaise sur la protection des données personnelles (2024). Les accès sont contrôlés par rôle, les actions importantes sont tracées, et vous pouvez demander la suppression de votre profil à tout moment. Vos informations ne sont jamais revendues à des tiers.',
-        ],
-        [
-            'question' => 'Qu\'est-ce que l\'intégration MCP annoncée sur la plateforme ?',
-            'answer'   => 'MCP (Model Context Protocol) est un protocole qui permettra d\'interagir avec MatchRH directement depuis des assistants IA (Claude, ChatGPT, Cursor…). Recruteurs et candidats pourront consulter des classements, publier des offres et recevoir des recommandations en langage naturel, sans quitter leur outil habituel. Cette fonctionnalité est en cours de développement.',
-        ],
-        [
-            'question' => 'L\'algorithme de matching est-il biaisé ?',
-            'answer'   => 'Le scoring de MatchRH est intentionnellement déterministe et documenté pour minimiser les biais. Il n\'évalue pas la photo, le nom, le sexe ou l\'âge uniquement les compétences, l\'expérience et les critères objectifs définis par le recruteur. Chaque score est décomposé et contestable. L\'objectif : le meilleur profil gagne, pas le meilleur CV designer.',
-        ],
-    ];
+
 @endphp
 </head>
 
@@ -284,21 +251,21 @@
 
     <p class="reveal d2 text-lg font-light max-w-xl mx-auto mb-10 leading-relaxed"
        :class="dark ? 'text-zinc-400' : 'text-zinc-500'">
-      Fini le tri manuel de centaines de CVs. MatchRH connecte talents et recruteurs via un scoring structuré, transparent et instantané.
+      Fini l'envoi et le tri manuel de centaines de CVs. MatchRH connecte talents et recruteurs via un scoring structuré, transparent et instantané.
     </p>
 
     <div class="reveal d3 flex flex-wrap gap-3 justify-center mb-16">
-      <button class="px-7 py-3.5 rounded-xl font-display font-bold text-zinc-900 bg-emerald-400 hover:bg-emerald-500 transition-all hover:-translate-y-0.5 hover:shadow-lg hover:shadow-emerald-500/25">
+        <flux:button icon:trailing="chevron-right" href="#valeur" class="px-7 py-3.5 rounded-xl font-medium border transition-all hover:-translate-y-0.5"
+                x-bind:class="dark ? 'border-zinc-700 text-zinc-300 hover:border-zinc-500 hover:bg-zinc-800/50' : 'border-zinc-200 text-zinc-600 hover:border-zinc-400 hover:bg-zinc-50'">
+          En savoir plus
+        </flux:button>
+      <flux:button href="{{ route('register') }}" variant="primary" color="emerald" class="px-7 py-3.5 rounded-xl font-display font-bold text-zinc-900 bg-emerald-400 hover:bg-emerald-500 transition-all hover:-translate-y-0.5 hover:shadow-lg hover:shadow-emerald-500/25">
         Créer un compte gratuit
-      </button>
-      <button class="px-7 py-3.5 rounded-xl font-medium border transition-all hover:-translate-y-0.5"
-              :class="dark ? 'border-zinc-700 text-zinc-300 hover:border-zinc-500 hover:bg-zinc-800/50' : 'border-zinc-200 text-zinc-600 hover:border-zinc-400 hover:bg-zinc-50'">
-        Voir la démo  <flux:icon.chevron-right class="size-4 inline-block ml-1"/>
-      </button>
+      </flux:button>
     </div>
 
     <!-- Stats -->
-    <div class="reveal d4 grid grid-cols-2 sm:grid-cols-4 gap-6 pt-10 border-t"
+    <div class="reveal d4 grid grid-cols-2 sm:grid-cols-4 gap-4 pt-10 border-t"
          :class="dark ? 'border-zinc-800' : 'border-zinc-200'">
       <div class="text-center">
         <div class="font-display font-extrabold text-2xl" :class="dark ? 'text-zinc-100' : 'text-zinc-900'">−87%</div>
@@ -313,7 +280,7 @@
         <div class="text-xs mt-1" :class="dark ? 'text-zinc-500' : 'text-zinc-400'">Transparent</div>
       </div>
       <div class="text-center">
-        <div class="font-display font-extrabold text-2xl" :class="dark ? 'text-zinc-100' : 'text-zinc-900'">0 CV</div>
+        <div class="font-display font-extrabold text-2xl" :class="dark ? 'text-zinc-100' : 'text-zinc-900'">0 CV, 0 LM</div>
         <div class="text-xs mt-1" :class="dark ? 'text-zinc-500' : 'text-zinc-400'">Requis</div>
       </div>
     </div>
@@ -416,7 +383,7 @@
           Vos compétences réelles sont évaluées sur des critères objectifs et structurés pas sur la beauté d'un PDF. Le meilleur profil gagne, pas le meilleur CV designer.
         </p>
         <div class="flex flex-wrap gap-3 justify-center">
-          <span class="px-4 py-2 rounded-lg text-sm font-medium border" :class="dark ? 'bg-emerald-500/10 border-emerald-500/20 text-emerald-300' : 'bg-emerald-100 border-emerald-300 text-emerald-700'">Compétences notées /5</span>
+          <span class="px-4 py-2 rounded-lg text-sm font-medium border" :class="dark ? 'bg-emerald-500/10 border-emerald-500/20 text-emerald-300' : 'bg-emerald-100 border-emerald-300 text-emerald-700'">Compétences notées</span>
           <span class="px-4 py-2 rounded-lg text-sm font-medium border" :class="dark ? 'bg-emerald-500/10 border-emerald-500/20 text-emerald-300' : 'bg-emerald-100 border-emerald-300 text-emerald-700'">Expérience vérifiable</span>
           <span class="px-4 py-2 rounded-lg text-sm font-medium border" :class="dark ? 'bg-emerald-500/10 border-emerald-500/20 text-emerald-300' : 'bg-emerald-100 border-emerald-300 text-emerald-700'">Score visible avant candidature</span>
           <span class="px-4 py-2 rounded-lg text-sm font-medium border" :class="dark ? 'bg-emerald-500/10 border-emerald-500/20 text-emerald-300' : 'bg-emerald-100 border-emerald-300 text-emerald-700'">Pas de biais de présentation</span>
@@ -980,7 +947,7 @@
         <span class="grad-text">Et c'est notre force.</span>
       </h2>
       <p class="text-base max-w-lg mx-auto" :class="dark ? 'text-zinc-400' : 'text-zinc-500'">
-        Pas de freemium, pas de fonctionnalités cachées derrière un paywall. La gratuité totale est notre avantage concurrentiel elle nous permet d'atteindre une masse critique de candidats et de recruteurs plus vite que n'importe quel concurrent.
+         La gratuité totale est notre avantage concurrentiel elle nous permet d'atteindre une masse critique de candidats et de recruteurs plus vite que n'importe quel concurrent.
       </p>
     </div>
 
@@ -997,7 +964,7 @@
     </div>
 
     <!-- Plans -->
-    <div class="grid sm:grid-cols-3 gap-5 mt-10">
+    <div class="grid sm:grid-cols-2 gap-5 mt-10">
 
       <!-- Candidat -->
       <div class="price-card reveal d1 rounded-2xl border overflow-hidden flex flex-col"
@@ -1014,22 +981,20 @@
             <div class="flex items-start gap-2.5 text-sm"><span class="shrink-0 mt-0.5 text-emerald-400">✓</span><span :class="dark ? 'text-zinc-300' : 'text-zinc-600'">Candidatures illimitées</span></div>
             <div class="flex items-start gap-2.5 text-sm"><span class="shrink-0 mt-0.5 text-emerald-400">✓</span><span :class="dark ? 'text-zinc-300' : 'text-zinc-600'">Recommandations d'offres</span></div>
             <div class="flex items-start gap-2.5 text-sm"><span class="shrink-0 mt-0.5 text-emerald-400">✓</span><span :class="dark ? 'text-zinc-300' : 'text-zinc-600'">Notifications en temps réel</span></div>
-            <div class="flex items-start gap-2.5 text-sm"><span class="shrink-0 mt-0.5 text-emerald-400">✓</span><span :class="dark ? 'text-zinc-300' : 'text-zinc-600'">CV optionnel (pas requis)</span></div>
+            <div class="flex items-start gap-2.5 text-sm"><span class="shrink-0 mt-0.5 text-emerald-400">✓</span><span :class="dark ? 'text-zinc-300' : 'text-zinc-600'">CV optionnel </span></div>
+            <div class="flex items-start gap-2.5 text-sm"><span class="shrink-0 mt-0.5 text-emerald-400">✓</span><span :class="dark ? 'text-zinc-300' : 'text-zinc-600'">Pas de LM </span></div>
+         <div class="flex items-start gap-2.5 text-sm"><span class="shrink-0 mt-0.5 text-emerald-400 text-xs">🔜</span><span :class="dark ? 'text-zinc-400' : 'text-zinc-500'">Intégration MCP (à venir)</span></div>
           </div>
-          <button class="w-full py-3 rounded-xl font-display font-bold text-sm border transition-all"
-                  :class="dark ? 'border-zinc-700 text-zinc-300 hover:border-zinc-500 hover:bg-zinc-800' : 'border-zinc-200 text-zinc-600 hover:border-zinc-400 hover:bg-zinc-50'">
+          <flux:button  href="{{ route('register') }}" class="w-full py-3 rounded-xl font-display font-bold text-sm border transition-all"
+                  x-bind:class="dark ? 'border-zinc-700 text-zinc-300 hover:border-zinc-500 hover:bg-zinc-800' : 'border-zinc-200 text-zinc-600 hover:border-zinc-400 hover:bg-zinc-50'">
             Créer mon profil
-          </button>
+          </flux:button>
         </div>
       </div>
 
       <!-- Recruteur PMEshrink-0Featured -->
       <div class="price-card reveal d2 rounded-2xl border overflow-hidden flex flex-col"
            :class="dark ? 'border-emerald-500/40 bg-emerald-950/40' : 'border-emerald-300 bg-emerald-50/60'">
-        <div class="py-2 text-center text-xs font-bold font-display tracking-widest uppercase"
-             :class="dark ? 'bg-emerald-500/20 text-emerald-400' : 'bg-emerald-100 text-emerald-700'">
-          ⭐ Le plus populaire
-        </div>
         <div class="p-6 flex flex-col flex-1">
           <p class="font-display font-bold text-sm mb-1" :class="dark ? 'text-zinc-300' : 'text-zinc-600'">Recruteur PME</p>
           <div class="flex items-baseline gap-1 mb-1">
@@ -1043,36 +1008,17 @@
             <div class="flex items-start gap-2.5 text-sm"><span class="shrink-0 mt-0.5 text-emerald-400">✓</span><span :class="dark ? 'text-zinc-300' : 'text-zinc-600'">Notifications & résumés périodiques</span></div>
             <div class="flex items-start gap-2.5 text-sm"><span class="shrink-0 mt-0.5 text-emerald-400">✓</span><span :class="dark ? 'text-zinc-300' : 'text-zinc-600'">Tableau de bord recruteur</span></div>
             <div class="flex items-start gap-2.5 text-sm"><span class="shrink-0 mt-0.5 text-emerald-400">✓</span><span :class="dark ? 'text-zinc-300' : 'text-zinc-600'">Support prioritaire</span></div>
-          </div>
-          <button class="w-full py-3 rounded-xl font-display font-bold text-sm bg-emerald-400 text-zinc-900 hover:bg-emerald-500 transition-all">
+         <div class="flex items-start gap-2.5 text-sm"><span class="shrink-0 mt-0.5 text-emerald-400 text-xs">🔜</span><span :class="dark ? 'text-zinc-400' : 'text-zinc-500'">Intégration MCP (à venir)</span></div>
+            <div class="flex items-start gap-2.5 text-sm"><span class="shrink-0 mt-0.5 text-emerald-400 text-xs">🔜</span><span :class="dark ? 'text-zinc-400' : 'text-zinc-500'">API privée & webhooks (à venir)</span></div>
+            <div class="flex items-start gap-2.5 text-sm"><span class="shrink-0 mt-0.5 text-emerald-400 text-xs">🔜</span><span :class="dark ? 'text-zinc-400' : 'text-zinc-500'">Account manager dédié (à venir)</span></div>
+
+        </div>
+          <flux:button variant="primary" color="emerald" href="{{ route('register') }}" class="w-full py-3 rounded-xl font-display font-bold text-sm bg-emerald-400 text-zinc-900 hover:bg-emerald-500 transition-all">
             Commencer à recruter
-          </button>
+          </flux:button>
         </div>
       </div>
 
-      <!-- Entreprise -->
-      <div class="price-card reveal d3 rounded-2xl border overflow-hidden flex flex-col"
-           :class="dark ? 'border-zinc-800 bg-zinc-900' : 'border-zinc-200 bg-white'">
-        <div class="p-6 flex flex-col flex-1">
-          <p class="font-display font-bold text-sm mb-1" :class="dark ? 'text-zinc-300' : 'text-zinc-600'">Entreprise</p>
-          <div class="flex items-baseline gap-1 mb-1">
-            <span class="font-display font-extrabold text-4xl" :class="dark ? 'text-zinc-100' : 'text-zinc-900'">Gratuit</span>
-          </div>
-          <p class="text-xs mb-6" :class="dark ? 'text-zinc-500' : 'text-zinc-400'">Fonctionnalités avancées à venir</p>
-          <div class="space-y-3 flex-1 mb-6">
-            <div class="flex items-start gap-2.5 text-sm"><span class="shrink-0 mt-0.5 text-emerald-400">✓</span><span :class="dark ? 'text-zinc-300' : 'text-zinc-600'">Tout Recruteur PME inclus</span></div>
-            <div class="flex items-start gap-2.5 text-sm"><span class="shrink-0 mt-0.5 text-emerald-400">✓</span><span :class="dark ? 'text-zinc-300' : 'text-zinc-600'">Multi-utilisateurs & équipes RH</span></div>
-            <div class="flex items-start gap-2.5 text-sm"><span class="shrink-0 mt-0.5 text-emerald-400">✓</span><span :class="dark ? 'text-zinc-300' : 'text-zinc-600'">Statistiques & reporting avancé</span></div>
-            <div class="flex items-start gap-2.5 text-sm"><span class="shrink-0 mt-0.5 text-emerald-400 text-xs">🔜</span><span :class="dark ? 'text-zinc-400' : 'text-zinc-500'">Intégration MCP (à venir)</span></div>
-            <div class="flex items-start gap-2.5 text-sm"><span class="shrink-0 mt-0.5 text-emerald-400 text-xs">🔜</span><span :class="dark ? 'text-zinc-400' : 'text-zinc-500'">API privée & webhooks (à venir)</span></div>
-            <div class="flex items-start gap-2.5 text-sm"><span class="shrink-0 mt-0.5 text-emerald-400 text-xs">🔜</span><span :class="dark ? 'text-zinc-400' : 'text-zinc-500'">Account manager dédié (à venir)</span></div>
-          </div>
-          <button class="w-full py-3 rounded-xl font-display font-bold text-sm border transition-all"
-                  :class="dark ? 'border-zinc-700 text-zinc-300 hover:border-zinc-500 hover:bg-zinc-800' : 'border-zinc-200 text-zinc-600 hover:border-zinc-400 hover:bg-zinc-50'">
-            Rejoindre la liste d'attente
-          </button>
-        </div>
-      </div>
     </div>
 
     <!-- Trust badges -->
@@ -1390,73 +1336,8 @@ $palette = [
    {{-- ═══════════════════════════════════════════════════
                      FAQ Réponses enrichies
                 ═══════════════════════════════════════════════════ --}}
-            <section id="faq" class="border-y transition-colors duration-300"
-         :class="dark ? 'border-zinc-800 bg-zinc-950' : 'border-zinc-200 bg-slate-50'">
-    <div class="mx-auto max-w-3xl px-5 py-14 sm:py-20 lg:px-8">
+<livewire:welcome.faq />
 
-        {{-- En-tête --}}
-        <div class="mb-10 text-center">
-            <div class="inline-block px-3 py-1 rounded-full border text-xs font-bold font-display uppercase tracking-widest mb-4"
-                 :class="dark ? 'bg-emerald-500/10 border-emerald-500/20 text-emerald-400' : 'bg-emerald-50 border-emerald-200 text-emerald-700'">
-                Foire aux questions
-            </div>
-            <h2 class="font-display font-bold leading-tight mb-3" style="font-size:clamp(1.6rem,4vw,2.4rem)"
-                :class="dark ? 'text-zinc-100' : 'text-zinc-900'">
-                Tout ce que vous voulez savoir<br class="hidden sm:block"> avant de vous lancer.
-            </h2>
-            <p class="text-sm" :class="dark ? 'text-zinc-400' : 'text-zinc-500'">
-                Candidats et recruteurs vos questions les plus fréquentes.
-            </p>
-        </div>
-
-        {{-- Accordéon --}}
-        <div class="space-y-3">
-            @foreach ($faqs as $index => $faq)
-                <details
-                    class="group rounded-2xl border transition-colors duration-200"
-                    :class="dark
-                        ? 'bg-zinc-900 border-zinc-800 open:border-emerald-500/30'
-                        : 'bg-white border-zinc-200 open:border-emerald-300'"
-                    @if ($index === 0) open @endif
-                >
-                    <summary class="flex cursor-pointer list-none items-center justify-between gap-4 px-5 py-4 sm:py-5">
-                        <span class="font-semibold text-sm leading-snug sm:text-base"
-                              :class="dark ? 'text-zinc-100' : 'text-zinc-900'">
-                            {{ $faq['question'] }}
-                        </span>
-                        <span class="grid size-7 shrink-0 place-items-center rounded-lg border transition-all duration-200
-                                     group-open:rotate-45"
-                              :class="dark
-                                  ? 'border-zinc-700 bg-zinc-800 text-zinc-300 group-open:border-emerald-500/30 group-open:bg-emerald-500/10 group-open:text-emerald-400'
-                                  : 'border-zinc-200 bg-zinc-100 text-zinc-500 group-open:border-emerald-300 group-open:bg-emerald-50 group-open:text-emerald-600'">
-                            <flux:icon.plus class="size-3.5" />
-                        </span>
-                    </summary>
-
-                    <div class="border-t px-5 pb-5 pt-4 text-sm leading-relaxed"
-                         :class="dark ? 'border-zinc-800 text-zinc-400' : 'border-zinc-100 text-zinc-500'">
-                        {{ $faq['answer'] }}
-                    </div>
-                </details>
-            @endforeach
-        </div>
-
-        {{-- CTA bas --}}
-        <div class="mt-8 rounded-2xl border p-6 text-center"
-             :class="dark ? 'bg-zinc-900 border-zinc-800' : 'bg-white border-zinc-200'">
-            <p class="font-semibold text-sm mb-4"
-               :class="dark ? 'text-zinc-200' : 'text-zinc-700'">
-                Vous avez une question spécifique à votre situation ?
-            </p>
-            <a href="#contact"
-               class="inline-flex items-center gap-2 px-7 py-3 rounded-xl font-display font-bold text-sm
-                      bg-emerald-400 text-zinc-900 hover:bg-emerald-500 transition-all
-                      hover:-translate-y-0.5 hover:shadow-lg hover:shadow-emerald-500/20">
-                Parlez-nous directement
-            </a>
-        </div>
-    </div>
-</section>
 <!-- ===== CTA ===== -->
 <section class="py-24 px-5 transition-colors duration-300" :class="dark ? 'bg-zinc-950' : 'bg-slate-50'">
   <div class="max-w-5xl mx-auto">
@@ -1466,21 +1347,21 @@ $palette = [
            style="background:radial-gradient(ellipse 60% 80% at 50% 100%,rgba(52,211,153,.09),transparent)"></div>
       <div class="relative">
         <h2 class="font-display font-extrabold leading-tight mb-4" style="font-size:clamp(1.8rem,5vw,3.2rem)"
-            :class="dark ? 'text-zinc-100' : 'text-zinc-900'">
-          Prêt à recruter<br>
+            :class="dark ? 'text-zinc-100' : 'text-zinc-800'">
+          Prêt à <span :class="dark ? 'text-zinc-400' : 'text-zinc-500'">(être) </span> recruter<br>
           <span class="grad-text">sans friction ?</span>
         </h2>
         <p class="text-base max-w-md mx-auto mb-8" :class="dark ? 'text-zinc-400' : 'text-zinc-500'">
-          Rejoignez la plateforme qui met fin au tri manuel. Commencez gratuitement dès maintenant aucune carte bancaire requise.
+          Rejoignez la plateforme qui met fin à vos attentes. Commencez gratuitement dès maintenant aucune paiement requis.
         </p>
         <div class="flex flex-wrap gap-3 justify-center">
-          <button class="px-8 py-3.5 rounded-xl font-display font-bold bg-emerald-400 text-zinc-900 hover:bg-emerald-500 transition-all hover:-translate-y-0.5 hover:shadow-xl hover:shadow-emerald-500/20">
+          <flux:button variant="primary" color="emerald" href="{{ route('register') }}" class="px-8 py-3.5 rounded-xl font-display font-bold bg-emerald-400 text-zinc-900 hover:bg-emerald-500 transition-all hover:-translate-y-0.5 hover:shadow-xl hover:shadow-emerald-500/20">
             Créer un compte gratuit
-          </button>
-          <button class="px-8 py-3.5 rounded-xl font-medium border transition-all hover:-translate-y-0.5"
-                  :class="dark ? 'border-zinc-700 text-zinc-300 hover:border-zinc-500 hover:bg-zinc-800/50' : 'border-zinc-300 text-zinc-600 hover:border-zinc-400 hover:bg-white'">
-            Parler à un expert  <flux:icon.chevron-right class="size-4 inline-block ml-1"/>
-          </button>
+          </flux:button>
+          <flux:button icon:trailing="chevron-right" href="#contact" class="px-8 py-3.5 rounded-xl font-medium border transition-all hover:-translate-y-0.5"
+                  x-bind:class="dark ? 'border-zinc-700 text-zinc-300 hover:border-zinc-500 hover:bg-zinc-800/50' : 'border-zinc-300 text-zinc-600 hover:border-zinc-400 hover:bg-white'">
+            Parler à un expert
+          </flux:button>
         </div>
       </div>
     </div>
