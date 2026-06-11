@@ -1,0 +1,1793 @@
+<!DOCTYPE html>
+<html lang="fr" class="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MatchRH — Recrutement Intelligent</title>
+<meta name="description" content="MatchRH connecte recruteurs et candidats via un scoring algorithmique transparent. Fini le tri manuel, fini les candidatures dans le vide.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500&display=swap" rel="stylesheet">
+
+<style>
+  /* ── Reset & base ── */
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --emerald-400: #34d399;
+    --emerald-500: #10b981;
+    --emerald-600: #059669;
+    --zinc-50:  #fafafa;
+    --zinc-100: #f4f4f5;
+    --zinc-200: #e4e4e7;
+    --zinc-300: #d4d4d8;
+    --zinc-400: #a1a1aa;
+    --zinc-500: #71717a;
+    --zinc-600: #52525b;
+    --zinc-700: #3f3f46;
+    --zinc-800: #27272a;
+    --zinc-900: #18181b;
+    --zinc-950: #09090b;
+    --slate-50:  #f8fafc;
+    --slate-200: #e2e8f0;
+    --slate-400: #94a3b8;
+    --slate-500: #64748b;
+    --slate-900: #0f172a;
+    --slate-950: #020617;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--zinc-950);
+    color: var(--zinc-100);
+    overflow-x: hidden;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .font-display { font-family: 'Syne', sans-serif; }
+
+  /* ── Gradient text ── */
+  .grad-text {
+    background: linear-gradient(135deg, var(--emerald-400) 0%, #6ee7b7 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  /* ── Hero grid bg ── */
+  .hero-grid {
+    background-image:
+      linear-gradient(rgba(52,211,153,.04) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(52,211,153,.04) 1px, transparent 1px);
+    background-size: 48px 48px;
+  }
+
+  /* ── Reveal animations ── */
+  .reveal, .reveal-l, .reveal-r {
+    opacity: 0;
+    transform: translateY(24px);
+    transition: opacity .6s ease, transform .6s ease;
+  }
+  .reveal-l { transform: translateX(-24px); }
+  .reveal-r { transform: translateX(24px); }
+  .reveal.on, .reveal-l.on, .reveal-r.on {
+    opacity: 1;
+    transform: translate(0);
+  }
+  .d1 { transition-delay: .05s; }
+  .d2 { transition-delay: .12s; }
+  .d3 { transition-delay: .19s; }
+  .d4 { transition-delay: .26s; }
+
+  /* ── Bar fill animation ── */
+  .bar-fill {
+    width: 0;
+    transition: width 1s ease;
+  }
+  .bar-fill.on { width: var(--w); }
+
+  /* ── Badge pill ── */
+  .badge {
+    display: inline-flex;
+    align-items: center;
+    gap: .5rem;
+    padding: .375rem 1rem;
+    border-radius: 999px;
+    border: 1px solid rgba(52,211,153,.25);
+    background: rgba(52,211,153,.08);
+    color: var(--emerald-400);
+    font-size: .75rem;
+    font-weight: 700;
+    font-family: 'Syne', sans-serif;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+  }
+  .badge .new {
+    background: var(--emerald-400);
+    color: var(--zinc-950);
+    padding: .1rem .5rem;
+    border-radius: 999px;
+    font-size: .65rem;
+    font-weight: 800;
+  }
+
+  /* ── Buttons ── */
+  .btn-primary {
+    display: inline-flex;
+    align-items: center;
+    gap: .5rem;
+    padding: .875rem 1.75rem;
+    border-radius: .75rem;
+    background: var(--emerald-400);
+    color: var(--zinc-950);
+    font-family: 'Syne', sans-serif;
+    font-weight: 700;
+    font-size: .9rem;
+    text-decoration: none;
+    transition: background .2s, transform .2s, box-shadow .2s;
+    border: none;
+    cursor: pointer;
+  }
+  .btn-primary:hover {
+    background: var(--emerald-500);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(52,211,153,.25);
+  }
+  .btn-ghost {
+    display: inline-flex;
+    align-items: center;
+    gap: .5rem;
+    padding: .875rem 1.75rem;
+    border-radius: .75rem;
+    border: 1px solid var(--zinc-700);
+    color: var(--zinc-300);
+    font-weight: 500;
+    font-size: .9rem;
+    text-decoration: none;
+    transition: border-color .2s, background .2s, transform .2s;
+    background: transparent;
+    cursor: pointer;
+  }
+  .btn-ghost:hover {
+    border-color: var(--zinc-500);
+    background: rgba(255,255,255,.04);
+    transform: translateY(-2px);
+  }
+
+  /* ── Layout helpers ── */
+  .container { max-width: 1024px; margin: 0 auto; padding: 0 1.25rem; }
+  .section { padding: 6rem 1.25rem; }
+  .section-alt { background: rgba(255,255,255,.02); border-top: 1px solid var(--zinc-800); border-bottom: 1px solid var(--zinc-800); }
+
+  /* ── Two-col layout ── */
+  .two-col {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.25rem;
+  }
+  @media (max-width: 768px) {
+    .two-col { grid-template-columns: 1fr; }
+    .hide-mobile { display: none; }
+  }
+
+  /* ── Cards ── */
+  .card {
+    border-radius: 1rem;
+    border: 1px solid var(--zinc-800);
+    background: var(--zinc-900);
+    padding: 1.75rem;
+    transition: border-color .2s, background .2s;
+  }
+  .card:hover { border-color: var(--zinc-600); }
+  .card-emerald {
+    border-color: rgba(52,211,153,.2);
+    background: rgba(52,211,153,.04);
+  }
+
+  /* ── Role headers ── */
+  .role-header {
+    display: flex;
+    align-items: center;
+    gap: .75rem;
+    padding: 1rem 1.25rem;
+    border-bottom: 1px solid var(--zinc-800);
+    border-radius: 1rem 1rem 0 0;
+  }
+  .role-icon {
+    width: 2.5rem;
+    height: 2.5rem;
+    border-radius: .625rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid;
+    font-size: 1.1rem;
+  }
+  .role-icon-recruiter {
+    background: rgba(99,102,241,.12);
+    border-color: rgba(99,102,241,.25);
+    color: #818cf8;
+  }
+  .role-icon-candidate {
+    background: rgba(52,211,153,.1);
+    border-color: rgba(52,211,153,.25);
+    color: var(--emerald-400);
+  }
+
+  /* ── Section titles ── */
+  .section-eyebrow {
+    display: inline-block;
+    padding: .25rem .875rem;
+    border-radius: 999px;
+    border: 1px solid rgba(52,211,153,.25);
+    background: rgba(52,211,153,.08);
+    color: var(--emerald-400);
+    font-size: .7rem;
+    font-weight: 700;
+    font-family: 'Syne', sans-serif;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+    margin-bottom: 1rem;
+  }
+  .section-title {
+    font-family: 'Syne', sans-serif;
+    font-weight: 700;
+    line-height: 1.1;
+    margin-bottom: 1rem;
+  }
+  .section-sub {
+    color: var(--zinc-400);
+    font-size: 1rem;
+    line-height: 1.6;
+    max-width: 42rem;
+  }
+
+  /* ── Divider label ── */
+  .divider-label {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+  }
+  .divider-label::before, .divider-label::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--zinc-800);
+  }
+  .divider-label span {
+    font-size: .7rem;
+    font-weight: 700;
+    font-family: 'Syne', sans-serif;
+    letter-spacing: .12em;
+    text-transform: uppercase;
+    color: var(--zinc-500);
+    white-space: nowrap;
+  }
+
+  /* ── Column role label ── */
+  .col-role-label {
+    font-family: 'Syne', sans-serif;
+    font-size: .7rem;
+    font-weight: 700;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+    padding: .3rem .875rem;
+    border-radius: 999px;
+    border: 1px solid;
+    display: inline-block;
+    margin-bottom: 1.25rem;
+  }
+  .col-role-recruiter {
+    background: rgba(99,102,241,.1);
+    border-color: rgba(99,102,241,.25);
+    color: #818cf8;
+  }
+  .col-role-candidate {
+    background: rgba(52,211,153,.08);
+    border-color: rgba(52,211,153,.25);
+    color: var(--emerald-400);
+  }
+
+  /* ── Check list ── */
+  .check-list { list-style: none; display: flex; flex-direction: column; gap: .75rem; }
+  .check-list li {
+    display: flex;
+    align-items: flex-start;
+    gap: .75rem;
+    font-size: .9rem;
+    color: var(--zinc-300);
+    line-height: 1.5;
+  }
+  .check-list li .icon { color: var(--emerald-400); margin-top: .1rem; flex-shrink: 0; font-size: .85rem; }
+  .check-list li .icon-x { color: #f87171; }
+  .check-list li .icon-warn { color: #fbbf24; }
+
+  /* ── Stats grid ── */
+  .stats-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1rem;
+    padding-top: 2.5rem;
+    border-top: 1px solid var(--zinc-800);
+  }
+  @media (max-width: 640px) {
+    .stats-grid { grid-template-columns: repeat(2, 1fr); }
+  }
+  .stat-item { text-align: center; }
+  .stat-value {
+    font-family: 'Syne', sans-serif;
+    font-weight: 800;
+    font-size: 1.5rem;
+    color: var(--zinc-100);
+    display: block;
+  }
+  .stat-label { font-size: .72rem; color: var(--zinc-500); margin-top: .25rem; display: block; }
+
+  /* ── Step cards ── */
+  .steps-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    border-radius: 1rem;
+    overflow: hidden;
+    border: 1px solid var(--zinc-800);
+    gap: 1px;
+    background: var(--zinc-800);
+  }
+  @media (max-width: 768px) {
+    .steps-grid { grid-template-columns: repeat(2, 1fr); }
+  }
+  .step-card {
+    background: var(--zinc-900);
+    padding: 1.5rem;
+    transition: background .2s;
+  }
+  .step-card:hover { background: rgba(255,255,255,.03); }
+  .step-num {
+    font-family: 'Syne', sans-serif;
+    font-weight: 800;
+    font-size: 2.5rem;
+    line-height: 1;
+    margin-bottom: 1rem;
+  }
+  .step-sub { font-size: .78rem; margin-top: .5rem; }
+  .step-sub span {
+    display: block;
+    padding: .25rem 0;
+    border-top: 1px solid var(--zinc-800);
+    color: var(--zinc-500);
+  }
+  .step-sub span strong { color: var(--zinc-400); font-weight: 500; }
+
+  /* ── Feature grid ── */
+  .feat-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.25rem;
+  }
+  @media (max-width: 768px) { .feat-grid { grid-template-columns: 1fr; } }
+
+  .feat-col-title {
+    font-family: 'Syne', sans-serif;
+    font-size: .95rem;
+    font-weight: 700;
+    margin-bottom: 1rem;
+    padding-bottom: .75rem;
+    border-bottom: 1px solid var(--zinc-800);
+    display: flex;
+    align-items: center;
+    gap: .625rem;
+  }
+
+  .feat-item {
+    display: flex;
+    gap: .875rem;
+    padding: 1rem;
+    border-radius: .75rem;
+    border: 1px solid var(--zinc-800);
+    background: var(--zinc-950);
+    transition: border-color .2s;
+    margin-bottom: .625rem;
+  }
+  .feat-item:hover { border-color: var(--zinc-700); }
+  .feat-icon {
+    width: 2.25rem;
+    height: 2.25rem;
+    border-radius: .5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1rem;
+    flex-shrink: 0;
+    border: 1px solid rgba(52,211,153,.2);
+    background: rgba(52,211,153,.06);
+  }
+  .feat-icon-indigo {
+    border-color: rgba(99,102,241,.25);
+    background: rgba(99,102,241,.08);
+  }
+
+  /* ── Testimonials ── */
+  .testi-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.25rem;
+  }
+  @media (max-width: 768px) { .testi-grid { grid-template-columns: 1fr; } }
+
+  .testi-card {
+    border-radius: 1rem;
+    border: 1px solid var(--zinc-800);
+    background: var(--zinc-900);
+    padding: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+  .testi-avatar {
+    width: 2.5rem;
+    height: 2.5rem;
+    border-radius: .625rem;
+    display: grid;
+    place-items: center;
+    font-family: 'Syne', sans-serif;
+    font-weight: 700;
+    font-size: .8rem;
+    border: 1px solid;
+    flex-shrink: 0;
+  }
+  .stars { color: var(--emerald-400); font-size: .85rem; letter-spacing: .1em; }
+  blockquote { font-size: .88rem; line-height: 1.65; color: var(--zinc-300); flex: 1; }
+
+  /* ── Pricing ── */
+  .price-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.25rem;
+  }
+  @media (max-width: 640px) { .price-grid { grid-template-columns: 1fr; } }
+
+  /* ── MCP block ── */
+  .mcp-wrap {
+    border-radius: 1rem;
+    border: 1px solid rgba(52,211,153,.2);
+    background: rgba(52,211,153,.03);
+    overflow: hidden;
+    position: relative;
+  }
+  .mcp-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2rem;
+    padding: 3rem;
+    align-items: start;
+  }
+  @media (max-width: 768px) {
+    .mcp-grid { grid-template-columns: 1fr; padding: 1.75rem; }
+  }
+  .code-block {
+    background: var(--zinc-900);
+    border: 1px solid var(--zinc-800);
+    border-radius: .75rem;
+    overflow: hidden;
+    font-family: 'Courier New', monospace;
+    font-size: .76rem;
+    color: var(--zinc-300);
+  }
+  .code-header {
+    display: flex;
+    align-items: center;
+    gap: .5rem;
+    padding: .75rem 1rem;
+    background: rgba(255,255,255,.02);
+    border-bottom: 1px solid var(--zinc-800);
+  }
+  .code-dot { width: .6rem; height: .6rem; border-radius: 50%; }
+  .code-body { padding: 1.25rem; line-height: 1.8; overflow-x: auto; }
+  .c-comment { color: var(--zinc-600); }
+  .c-kw { color: var(--emerald-400); }
+  .c-str { color: #fbbf24; }
+  .c-num { color: #93c5fd; }
+
+  /* ── CTA final ── */
+  .cta-wrap {
+    border-radius: 1.5rem;
+    border: 1px solid rgba(52,211,153,.2);
+    background: rgba(52,211,153,.04);
+    padding: 4rem 2rem;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .cta-glow {
+    position: absolute;
+    bottom: -60px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 600px;
+    height: 300px;
+    background: radial-gradient(ellipse, rgba(52,211,153,.08) 0%, transparent 70%);
+    pointer-events: none;
+  }
+
+  /* ── Header ── */
+  .header {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 40;
+    display: flex;
+    justify-content: center;
+    padding: .75rem 1.25rem;
+    transition: padding .3s;
+  }
+  .header-inner {
+    width: 100%;
+    max-width: 1024px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: .625rem 1.25rem;
+    border-radius: 999px;
+    background: rgba(9,9,11,.8);
+    backdrop-filter: blur(16px);
+    border: 1px solid rgba(255,255,255,.06);
+    box-shadow: 0 8px 32px rgba(0,0,0,.4), 0 0 0 1px rgba(52,211,153,.06);
+  }
+  .logo { display: flex; align-items: center; gap: .625rem; text-decoration: none; }
+  .logo-icon {
+    width: 2rem; height: 2rem;
+    background: var(--zinc-50);
+    color: var(--zinc-950);
+    border-radius: .5rem;
+    display: grid;
+    place-items: center;
+    font-family: 'Syne', sans-serif;
+    font-weight: 800;
+    font-size: .75rem;
+  }
+  .logo-name {
+    font-family: 'Syne', sans-serif;
+    font-weight: 800;
+    font-size: 1rem;
+    color: var(--zinc-400);
+  }
+  .nav-links {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+  }
+  .nav-links a {
+    font-size: .8rem;
+    font-weight: 500;
+    color: var(--zinc-400);
+    text-decoration: none;
+    transition: color .2s;
+  }
+  .nav-links a:hover { color: var(--emerald-400); }
+  @media (max-width: 768px) { .nav-links { display: none; } }
+  .header-cta {
+    display: inline-flex;
+    align-items: center;
+    padding: .4rem 1rem;
+    border-radius: 999px;
+    background: var(--zinc-50);
+    color: var(--zinc-950);
+    font-family: 'Syne', sans-serif;
+    font-weight: 700;
+    font-size: .78rem;
+    text-decoration: none;
+    transition: background .2s;
+  }
+  .header-cta:hover { background: var(--zinc-200); }
+
+  /* ── Footer ── */
+  footer {
+    border-top: 1px solid var(--zinc-800);
+    padding: 3rem 1.25rem 2rem;
+    background: rgba(255,255,255,.01);
+  }
+  .footer-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 2rem;
+    max-width: 1024px;
+    margin: 0 auto 2.5rem;
+  }
+  @media (max-width: 768px) { .footer-grid { grid-template-columns: repeat(2, 1fr); } }
+  .footer-col-title {
+    font-family: 'Syne', sans-serif;
+    font-size: .8rem;
+    font-weight: 700;
+    color: var(--zinc-100);
+    margin-bottom: 1rem;
+  }
+  .footer-col a {
+    display: block;
+    font-size: .8rem;
+    color: var(--zinc-500);
+    text-decoration: none;
+    margin-bottom: .625rem;
+    transition: color .2s;
+  }
+  .footer-col a:hover { color: var(--zinc-50); }
+  .footer-bottom {
+    max-width: 1024px;
+    margin: 0 auto;
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--zinc-800);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 1rem;
+  }
+  .footer-copy { font-size: .78rem; color: var(--zinc-500); }
+  .status-dot {
+    display: flex;
+    align-items: center;
+    gap: .5rem;
+    font-size: .78rem;
+    font-weight: 500;
+    color: var(--zinc-400);
+  }
+  .dot-green {
+    width: .5rem; height: .5rem;
+    border-radius: 50%;
+    background: var(--emerald-400);
+    animation: pulse-dot 2s infinite;
+  }
+  @keyframes pulse-dot {
+    0%, 100% { opacity: 1; }
+    50% { opacity: .4; }
+  }
+
+  /* ── Spacer ── */
+  .spacer-header { height: 5rem; }
+
+  /* ── Inline helpers ── */
+  .text-center { text-align: center; }
+  .mb-3 { margin-bottom: .75rem; }
+  .mb-4 { margin-bottom: 1rem; }
+  .mb-5 { margin-bottom: 1.25rem; }
+  .mb-6 { margin-bottom: 1.5rem; }
+  .mb-8 { margin-bottom: 2rem; }
+  .mb-10 { margin-bottom: 2.5rem; }
+  .mb-12 { margin-bottom: 3rem; }
+  .mb-14 { margin-bottom: 3.5rem; }
+  .mt-6 { margin-top: 1.5rem; }
+  .mt-8 { margin-top: 2rem; }
+  .mt-10 { margin-top: 2.5rem; }
+  .flex { display: flex; }
+  .flex-wrap { flex-wrap: wrap; }
+  .items-center { align-items: center; }
+  .gap-2 { gap: .5rem; }
+  .gap-3 { gap: .75rem; }
+  .gap-4 { gap: 1rem; }
+  .justify-center { justify-content: center; }
+  .w-full { width: 100%; }
+  .text-sm { font-size: .875rem; }
+  .text-xs { font-size: .75rem; }
+  .font-bold { font-weight: 700; }
+  .text-zinc-400 { color: var(--zinc-400); }
+  .text-zinc-500 { color: var(--zinc-500); }
+  .text-zinc-300 { color: var(--zinc-300); }
+  .text-emerald { color: var(--emerald-400); }
+  .relative { position: relative; }
+  .overflow-hidden { overflow: hidden; }
+  .pulse { animation: pulse-dot 2.5s infinite; }
+
+  /* ── Radial glow ── */
+  .glow-top {
+    position: absolute;
+    top: 0; left: 50%;
+    transform: translateX(-50%);
+    width: 700px; height: 400px;
+    background: radial-gradient(ellipse, rgba(52,211,153,.1) 0%, transparent 70%);
+    pointer-events: none;
+  }
+
+  /* ── Classement table ── */
+  .rank-table { border-radius: 1rem; border: 1px solid var(--zinc-800); overflow: hidden; background: var(--zinc-900); }
+  .rank-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1rem 1.25rem;
+    border-bottom: 1px solid var(--zinc-800);
+  }
+  .rank-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: .875rem 1.25rem;
+    border-bottom: 1px solid var(--zinc-800);
+    transition: background .15s;
+    cursor: default;
+  }
+  .rank-row:last-child { border-bottom: none; }
+  .rank-row:hover { background: rgba(255,255,255,.02); }
+  .rank-avatar {
+    width: 2.25rem; height: 2.25rem;
+    border-radius: .5rem;
+    display: grid;
+    place-items: center;
+    font-size: .75rem;
+    font-weight: 700;
+    font-family: 'Syne', sans-serif;
+    flex-shrink: 0;
+    border: 1px solid;
+  }
+  .rank-bar-wrap {
+    width: 5rem; height: .375rem;
+    border-radius: 999px;
+    background: var(--zinc-800);
+    overflow: hidden;
+  }
+  .rank-bar { height: 100%; border-radius: 999px; background: linear-gradient(90deg, var(--emerald-600), var(--emerald-400)); }
+  .rank-score { font-family: 'Syne', sans-serif; font-weight: 700; font-size: .85rem; color: var(--emerald-400); }
+
+  /* ── Trust badges ── */
+  .trust-list {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 1.25rem;
+    font-size: .8rem;
+    color: var(--zinc-500);
+    margin-top: 2rem;
+  }
+
+  /* ── MCP use cards ── */
+  .mcp-use {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: .875rem;
+    margin-top: 1.5rem;
+  }
+  @media (max-width: 640px) { .mcp-use { grid-template-columns: 1fr; } }
+  .mcp-use-card {
+    display: flex;
+    gap: .75rem;
+    padding: 1rem;
+    border-radius: .75rem;
+    border: 1px solid var(--zinc-800);
+    background: rgba(9,9,11,.6);
+  }
+  .mcp-use-icon { font-size: 1.2rem; flex-shrink: 0; margin-top: .1rem; }
+
+  /* Scroll-triggered bar */
+  @media (prefers-reduced-motion: reduce) {
+    .reveal, .reveal-l, .reveal-r { opacity: 1; transform: none; transition: none; }
+    .bar-fill { width: var(--w) !important; }
+  }
+</style>
+</head>
+
+<body>
+
+<!-- ═══ HEADER ═══ -->
+<header class="header" id="top">
+  <div class="header-inner">
+    <a href="#top" class="logo">
+      <div class="logo-icon">sq</div>
+      <span class="logo-name">fallabolo</span>
+    </a>
+    <nav class="nav-links">
+      <a href="#valeur">Proposition de valeur</a>
+      <a href="#probleme">Problème</a>
+      <a href="#solution">Solution</a>
+      <a href="#fonctionnalites">Fonctionnalités</a>
+      <a href="#mcp">MCP</a>
+      <a href="#tarifs">Tarifs</a>
+    </nav>
+    <a href="#contact" class="header-cta">Demander une démo</a>
+  </div>
+</header>
+
+<div class="spacer-header"></div>
+
+
+<!-- ═══ HERO — Double lecture ═══ -->
+<section class="section relative overflow-hidden" style="padding-top:7rem;padding-bottom:6rem;text-align:center;">
+  <div class="glow-top"></div>
+  <div class="hero-grid" style="position:absolute;inset:0;pointer-events:none;"></div>
+
+  <div class="container relative">
+
+    <div class="reveal mb-6">
+      <div class="badge">
+        <span class="new">NOUVEAU</span>
+        Matching algorithmique · Score transparent · Sans CV obligatoire
+      </div>
+    </div>
+
+    <!-- Headline à double lecture -->
+    <h1 class="reveal d1 font-display" style="font-size:clamp(2.4rem,7vw,4.8rem);font-weight:800;line-height:1.06;letter-spacing:-.02em;margin-bottom:1.25rem;">
+      Le bon profil.<br>
+      <span class="grad-text">La bonne offre. Enfin.</span>
+    </h1>
+
+    <!-- Sous-titre double lecture explicite -->
+    <p class="reveal d2" style="font-size:1.1rem;color:var(--zinc-400);max-width:36rem;margin:0 auto 1.25rem;line-height:1.7;">
+      Vous recrutez sans vous noyer dans les CVs.<br>
+      Vous postulez sans disparaître dans le silence.
+    </p>
+
+    <!-- Ligne d'ancrage émotionnel -->
+    <p class="reveal d2" style="font-size:.9rem;color:var(--zinc-600);max-width:32rem;margin:0 auto 2.5rem;line-height:1.6;font-style:italic;">
+      MatchRH juge vos compétences réelles — pas la mise en page de votre PDF, pas votre patience face à 200 dossiers.
+    </p>
+
+    <div class="reveal d3 flex flex-wrap gap-3 justify-center mb-14">
+      <a href="#valeur" class="btn-ghost">En savoir plus →</a>
+      <a href="#register" class="btn-primary">Créer un compte gratuit</a>
+    </div>
+
+    <!-- Stats — 2 recruteur / 2 candidat -->
+    <div class="reveal d4 stats-grid">
+      <div class="stat-item">
+        <span class="stat-value">−87%</span>
+        <span class="stat-label">Temps de tri pour le recruteur</span>
+      </div>
+      <div class="stat-item">
+        <span class="stat-value">Score visible</span>
+        <span class="stat-label">Avant même de postuler</span>
+      </div>
+      <div class="stat-item">
+        <span class="stat-value">0 CV, 0 LM</span>
+        <span class="stat-label">Requis pour le candidat</span>
+      </div>
+      <div class="stat-item">
+        <span class="stat-value">100%</span>
+        <span class="stat-label">Transparent — chaque score expliqué</span>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+
+<!-- ═══ PROPOSITION DE VALEUR — Double lecture ═══ -->
+<section id="valeur" class="section section-alt">
+  <div class="container">
+
+    <div class="reveal text-center mb-14">
+      <div class="section-eyebrow">La vérité que personne ne dit</div>
+      <h2 class="section-title font-display" style="font-size:clamp(1.8rem,4.5vw,3rem);">
+        Deux réalités.<br>
+        <span class="grad-text">Un problème commun.</span>
+      </h2>
+      <p class="section-sub" style="margin:0 auto;">
+        Le recrutement classique fait perdre du temps aux deux parties. MatchRH rend le jeu équitable.
+      </p>
+    </div>
+
+    <!-- Colonnes gauche/droite : douleurs opposées -->
+    <div class="two-col mb-8">
+
+      <!-- Candidat -->
+      <div class="reveal-l card" style="position:relative;">
+        <div style="position:absolute;top:1rem;right:1rem;" class="col-role-label col-role-candidate">Candidat</div>
+        <h3 class="font-display" style="font-size:1.05rem;font-weight:700;color:var(--zinc-100);margin-bottom:1.25rem;padding-top:.5rem;">Ce que vous vivez en cherchant un emploi</h3>
+        <ul class="check-list">
+          <li><span class="icon icon-x">✗</span> Vous postulez et n'avez jamais de retour — même pour un refus</li>
+          <li><span class="icon icon-x">✗</span> Vous êtes éliminé sans savoir pourquoi ni sur quels critères</li>
+          <li><span class="icon icon-x">✗</span> Vous passez des heures sur un CV que personne ne lit en entier</li>
+          <li><span class="icon icon-x">✗</span> Vous ne savez jamais si vous êtes vraiment qualifié pour une offre</li>
+          <li><span class="icon icon-x">✗</span> Vous adaptez votre mise en page plutôt que de mettre en avant vos compétences</li>
+        </ul>
+      </div>
+
+      <!-- Recruteur -->
+      <div class="reveal-r card" style="position:relative;">
+        <div style="position:absolute;top:1rem;right:1rem;" class="col-role-label col-role-recruiter">Recruteur</div>
+        <h3 class="font-display" style="font-size:1.05rem;font-weight:700;color:var(--zinc-100);margin-bottom:1.25rem;padding-top:.5rem;">Ce que vous vivez en recrutant</h3>
+        <ul class="check-list">
+          <li><span class="icon icon-warn">!</span> Vous recevez 200+ candidatures en 48h pour un seul poste</li>
+          <li><span class="icon icon-warn">!</span> Vous scannez chaque CV en 6 secondes — titre, entreprise, c'est tout</li>
+          <li><span class="icon icon-warn">!</span> Vous ignorez les lettres de motivation dans 90% des cas</li>
+          <li><span class="icon icon-warn">!</span> Vous éliminez en masse par manque de temps, sans critères clairs</li>
+          <li><span class="icon icon-warn">!</span> Les données de chaque candidat sont dans des PDFs impossibles à comparer</li>
+        </ul>
+      </div>
+
+    </div>
+
+    <!-- Conclusion double lecture -->
+    <div class="reveal card card-emerald text-center" style="padding:3rem;">
+      <div style="font-size:2rem;margin-bottom:1rem;">⚖️</div>
+      <h3 class="font-display" style="font-size:1.5rem;font-weight:700;color:var(--zinc-100);margin-bottom:.75rem;">
+        MatchRH rend le jeu équitable
+      </h3>
+      <p style="font-size:.95rem;color:var(--zinc-400);max-width:38rem;margin:0 auto 1.5rem;line-height:1.65;">
+        Vos compétences réelles sont évaluées sur des critères objectifs — pas sur la beauté d'un PDF. Vous recevez uniquement des profils qui correspondent — pas des candidatures espoir.
+      </p>
+      <div class="flex flex-wrap gap-2 justify-center">
+        <span style="padding:.4rem .875rem;border-radius:.5rem;border:1px solid rgba(52,211,153,.25);background:rgba(52,211,153,.08);color:var(--emerald-400);font-size:.78rem;font-weight:600;">Compétences notées 1→5</span>
+        <span style="padding:.4rem .875rem;border-radius:.5rem;border:1px solid rgba(52,211,153,.25);background:rgba(52,211,153,.08);color:var(--emerald-400);font-size:.78rem;font-weight:600;">Score visible avant candidature</span>
+        <span style="padding:.4rem .875rem;border-radius:.5rem;border:1px solid rgba(52,211,153,.25);background:rgba(52,211,153,.08);color:var(--emerald-400);font-size:.78rem;font-weight:600;">Critères bloquants transparents</span>
+        <span style="padding:.4rem .875rem;border-radius:.5rem;border:1px solid rgba(52,211,153,.25);background:rgba(52,211,153,.08);color:var(--emerald-400);font-size:.78rem;font-weight:600;">Zéro biais de présentation</span>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+
+<!-- ═══ PROBLÈME — Colonnes distinctes ═══ -->
+<section id="probleme" class="section">
+  <div class="container">
+
+    <div class="reveal mb-12">
+      <div class="section-eyebrow">Problème</div>
+      <h2 class="section-title font-display" style="font-size:clamp(1.8rem,4.5vw,3rem);">
+        Le recrutement classique<br>est cassé <span class="grad-text">des deux côtés</span>
+      </h2>
+      <p class="section-sub">
+        Même frustration, deux perspectives. MatchRH y met fin simultanément.
+      </p>
+    </div>
+
+    <div class="two-col">
+
+      <!-- Colonne Recruteur -->
+      <div class="reveal-l">
+        <div class="col-role-label col-role-recruiter">Pour le recruteur</div>
+        <div style="display:flex;flex-direction:column;gap:.75rem;">
+          <div class="card" style="padding:1.25rem;">
+            <div style="width:2.5rem;height:2.5rem;border-radius:.625rem;background:rgba(239,68,68,.08);border:1px solid rgba(239,68,68,.2);display:flex;align-items:center;justify-content:center;margin-bottom:.875rem;font-size:1.1rem;">📨</div>
+            <h3 class="font-display" style="font-size:.85rem;font-weight:700;color:var(--zinc-100);margin-bottom:.5rem;">Candidatures massives non pertinentes</h3>
+            <p style="font-size:.82rem;color:var(--zinc-500);line-height:1.55;">Chaque offre attire des dizaines de profils inadaptés, noyant les bons candidats dans la masse.</p>
+          </div>
+          <div class="card" style="padding:1.25rem;">
+            <div style="width:2.5rem;height:2.5rem;border-radius:.625rem;background:rgba(239,68,68,.08);border:1px solid rgba(239,68,68,.2);display:flex;align-items:center;justify-content:center;margin-bottom:.875rem;font-size:1.1rem;">⏱️</div>
+            <h3 class="font-display" style="font-size:.85rem;font-weight:700;color:var(--zinc-100);margin-bottom:.5rem;">Tri manuel chronophage</h3>
+            <p style="font-size:.82rem;color:var(--zinc-500);line-height:1.55;">6 secondes par CV en moyenne. La qualité de décision est sacrifiée pour la vitesse.</p>
+          </div>
+          <div class="card" style="padding:1.25rem;">
+            <div style="width:2.5rem;height:2.5rem;border-radius:.625rem;background:rgba(239,68,68,.08);border:1px solid rgba(239,68,68,.2);display:flex;align-items:center;justify-content:center;margin-bottom:.875rem;font-size:1.1rem;">📁</div>
+            <h3 class="font-display" style="font-size:.85rem;font-weight:700;color:var(--zinc-100);margin-bottom:.5rem;">Données non comparables</h3>
+            <p style="font-size:.82rem;color:var(--zinc-500);line-height:1.55;">Compétences dispersées dans des PDFs — impossible de comparer objectivement les profils.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Colonne Candidat -->
+      <div class="reveal-r">
+        <div class="col-role-label col-role-candidate">Pour le candidat</div>
+        <div style="display:flex;flex-direction:column;gap:.75rem;">
+          <div class="card" style="padding:1.25rem;">
+            <div style="width:2.5rem;height:2.5rem;border-radius:.625rem;background:rgba(239,68,68,.08);border:1px solid rgba(239,68,68,.2);display:flex;align-items:center;justify-content:center;margin-bottom:.875rem;font-size:1.1rem;">🔇</div>
+            <h3 class="font-display" style="font-size:.85rem;font-weight:700;color:var(--zinc-100);margin-bottom:.5rem;">Postuler dans le vide</h3>
+            <p style="font-size:.82rem;color:var(--zinc-500);line-height:1.55;">Des dizaines de candidatures envoyées, aucun retour — même pas un refus. Le silence est la norme.</p>
+          </div>
+          <div class="card" style="padding:1.25rem;">
+            <div style="width:2.5rem;height:2.5rem;border-radius:.625rem;background:rgba(239,68,68,.08);border:1px solid rgba(239,68,68,.2);display:flex;align-items:center;justify-content:center;margin-bottom:.875rem;font-size:1.1rem;">❓</div>
+            <h3 class="font-display" style="font-size:.85rem;font-weight:700;color:var(--zinc-100);margin-bottom:.5rem;">Être éliminé sans explication</h3>
+            <p style="font-size:.82rem;color:var(--zinc-500);line-height:1.55;">Vous ne savez jamais pourquoi vous n'avez pas été retenu. Impossible de progresser sans feedback.</p>
+          </div>
+          <div class="card" style="padding:1.25rem;">
+            <div style="width:2.5rem;height:2.5rem;border-radius:.625rem;background:rgba(239,68,68,.08);border:1px solid rgba(239,68,68,.2);display:flex;align-items:center;justify-content:center;margin-bottom:.875rem;font-size:1.1rem;">🎭</div>
+            <h3 class="font-display" style="font-size:.85rem;font-weight:700;color:var(--zinc-100);margin-bottom:.5rem;">Être jugé sur la forme, pas le fond</h3>
+            <p style="font-size:.82rem;color:var(--zinc-500);line-height:1.55;">Le meilleur CV designer gagne. Pas le meilleur profil. Vos vraies compétences restent invisibles.</p>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+
+<!-- ═══ SOLUTION — Neutre unifié + double perspective ═══ -->
+<section id="solution" class="section section-alt">
+  <div class="container">
+
+    <div class="reveal text-center mb-12">
+      <div class="section-eyebrow">Notre solution</div>
+      <h2 class="section-title font-display" style="font-size:clamp(1.8rem,4.5vw,3rem);">
+        Matching en 4 étapes,<br><span class="grad-text">score transparent</span>
+      </h2>
+      <p class="section-sub" style="margin:0 auto;">
+        Un algorithme déterministe. Pas de boîte noire — chaque score est expliqué, visible et compréhensible par tous.
+      </p>
+    </div>
+
+    <!-- Steps avec double perspective -->
+    <div class="steps-grid mb-12">
+      <div class="step-card reveal d1">
+        <div class="step-num grad-text">01</div>
+        <h3 class="font-display" style="font-size:.85rem;font-weight:700;color:var(--zinc-100);margin-bottom:.5rem;">Critères bloquants</h3>
+        <p style="font-size:.8rem;color:var(--zinc-500);line-height:1.55;">Éliminatoires. Si un critère obligatoire n'est pas rempli, le score tombe à 0 automatiquement.</p>
+        <div class="step-sub">
+          <span><strong>Recruteur :</strong> vous définissez vos non-négociables une seule fois</span>
+          <span><strong>Candidat :</strong> vous savez immédiatement si vous êtes éligible</span>
+        </div>
+      </div>
+      <div class="step-card reveal d2">
+        <div class="step-num grad-text">02</div>
+        <h3 class="font-display" style="font-size:.85rem;font-weight:700;color:var(--zinc-100);margin-bottom:.5rem;">Score principal pondéré</h3>
+        <p style="font-size:.8rem;color:var(--zinc-500);line-height:1.55;">6 dimensions clés combinées en un score sur 100 selon le niveau du poste.</p>
+        <div class="step-sub">
+          <span><strong>Recruteur :</strong> un classement objectif, non manipulable</span>
+          <span><strong>Candidat :</strong> votre vrai niveau enfin reconnu et mesuré</span>
+        </div>
+      </div>
+      <div class="step-card reveal d3">
+        <div class="step-num grad-text">03</div>
+        <h3 class="font-display" style="font-size:.85rem;font-weight:700;color:var(--zinc-100);margin-bottom:.5rem;">Atouts détectés</h3>
+        <p style="font-size:.8rem;color:var(--zinc-500);line-height:1.55;">Certifications, expériences sectorielles, langues supplémentaires — valorisés séparément.</p>
+        <div class="step-sub">
+          <span><strong>Recruteur :</strong> départagez facilement les profils à score égal</span>
+          <span><strong>Candidat :</strong> vos atouts sont visibles, pas enfouis dans un PDF</span>
+        </div>
+      </div>
+      <div class="step-card reveal d4">
+        <div class="step-num grad-text">04</div>
+        <h3 class="font-display" style="font-size:.85rem;font-weight:700;color:var(--zinc-100);margin-bottom:.5rem;">Score final en %</h3>
+        <p style="font-size:.8rem;color:var(--zinc-500);line-height:1.55;">Un chiffre clair, visible avant même de postuler. Tout le monde joue cartes sur table.</p>
+        <div class="step-sub">
+          <span><strong>Recruteur :</strong> votre pipeline arrive déjà trié du meilleur au moins bon</span>
+          <span><strong>Candidat :</strong> vous postulez uniquement là où vous avez une vraie chance</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Barres + Score preview -->
+    <div class="two-col" style="align-items:start;">
+
+      <!-- Barres -->
+      <div class="reveal-l">
+        <p style="font-size:.7rem;font-weight:700;font-family:'Syne',sans-serif;letter-spacing:.1em;text-transform:uppercase;color:var(--emerald-400);margin-bottom:1.25rem;">Pondérations fixes & transparentes</p>
+        <div style="display:flex;flex-direction:column;gap:1rem;">
+          <div style="display:flex;align-items:center;gap:.75rem;">
+            <div style="font-size:.82rem;width:6.5rem;flex-shrink:0;color:var(--zinc-400);">Compétences</div>
+            <div style="flex:1;height:.375rem;border-radius:999px;overflow:hidden;background:var(--zinc-800);">
+              <div class="bar-fill" style="--w:50%;height:100%;border-radius:999px;background:linear-gradient(90deg,var(--emerald-600),var(--emerald-400));"></div>
+            </div>
+            <div style="font-size:.82rem;font-weight:700;font-family:'Syne',sans-serif;width:2.5rem;text-align:right;color:var(--emerald-400);">50%</div>
+          </div>
+          <div style="display:flex;align-items:center;gap:.75rem;">
+            <div style="font-size:.82rem;width:6.5rem;flex-shrink:0;color:var(--zinc-400);">Expérience</div>
+            <div style="flex:1;height:.375rem;border-radius:999px;overflow:hidden;background:var(--zinc-800);">
+              <div class="bar-fill" style="--w:20%;height:100%;border-radius:999px;background:linear-gradient(90deg,var(--emerald-600),var(--emerald-400));"></div>
+            </div>
+            <div style="font-size:.82rem;font-weight:700;font-family:'Syne',sans-serif;width:2.5rem;text-align:right;color:var(--emerald-400);">20%</div>
+          </div>
+          <div style="display:flex;align-items:center;gap:.75rem;">
+            <div style="font-size:.82rem;width:6.5rem;flex-shrink:0;color:var(--zinc-400);">Formation</div>
+            <div style="flex:1;height:.375rem;border-radius:999px;overflow:hidden;background:var(--zinc-800);">
+              <div class="bar-fill" style="--w:10%;height:100%;border-radius:999px;background:linear-gradient(90deg,var(--emerald-600),var(--emerald-400));"></div>
+            </div>
+            <div style="font-size:.82rem;font-weight:700;font-family:'Syne',sans-serif;width:2.5rem;text-align:right;color:var(--emerald-400);">10%</div>
+          </div>
+          <div style="display:flex;align-items:center;gap:.75rem;">
+            <div style="font-size:.82rem;width:6.5rem;flex-shrink:0;color:var(--zinc-400);">Langues</div>
+            <div style="flex:1;height:.375rem;border-radius:999px;overflow:hidden;background:var(--zinc-800);">
+              <div class="bar-fill" style="--w:10%;height:100%;border-radius:999px;background:linear-gradient(90deg,var(--emerald-600),var(--emerald-400));"></div>
+            </div>
+            <div style="font-size:.82rem;font-weight:700;font-family:'Syne',sans-serif;width:2.5rem;text-align:right;color:var(--emerald-400);">10%</div>
+          </div>
+          <div style="display:flex;align-items:center;gap:.75rem;">
+            <div style="font-size:.82rem;width:6.5rem;flex-shrink:0;color:var(--zinc-400);">Disponibilité</div>
+            <div style="flex:1;height:.375rem;border-radius:999px;overflow:hidden;background:var(--zinc-800);">
+              <div class="bar-fill" style="--w:5%;height:100%;border-radius:999px;background:linear-gradient(90deg,var(--emerald-600),var(--emerald-400));"></div>
+            </div>
+            <div style="font-size:.82rem;font-weight:700;font-family:'Syne',sans-serif;width:2.5rem;text-align:right;color:var(--emerald-400);">5%</div>
+          </div>
+          <div style="display:flex;align-items:center;gap:.75rem;">
+            <div style="font-size:.82rem;width:6.5rem;flex-shrink:0;color:var(--zinc-400);">Localisation</div>
+            <div style="flex:1;height:.375rem;border-radius:999px;overflow:hidden;background:var(--zinc-800);">
+              <div class="bar-fill" style="--w:5%;height:100%;border-radius:999px;background:linear-gradient(90deg,var(--emerald-600),var(--emerald-400));"></div>
+            </div>
+            <div style="font-size:.82rem;font-weight:700;font-family:'Syne',sans-serif;width:2.5rem;text-align:right;color:var(--emerald-400);">5%</div>
+          </div>
+        </div>
+        <p style="margin-top:1.25rem;font-size:.75rem;color:var(--zinc-600);">* Les pondérations varient selon le template de poste choisi (Manœuvre → Cadre dirigeant).</p>
+      </div>
+
+      <!-- Score preview -->
+      <div class="reveal-r card" style="padding:1.5rem;">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1.25rem;">
+          <h4 class="font-display" style="font-size:.82rem;font-weight:700;color:var(--zinc-400);">Vue candidat — Compatibilité estimée</h4>
+          <span class="font-display grad-text" style="font-size:2.5rem;font-weight:800;">84%</span>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:.625rem;margin-bottom:1.25rem;">
+          <div style="display:flex;align-items:center;gap:.75rem;font-size:.82rem;">
+            <span style="color:var(--emerald-400);">✓</span>
+            <span style="flex:1;color:var(--zinc-400);">Compétences</span>
+            <span style="font-weight:500;color:var(--zinc-200);">Excellent</span>
+          </div>
+          <div style="display:flex;align-items:center;gap:.75rem;font-size:.82rem;">
+            <span style="color:var(--emerald-400);">✓</span>
+            <span style="flex:1;color:var(--zinc-400);">Expérience</span>
+            <span style="font-weight:500;color:var(--zinc-200);">Compatible</span>
+          </div>
+          <div style="display:flex;align-items:center;gap:.75rem;font-size:.82rem;">
+            <span style="color:var(--emerald-400);">✓</span>
+            <span style="flex:1;color:var(--zinc-400);">Langues</span>
+            <span style="font-weight:500;color:var(--zinc-200);">Compatible</span>
+          </div>
+          <div style="display:flex;align-items:center;gap:.75rem;font-size:.82rem;">
+            <span style="color:var(--emerald-400);">✓</span>
+            <span style="flex:1;color:var(--zinc-400);">Disponibilité</span>
+            <span style="font-weight:500;color:var(--zinc-200);">Immédiate</span>
+          </div>
+          <div style="display:flex;align-items:center;gap:.75rem;font-size:.82rem;">
+            <span style="color:var(--emerald-400);">✓</span>
+            <span style="flex:1;color:var(--zinc-400);">Localisation</span>
+            <span style="font-weight:500;color:var(--zinc-200);">Compatible</span>
+          </div>
+        </div>
+        <div style="padding-top:1rem;border-top:1px solid var(--zinc-800);">
+          <p style="font-size:.72rem;color:var(--zinc-500);margin-bottom:.625rem;">Atouts détectés sur votre profil</p>
+          <div class="flex flex-wrap gap-2">
+            <span style="padding:.3rem .75rem;border-radius:.5rem;border:1px solid rgba(52,211,153,.2);background:rgba(52,211,153,.06);color:var(--emerald-400);font-size:.75rem;font-weight:600;">✓ Expérience BTP</span>
+            <span style="padding:.3rem .75rem;border-radius:.5rem;border:1px solid rgba(52,211,153,.2);background:rgba(52,211,153,.06);color:var(--emerald-400);font-size:.75rem;font-weight:600;">✓ Certification Sage Paie</span>
+          </div>
+        </div>
+        <p style="margin-top:1rem;font-size:.72rem;color:var(--zinc-600);font-style:italic;">Pour la première fois, vous savez exactement où vous en êtes.</p>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+
+<!-- ═══ FONCTIONNALITÉS — Colonnes recruteur/candidat ═══ -->
+<section id="fonctionnalites" class="section">
+  <div class="container">
+
+    <div class="reveal text-center mb-14">
+      <div class="section-eyebrow">Fonctionnalités</div>
+      <h2 class="section-title font-display" style="font-size:clamp(1.8rem,4.5vw,3rem);">
+        Tout ce dont vous avez besoin,<br>rien de superflu
+      </h2>
+    </div>
+
+    <div class="feat-grid">
+
+      <!-- Colonne Recruteur -->
+      <div class="reveal-l">
+        <div class="feat-col-title font-display">
+          <div style="width:1.75rem;height:1.75rem;border-radius:.4rem;background:rgba(99,102,241,.1);border:1px solid rgba(99,102,241,.25);display:grid;place-items:center;font-size:.8rem;">🏢</div>
+          <span class="col-role-label col-role-recruiter" style="margin-bottom:0;">Je recrute</span>
+        </div>
+        <div class="feat-item">
+          <div class="feat-icon feat-icon-indigo">🚫</div>
+          <div>
+            <h3 class="font-display" style="font-size:.82rem;font-weight:700;color:var(--zinc-100);margin-bottom:.35rem;">Critères bloquants configurables</h3>
+            <p style="font-size:.78rem;color:var(--zinc-500);line-height:1.5;">Définissez vos exigences non-négociables. Tout profil non-conforme est filtré automatiquement.</p>
+          </div>
+        </div>
+        <div class="feat-item">
+          <div class="feat-icon feat-icon-indigo">📊</div>
+          <div>
+            <h3 class="font-display" style="font-size:.82rem;font-weight:700;color:var(--zinc-100);margin-bottom:.35rem;">Classement automatique</h3>
+            <p style="font-size:.78rem;color:var(--zinc-500);line-height:1.5;">Les candidats arrivent déjà classés du plus compatible au moins compatible. Zéro tri manuel.</p>
+          </div>
+        </div>
+        <div class="feat-item">
+          <div class="feat-icon feat-icon-indigo">🔔</div>
+          <div>
+            <h3 class="font-display" style="font-size:.82rem;font-weight:700;color:var(--zinc-100);margin-bottom:.35rem;">Alertes & résumés périodiques</h3>
+            <p style="font-size:.78rem;color:var(--zinc-500);line-height:1.5;">Notifié à chaque candidature qualifiée. Résumé quotidien avec top profils et score moyen.</p>
+          </div>
+        </div>
+        <div class="feat-item">
+          <div class="feat-icon feat-icon-indigo">⭐</div>
+          <div>
+            <h3 class="font-display" style="font-size:.82rem;font-weight:700;color:var(--zinc-100);margin-bottom:.35rem;">Système de bonus flexible</h3>
+            <p style="font-size:.78rem;color:var(--zinc-500);line-height:1.5;">Valorisez les atouts différenciants — certifications, secteur, langues rares — comme signal de départage.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Colonne Candidat -->
+      <div class="reveal-r">
+        <div class="feat-col-title font-display">
+          <div style="width:1.75rem;height:1.75rem;border-radius:.4rem;background:rgba(52,211,153,.08);border:1px solid rgba(52,211,153,.2);display:grid;place-items:center;font-size:.8rem;">🙋</div>
+          <span class="col-role-label col-role-candidate" style="margin-bottom:0;">Je cherche un emploi</span>
+        </div>
+        <div class="feat-item">
+          <div class="feat-icon">👁️</div>
+          <div>
+            <h3 class="font-display" style="font-size:.82rem;font-weight:700;color:var(--zinc-100);margin-bottom:.35rem;">Score visible avant de postuler</h3>
+            <p style="font-size:.78rem;color:var(--zinc-500);line-height:1.5;">Voyez votre compatibilité avec chaque offre avant d'envoyer quoi que ce soit. Postulez en connaissance de cause.</p>
+          </div>
+        </div>
+        <div class="feat-item">
+          <div class="feat-icon">📋</div>
+          <div>
+            <h3 class="font-display" style="font-size:.82rem;font-weight:700;color:var(--zinc-100);margin-bottom:.35rem;">Profil structuré, sans CV obligatoire</h3>
+            <p style="font-size:.78rem;color:var(--zinc-500);line-height:1.5;">Renseignez vos compétences une seule fois. Votre profil parle pour vous, mieux qu'un PDF.</p>
+          </div>
+        </div>
+        <div class="feat-item">
+          <div class="feat-icon">🎯</div>
+          <div>
+            <h3 class="font-display" style="font-size:.82rem;font-weight:700;color:var(--zinc-100);margin-bottom:.35rem;">Offres recommandées selon votre profil</h3>
+            <p style="font-size:.78rem;color:var(--zinc-500);line-height:1.5;">Le système suggère les offres où vous avez les meilleures chances — pas les plus visibles.</p>
+          </div>
+        </div>
+        <div class="feat-item">
+          <div class="feat-icon">💡</div>
+          <div>
+            <h3 class="font-display" style="font-size:.82rem;font-weight:700;color:var(--zinc-100);margin-bottom:.35rem;">Comprendre pourquoi vous n'êtes pas retenu</h3>
+            <p style="font-size:.78rem;color:var(--zinc-500);line-height:1.5;">Le détail de chaque score vous indique exactement ce qui vous a pénalisé. Progressez à chaque postulation.</p>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+
+<!-- ═══ MCP — Neutre unifié amélioré ═══ -->
+<section id="mcp" class="section section-alt">
+  <div class="container">
+    <div class="mcp-wrap reveal">
+      <div class="mcp-grid">
+
+        <!-- Texte -->
+        <div>
+          <div style="display:inline-flex;align-items:center;gap:.5rem;padding:.375rem .875rem;border-radius:999px;border:1px solid rgba(52,211,153,.25);background:rgba(52,211,153,.08);color:var(--emerald-400);font-size:.7rem;font-weight:700;font-family:'Syne',sans-serif;letter-spacing:.08em;text-transform:uppercase;margin-bottom:1.25rem;">
+            <span class="pulse" style="width:.5rem;height:.5rem;border-radius:50%;background:var(--emerald-400);display:inline-block;"></span>
+            Prochainement · MCP Integration
+          </div>
+          <h2 class="font-display" style="font-size:clamp(1.4rem,3.5vw,2rem);font-weight:700;line-height:1.15;margin-bottom:.875rem;">
+            MatchRH dans votre<br><span class="grad-text">IA préférée</span>
+          </h2>
+          <p style="font-size:.9rem;color:var(--zinc-400);line-height:1.65;margin-bottom:1.5rem;">
+            Via le protocole <strong style="color:var(--zinc-200);">MCP (Model Context Protocol)</strong>, interagissez avec MatchRH directement depuis Claude, ChatGPT, Cursor ou Copilot — sans quitter votre environnement de travail.
+          </p>
+
+          <!-- Double perspective MCP -->
+          <div class="mcp-use">
+            <div class="mcp-use-card">
+              <div class="mcp-use-icon">🏢</div>
+              <div>
+                <p style="font-size:.78rem;font-weight:600;color:var(--zinc-200);margin-bottom:.25rem;">Pour le recruteur</p>
+                <p style="font-size:.72rem;color:var(--zinc-500);line-height:1.5;">"Trouve les 3 meilleurs profils comptables disponibles à Douala sous 30 jours"</p>
+              </div>
+            </div>
+            <div class="mcp-use-card">
+              <div class="mcp-use-icon">🙋</div>
+              <div>
+                <p style="font-size:.78rem;font-weight:600;color:var(--zinc-200);margin-bottom:.25rem;">Pour le candidat</p>
+                <p style="font-size:.72rem;color:var(--zinc-500);line-height:1.5;">"Quelles offres correspondent à mon profil en ce moment à Yaoundé ?"</p>
+              </div>
+            </div>
+            <div class="mcp-use-card">
+              <div class="mcp-use-icon">📝</div>
+              <div>
+                <p style="font-size:.78rem;font-weight:600;color:var(--zinc-200);margin-bottom:.25rem;">Création d'offres via l'IA</p>
+                <p style="font-size:.72rem;color:var(--zinc-500);line-height:1.5;">Publiez une offre structurée en décrivant simplement le poste à votre assistant IA</p>
+              </div>
+            </div>
+            <div class="mcp-use-card">
+              <div class="mcp-use-icon">📈</div>
+              <div>
+                <p style="font-size:.78rem;font-weight:600;color:var(--zinc-200);margin-bottom:.25rem;">Scores & recommandations</p>
+                <p style="font-size:.72rem;color:var(--zinc-500);line-height:1.5;">Classements et analyses disponibles directement depuis votre outil habituel</p>
+              </div>
+            </div>
+          </div>
+
+          <div style="display:flex;flex-wrap:wrap;gap:.875rem;align-items:center;margin-top:1.5rem;">
+            <button class="btn-primary" style="padding:.625rem 1.25rem;font-size:.82rem;">M'avertir à la sortie</button>
+            <a href="#" style="font-size:.82rem;color:var(--zinc-400);text-decoration:underline;text-underline-offset:.25rem;text-decoration-style:dashed;">En savoir plus sur MCP →</a>
+          </div>
+        </div>
+
+        <!-- Code block -->
+        <div class="code-block">
+          <div class="code-header">
+            <div style="display:flex;gap:.375rem;">
+              <span class="code-dot" style="background:#ef4444;"></span>
+              <span class="code-dot" style="background:#f59e0b;"></span>
+              <span class="code-dot" style="background:#10b981;"></span>
+            </div>
+            <span style="color:var(--zinc-500);font-size:.7rem;margin-left:.5rem;">matchrh-mcp.ts</span>
+          </div>
+          <div class="code-body">
+            <div class="c-comment">// Connexion MCP MatchRH</div>
+            <div><span class="c-kw">import</span> { MatchRH } <span class="c-kw">from</span> <span class="c-str">'matchrh-mcp'</span></div>
+            <div>&nbsp;</div>
+            <div class="c-comment">// Recruteur — top candidats</div>
+            <div><span class="c-kw">const</span> top = <span class="c-kw">await</span> MatchRH.getTopCandidates({</div>
+            <div>&nbsp;&nbsp;offreId: <span class="c-str">'comptable-douala-01'</span>,</div>
+            <div>&nbsp;&nbsp;limit: <span class="c-num">5</span></div>
+            <div>})</div>
+            <div class="c-comment">// [{ name: 'Sylvie', score: 91% },</div>
+            <div class="c-comment">//  { name: 'Patrick', score: 87% }]</div>
+            <div>&nbsp;</div>
+            <div class="c-comment">// Candidat — offres compatibles</div>
+            <div><span class="c-kw">const</span> offres = <span class="c-kw">await</span> MatchRH.getMatchingOffers({</div>
+            <div>&nbsp;&nbsp;candidatId: <span class="c-str">'mon-profil'</span>,</div>
+            <div>&nbsp;&nbsp;minScore: <span class="c-num">75</span></div>
+            <div>})</div>
+            <div class="c-comment">// [{ titre: 'Chef Comptable', score: 88% },</div>
+            <div class="c-comment">//  { titre: 'Auditeur', score: 82% }]</div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ═══ UTILISATEURS — Colonnes + classement diversifié ═══ -->
+<section id="utilisateurs" class="section">
+  <div class="container">
+
+    <div class="reveal text-center mb-14">
+      <div class="section-eyebrow">Utilisateurs</div>
+      <h2 class="section-title font-display" style="font-size:clamp(1.8rem,4.5vw,3rem);">
+        Deux profils, une même plateforme
+      </h2>
+    </div>
+
+    <div class="two-col mb-8">
+
+      <!-- Recruteur -->
+      <div class="reveal-l card" style="padding:0;overflow:hidden;">
+        <div class="role-header">
+          <div class="role-icon role-icon-recruiter">🏢</div>
+          <div>
+            <p class="font-display" style="font-weight:700;font-size:.95rem;color:var(--zinc-100);">Recruteur</p>
+            <p style="font-size:.72rem;color:var(--zinc-500);">Entreprises & DRH</p>
+          </div>
+        </div>
+        <div style="padding:1.25rem;">
+          <ul class="check-list">
+            <li><span class="icon">→</span> Publie des offres avec critères bloquants & atouts recherchés</li>
+            <li><span class="icon">→</span> Reçoit uniquement des candidatures qualifiées, classées automatiquement</li>
+            <li><span class="icon">→</span> Définit les critères éliminatoires — permis, expérience minimum, langue</li>
+            <li><span class="icon">→</span> Accède au résumé structuré de chaque candidat avec son score détaillé</li>
+          </ul>
+          <div class="flex flex-wrap gap-2 mt-6">
+            <span style="padding:.3rem .75rem;border-radius:.5rem;border:1px solid var(--zinc-700);background:var(--zinc-800);color:var(--zinc-300);font-size:.72rem;font-weight:500;">Classement auto</span>
+            <span style="padding:.3rem .75rem;border-radius:.5rem;border:1px solid var(--zinc-700);background:var(--zinc-800);color:var(--zinc-300);font-size:.72rem;font-weight:500;">Critères bloquants</span>
+            <span style="padding:.3rem .75rem;border-radius:.5rem;border:1px solid var(--zinc-700);background:var(--zinc-800);color:var(--zinc-300);font-size:.72rem;font-weight:500;">Atouts bonus</span>
+            <span style="padding:.3rem .75rem;border-radius:.5rem;border:1px solid var(--zinc-700);background:var(--zinc-800);color:var(--zinc-300);font-size:.72rem;font-weight:500;">Notifs temps réel</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Candidat -->
+      <div class="reveal-r card" style="padding:0;overflow:hidden;">
+        <div class="role-header">
+          <div class="role-icon role-icon-candidate">🙋</div>
+          <div>
+            <p class="font-display" style="font-weight:700;font-size:.95rem;color:var(--zinc-100);">Candidat</p>
+            <p style="font-size:.72rem;color:var(--zinc-500);">Tous secteurs — tous niveaux</p>
+          </div>
+        </div>
+        <div style="padding:1.25rem;">
+          <ul class="check-list">
+            <li><span class="icon">→</span> Crée un profil structuré sans CV obligatoire — rempli une seule fois</li>
+            <li><span class="icon">→</span> Voit son score de compatibilité avant même de postuler</li>
+            <li><span class="icon">→</span> Comprend exactement pourquoi il est éliminé ou retenu</li>
+            <li><span class="icon">→</span> Reçoit des recommandations d'offres adaptées à son profil réel</li>
+          </ul>
+          <!-- Profils diversifiés — pas que dev -->
+          <div style="margin-top:1.25rem;display:flex;flex-direction:column;gap:.5rem;">
+            <div style="display:flex;align-items:center;gap:.75rem;font-size:.78rem;">
+              <span style="width:7rem;flex-shrink:0;color:var(--zinc-500);">Comptabilité</span>
+              <span style="color:var(--emerald-400);">★★★★★</span>
+            </div>
+            <div style="display:flex;align-items:center;gap:.75rem;font-size:.78rem;">
+              <span style="width:7rem;flex-shrink:0;color:var(--zinc-500);">Excel avancé</span>
+              <span style="color:var(--emerald-400);">★★★★</span><span style="color:var(--zinc-700);">★</span>
+            </div>
+            <div style="display:flex;align-items:center;gap:.75rem;font-size:.78rem;">
+              <span style="width:7rem;flex-shrink:0;color:var(--zinc-500);">Sage Paie</span>
+              <span style="color:var(--emerald-400);">★★★</span><span style="color:var(--zinc-700);">★★</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Classement diversifié — pas que tech -->
+    <div class="reveal rank-table">
+      <div class="rank-header">
+        <h4 class="font-display" style="font-size:.82rem;font-weight:700;color:var(--zinc-100);">Classement automatique · Responsable Comptable — Douala</h4>
+        <span style="padding:.25rem .75rem;border-radius:.5rem;border:1px solid rgba(52,211,153,.2);background:rgba(52,211,153,.06);color:var(--emerald-400);font-size:.72rem;font-weight:700;">Classement auto ✓</span>
+      </div>
+      <div class="rank-row">
+        <div style="display:flex;align-items:center;gap:.75rem;">
+          <div class="rank-avatar" style="background:rgba(99,102,241,.12);border-color:rgba(99,102,241,.3);color:#818cf8;">SK</div>
+          <div>
+            <p style="font-size:.82rem;font-weight:600;color:var(--zinc-100);">Sylvie Kamga</p>
+            <p style="font-size:.72rem;color:var(--zinc-500);">Comptable Senior · 7 ans · Douala</p>
+          </div>
+        </div>
+        <div style="display:flex;align-items:center;gap:.75rem;">
+          <div class="rank-bar-wrap hide-mobile"><div class="rank-bar" style="width:94%;"></div></div>
+          <span class="rank-score">94%</span>
+        </div>
+      </div>
+      <div class="rank-row">
+        <div style="display:flex;align-items:center;gap:.75rem;">
+          <div class="rank-avatar" style="background:rgba(34,197,94,.1);border-color:rgba(34,197,94,.25);color:#4ade80;">PM</div>
+          <div>
+            <p style="font-size:.82rem;font-weight:600;color:var(--zinc-100);">Patrick Mbarga</p>
+            <p style="font-size:.72rem;color:var(--zinc-500);">Chef Comptable · 5 ans · Yaoundé</p>
+          </div>
+        </div>
+        <div style="display:flex;align-items:center;gap:.75rem;">
+          <div class="rank-bar-wrap hide-mobile"><div class="rank-bar" style="width:88%;"></div></div>
+          <span class="rank-score">88%</span>
+        </div>
+      </div>
+      <div class="rank-row">
+        <div style="display:flex;align-items:center;gap:.75rem;">
+          <div class="rank-avatar" style="background:rgba(251,191,36,.1);border-color:rgba(251,191,36,.25);color:#fbbf24;">AN</div>
+          <div>
+            <p style="font-size:.82rem;font-weight:600;color:var(--zinc-100);">Arlette Nguema</p>
+            <p style="font-size:.72rem;color:var(--zinc-500);">Contrôleur de gestion · 4 ans · Douala</p>
+          </div>
+        </div>
+        <div style="display:flex;align-items:center;gap:.75rem;">
+          <div class="rank-bar-wrap hide-mobile"><div class="rank-bar" style="width:83%;"></div></div>
+          <span class="rank-score">83%</span>
+        </div>
+      </div>
+      <div class="rank-row">
+        <div style="display:flex;align-items:center;gap:.75rem;">
+          <div class="rank-avatar" style="background:rgba(239,68,68,.1);border-color:rgba(239,68,68,.2);color:#f87171;">JF</div>
+          <div>
+            <p style="font-size:.82rem;font-weight:600;color:var(--zinc-100);">Jean Fomba</p>
+            <p style="font-size:.72rem;color:var(--zinc-500);">Assistant Comptable · 2 ans · Bafoussam</p>
+          </div>
+        </div>
+        <div style="display:flex;align-items:center;gap:.75rem;">
+          <div class="rank-bar-wrap hide-mobile"><div class="rank-bar" style="width:76%;"></div></div>
+          <span class="rank-score">76%</span>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+
+<!-- ═══ TÉMOIGNAGES — Colonnes recruteur/candidat ═══ -->
+<section id="avis" class="section section-alt">
+  <div class="container">
+
+    <div class="reveal text-center mb-14">
+      <div class="section-eyebrow">Témoignages</div>
+      <h2 class="section-title font-display" style="font-size:clamp(1.8rem,4.5vw,3rem);">
+        Moins de bruit.<br>
+        <span class="grad-text">Plus de résultats.</span>
+      </h2>
+      <p class="section-sub" style="margin:0 auto;">
+        Candidats et recruteurs partagent ce que MatchRH a changé pour eux.
+      </p>
+    </div>
+
+    <!-- Ligne 1 : candidat en premier -->
+    <div class="testi-grid mb-4">
+
+      <!-- Candidat 1 — jeune diplômé, non-tech -->
+      <div class="reveal-l testi-card">
+        <div style="display:flex;align-items:start;justify-content:space-between;gap:.75rem;">
+          <div style="display:flex;align-items:center;gap:.75rem;">
+            <div class="testi-avatar" style="background:rgba(52,211,153,.1);border-color:rgba(52,211,153,.25);color:var(--emerald-400);">AN</div>
+            <div>
+              <p class="font-display" style="font-weight:700;font-size:.85rem;color:var(--zinc-100);">Astride Nkoa</p>
+              <p style="font-size:.72rem;color:var(--zinc-500);">Assistante RH · Yaoundé</p>
+            </div>
+          </div>
+          <span class="col-role-label col-role-candidate" style="font-size:.65rem;white-space:nowrap;">Candidat</span>
+        </div>
+        <div class="stars">★★★★★</div>
+        <blockquote>"Pour la première fois, j'ai compris pourquoi je n'étais pas retenue. Mon score m'indiquait exactement ce qui me manquait. J'ai complété ma formation Sage Paie et j'ai décroché mon poste en 3 semaines."</blockquote>
+      </div>
+
+      <!-- Recruteur 1 -->
+      <div class="reveal-r testi-card">
+        <div style="display:flex;align-items:start;justify-content:space-between;gap:.75rem;">
+          <div style="display:flex;align-items:center;gap:.75rem;">
+            <div class="testi-avatar" style="background:rgba(99,102,241,.12);border-color:rgba(99,102,241,.3);color:#818cf8;">FB</div>
+            <div>
+              <p class="font-display" style="font-weight:700;font-size:.85rem;color:var(--zinc-100);">Fatou Bello</p>
+              <p style="font-size:.72rem;color:var(--zinc-500);">DRH · Cabinet RH Douala</p>
+            </div>
+          </div>
+          <span class="col-role-label col-role-recruiter" style="font-size:.65rem;white-space:nowrap;">Recruteur</span>
+        </div>
+        <div class="stars">★★★★★</div>
+        <blockquote>"On avait l'habitude de recevoir 150 CVs par poste. Avec MatchRH on en reçoit 20, toutes pertinentes. Les critères bloquants font le filtre à notre place — on a récupéré deux jours de travail par campagne."</blockquote>
+      </div>
+
+    </div>
+
+    <!-- Ligne 2 -->
+    <div class="testi-grid mb-4">
+
+      <!-- Candidat 2 — profil non-tech, ville secondaire -->
+      <div class="reveal-l testi-card">
+        <div style="display:flex;align-items:start;justify-content:space-between;gap:.75rem;">
+          <div style="display:flex;align-items:center;gap:.75rem;">
+            <div class="testi-avatar" style="background:rgba(251,191,36,.1);border-color:rgba(251,191,36,.25);color:#fbbf24;">CM</div>
+            <div>
+              <p class="font-display" style="font-weight:700;font-size:.85rem;color:var(--zinc-100);">Cyrille Mfoumou</p>
+              <p style="font-size:.72rem;color:var(--zinc-500);">Commercial terrain · Bafoussam</p>
+            </div>
+          </div>
+          <span class="col-role-label col-role-candidate" style="font-size:.65rem;white-space:nowrap;">Candidat</span>
+        </div>
+        <div class="stars">★★★★★</div>
+        <blockquote>"Je n'avais jamais utilisé de plateforme de recrutement parce qu'elles semblaient faites pour les développeurs. Ici mon profil commercial est évalué sur mes vrais critères — zone de couverture, portefeuille client, langues. Le recruteur m'a rappelé en 48h."</blockquote>
+      </div>
+
+      <!-- Recruteur 2 -->
+      <div class="reveal-r testi-card">
+        <div style="display:flex;align-items:start;justify-content:space-between;gap:.75rem;">
+          <div style="display:flex;align-items:center;gap:.75rem;">
+            <div class="testi-avatar" style="background:rgba(20,184,166,.12);border-color:rgba(20,184,166,.3);color:#2dd4bf;">SE</div>
+            <div>
+              <p class="font-display" style="font-weight:700;font-size:.85rem;color:var(--zinc-100);">Samuel Essomba</p>
+              <p style="font-size:.72rem;color:var(--zinc-500);">Gérant · PME Logistique, Douala</p>
+            </div>
+          </div>
+          <span class="col-role-label col-role-recruiter" style="font-size:.65rem;white-space:nowrap;">Recruteur</span>
+        </div>
+        <div class="stars">★★★★★</div>
+        <blockquote>"L'algorithme est transparent — chaque score est décomposé. Mes équipes l'ont adopté sans résistance parce qu'elles comprennent la logique. Pas de boîte noire, pas de méfiance. Juste des décisions plus rapides et mieux justifiées."</blockquote>
+      </div>
+
+    </div>
+
+    <!-- Ligne 3 -->
+    <div class="testi-grid">
+
+      <!-- Candidat 3 — profil senior reconverti -->
+      <div class="reveal-l testi-card">
+        <div style="display:flex;align-items:start;justify-content:space-between;gap:.75rem;">
+          <div style="display:flex;align-items:center;gap:.75rem;">
+            <div class="testi-avatar" style="background:rgba(139,92,246,.12);border-color:rgba(139,92,246,.3);color:#a78bfa;">RN</div>
+            <div>
+              <p class="font-display" style="font-weight:700;font-size:.85rem;color:var(--zinc-100);">Rose Nguefack</p>
+              <p style="font-size:.72rem;color:var(--zinc-500);">Ingénieure reconvertie RH · Ngaoundéré</p>
+            </div>
+          </div>
+          <span class="col-role-label col-role-candidate" style="font-size:.65rem;white-space:nowrap;">Candidat</span>
+        </div>
+        <div class="stars">★★★★★</div>
+        <blockquote>"J'avais peur que mon parcours atypique me pénalise. Mais le score valorise ce que je sais faire — pas la linéarité de mon CV. Mon double profil technique et RH est devenu un atout visible, pas une anomalie à expliquer."</blockquote>
+      </div>
+
+      <!-- Recruteur 3 -->
+      <div class="reveal-r testi-card">
+        <div style="display:flex;align-items:start;justify-content:space-between;gap:.75rem;">
+          <div style="display:flex;align-items:center;gap:.75rem;">
+            <div class="testi-avatar" style="background:rgba(244,63,94,.1);border-color:rgba(244,63,94,.25);color:#fb7185;">MK</div>
+            <div>
+              <p class="font-display" style="font-weight:700;font-size:.85rem;color:var(--zinc-100);">Marie-Claire Kamto</p>
+              <p style="font-size:.72rem;color:var(--zinc-500);">Head of Talent · Banque régionale</p>
+            </div>
+          </div>
+          <span class="col-role-label col-role-recruiter" style="font-size:.65rem;white-space:nowrap;">Recruteur</span>
+        </div>
+        <div class="stars">★★★★★</div>
+        <blockquote>"En 3 ans de recrutement je n'avais jamais reçu des candidatures aussi ciblées dès le premier jour. Et pour la première fois, je peux justifier mes sélections avec des données — plus de décisions au feeling difficiles à défendre."</blockquote>
+      </div>
+
+    </div>
+
+  </div>
+</section>
+
+
+<!-- ═══ TARIFS — Colonnes égales ═══ -->
+<section id="tarifs" class="section">
+  <div class="container">
+
+    <div class="reveal text-center mb-8">
+      <div class="section-eyebrow">Tarifs</div>
+      <h2 class="section-title font-display" style="font-size:clamp(1.8rem,4.5vw,3rem);">
+        100% Gratuit.<br>
+        <span class="grad-text">Et c'est notre force.</span>
+      </h2>
+      <p class="section-sub" style="margin:0 auto;">
+        La gratuité totale est notre avantage concurrentiel — elle nous permet d'atteindre la masse critique des deux côtés plus vite que n'importe quel concurrent.
+      </p>
+    </div>
+
+    <!-- Argument stratégique -->
+    <div class="reveal card mb-8" style="display:flex;gap:1rem;align-items:flex-start;padding:1.25rem;">
+      <span style="font-size:1.25rem;flex-shrink:0;margin-top:.1rem;">💡</span>
+      <div>
+        <p class="font-display" style="font-size:.85rem;font-weight:700;color:var(--zinc-100);margin-bottom:.375rem;">Notre avantage stratégique</p>
+        <p style="font-size:.82rem;color:var(--zinc-500);line-height:1.6;">Les plateformes payantes créent une barrière — les meilleurs talents ne paient pas pour chercher un emploi, et les PME ne paient pas pour recruter des profils incertains. En étant entièrement gratuit, MatchRH agrège le marché plus vite et construit la réputation qui fera sa pérennité.</p>
+      </div>
+    </div>
+
+    <!-- Plans — égalité visuelle totale -->
+    <div class="price-grid">
+
+      <!-- Candidat — promesse émotionnelle forte -->
+      <div class="reveal-l card" style="display:flex;flex-direction:column;">
+        <div class="col-role-label col-role-candidate" style="align-self:flex-start;margin-bottom:1rem;">Candidat</div>
+        <div style="margin-bottom:.25rem;">
+          <span class="font-display" style="font-size:2.5rem;font-weight:800;color:var(--zinc-100);">Gratuit</span>
+        </div>
+        <p style="font-size:.78rem;color:var(--zinc-500);margin-bottom:1.5rem;font-style:italic;">Postulez uniquement là où vous avez une vraie chance</p>
+        <ul class="check-list" style="flex:1;margin-bottom:1.5rem;">
+          <li><span class="icon">✓</span> Profil structuré complet — sans CV obligatoire</li>
+          <li><span class="icon">✓</span> Score de compatibilité visible avant de postuler</li>
+          <li><span class="icon">✓</span> Comprendre pourquoi vous êtes retenu ou non</li>
+          <li><span class="icon">✓</span> Candidatures illimitées</li>
+          <li><span class="icon">✓</span> Recommandations d'offres adaptées à votre profil</li>
+          <li><span class="icon">✓</span> Notifications en temps réel</li>
+          <li><span class="icon" style="color:var(--zinc-600);">🔜</span> <span style="color:var(--zinc-500);">Intégration MCP (à venir)</span></li>
+        </ul>
+        <a href="#register" class="btn-ghost" style="text-align:center;justify-content:center;">Créer mon profil</a>
+      </div>
+
+      <!-- Recruteur -->
+      <div class="reveal-r card card-emerald" style="display:flex;flex-direction:column;">
+        <div class="col-role-label col-role-recruiter" style="align-self:flex-start;margin-bottom:1rem;">Recruteur PME</div>
+        <div style="margin-bottom:.25rem;">
+          <span class="font-display" style="font-size:2.5rem;font-weight:800;color:var(--zinc-100);">Gratuit</span>
+        </div>
+        <p style="font-size:.78rem;color:var(--zinc-500);margin-bottom:1.5rem;font-style:italic;">Recevez moins de candidatures, mais toutes pertinentes</p>
+        <ul class="check-list" style="flex:1;margin-bottom:1.5rem;">
+          <li><span class="icon">✓</span> Offres d'emploi illimitées</li>
+          <li><span class="icon">✓</span> Critères bloquants & atouts configurables</li>
+          <li><span class="icon">✓</span> Classement automatique des candidats</li>
+          <li><span class="icon">✓</span> Notifications & résumés périodiques</li>
+          <li><span class="icon">✓</span> Tableau de bord recruteur complet</li>
+          <li><span class="icon">✓</span> Support prioritaire</li>
+          <li><span class="icon" style="color:var(--zinc-600);">🔜</span> <span style="color:var(--zinc-500);">Intégration MCP (à venir)</span></li>
+          <li><span class="icon" style="color:var(--zinc-600);">🔜</span> <span style="color:var(--zinc-500);">API privée & webhooks (à venir)</span></li>
+        </ul>
+        <a href="#register" class="btn-primary" style="text-align:center;justify-content:center;">Commencer à recruter</a>
+      </div>
+
+    </div>
+
+    <!-- Trust badges -->
+    <div class="trust-list">
+      <span>✓ Aucune carte bancaire requise</span>
+      <span>✓ Aucune limite cachée</span>
+      <span>✓ Données protégées · Loi camerounaise 2024</span>
+      <span>✓ Gratuit pour toujours sur les offres de base</span>
+    </div>
+
+  </div>
+</section>
+
+
+<!-- ═══ FAQ placeholder ═══ -->
+<section id="faq" class="section section-alt">
+  <div class="container">
+    <!-- Composant Livewire FAQ inchangé -->
+    <!-- <livewire:welcome.faq /> -->
+    <div class="reveal text-center">
+      <div class="section-eyebrow">FAQ</div>
+      <p style="color:var(--zinc-500);font-size:.9rem;margin-top:.5rem;">Section FAQ — composant Livewire inchangé</p>
+    </div>
+  </div>
+</section>
+
+
+<!-- ═══ CONTACT placeholder ═══ -->
+<section id="contact" class="section">
+  <div class="container" style="max-width:48rem;">
+    <div class="reveal text-center mb-12">
+      <div class="section-eyebrow">Contactez-nous</div>
+      <h2 class="section-title font-display" style="font-size:clamp(1.8rem,4.5vw,3rem);">
+        Une question ?<br><span class="grad-text">Parlons-en.</span>
+      </h2>
+      <p class="section-sub" style="margin:0 auto;">Que vous soyez recruteur ou candidat, notre équipe est là pour vous accompagner.</p>
+    </div>
+    <div class="reveal card text-center" style="padding:2rem;">
+      <!-- <livewire:contact-form /> -->
+      <p style="color:var(--zinc-500);font-size:.9rem;">Formulaire de contact — composant Livewire inchangé</p>
+      <p style="margin-top:.5rem;"><a href="mailto:contact@fallabolo.com" style="color:var(--emerald-400);text-decoration:none;">contact@fallabolo.com</a></p>
+    </div>
+  </div>
+</section>
+
+
+<!-- ═══ CTA FINAL — Double lecture maximale ═══ -->
+<section class="section">
+  <div class="container">
+    <div class="reveal cta-wrap">
+      <div class="cta-glow"></div>
+      <div style="position:relative;">
+        <h2 class="font-display" style="font-size:clamp(1.8rem,5vw,3.2rem);font-weight:800;line-height:1.1;margin-bottom:1rem;color:var(--zinc-100);">
+          Prêt à jouer<br>
+          <span class="grad-text">à armes égales ?</span>
+        </h2>
+        <p style="font-size:.95rem;color:var(--zinc-400);max-width:36rem;margin:0 auto 2rem;line-height:1.65;">
+          Recruteurs — recevez moins de candidatures, mais toutes pertinentes.<br>
+          Candidats — postulez uniquement là où vous avez une vraie chance.
+        </p>
+        <!-- Deux CTAs distincts -->
+        <div class="flex flex-wrap gap-3 justify-center">
+          <a href="#register" class="btn-primary">
+            Je veux recruter mieux →
+          </a>
+          <a href="#register" class="btn-ghost">
+            Je cherche un emploi →
+          </a>
+        </div>
+        <p style="margin-top:1.25rem;font-size:.78rem;color:var(--zinc-600);">✓ Sans engagement &nbsp;·&nbsp; ✓ Gratuit &nbsp;·&nbsp; ✓ Réponse sous 24h</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ═══ FOOTER ═══ -->
+<footer>
+  <div class="footer-grid">
+    <div class="footer-col">
+      <p class="footer-col-title">Produit</p>
+      <a href="#tarifs">Tarifs</a>
+      <a href="#solution">Solution</a>
+      <a href="#fonctionnalites">Fonctionnalités</a>
+      <a href="#faq">FAQ</a>
+    </div>
+    <div class="footer-col">
+      <p class="footer-col-title">Légal</p>
+      <a href="#">CGU</a>
+      <a href="#">CGV</a>
+      <a href="#">Politique de confidentialité</a>
+      <a href="#">Politique de cookies</a>
+    </div>
+    <div class="footer-col">
+      <p class="footer-col-title">Contact</p>
+      <a href="#contact">Demander une démo</a>
+      <a href="mailto:contact@fallabolo.com">contact@fallabolo.com</a>
+      <a href="#">Newsletter RH</a>
+    </div>
+    <div class="footer-col">
+      <p class="footer-col-title">Ressources</p>
+      <a href="#faq">FAQ</a>
+      <a href="#avis">Témoignages</a>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <a href="#top" class="logo">
+      <div class="logo-icon" style="width:1.875rem;height:1.875rem;font-size:.7rem;">sq</div>
+      <span class="logo-name">fallabolo</span>
+    </a>
+    <div class="status-dot">
+      <span class="dot-green"></span>
+      Tous les services sont opérationnels
+    </div>
+    <p class="footer-copy">© 2026 fallabolo. Conçu pour les PME camerounaises.</p>
+  </div>
+</footer>
+
+
+<!-- ═══ SCROLL ANIMATIONS ═══ -->
+<script>
+  const obs = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.classList.add('on');
+        if (e.target.classList.contains('bar-fill')) {
+          e.target.style.width = e.target.style.getPropertyValue('--w') || e.target.getAttribute('data-w') + '%';
+        }
+      }
+    });
+  }, { threshold: .1, rootMargin: '0px 0px -40px 0px' });
+
+  document.querySelectorAll('.reveal, .reveal-l, .reveal-r, .bar-fill').forEach(el => obs.observe(el));
+</script>
+
+</body>
+</html>
