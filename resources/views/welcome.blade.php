@@ -726,28 +726,28 @@
 
           <div class="space-y-4">
           <div class="flex gap-4 p-4 rounded-xl border border-transparent hover:border-zinc-800 transition-colors">
-            <div class="text-xl">👁️</div>
+           <flux:icon.show class="size-6 text-zinc-400 shrink-0" />
             <div>
               <h3 class="font-display font-bold text-sm mb-1" :class="dark ? 'text-zinc-100' : 'text-zinc-900'">Score visible avant de postuler</h3>
               <p class="text-xs leading-relaxed" :class="dark ? 'text-zinc-500' : 'text-zinc-400'">Voyez votre compatibilité avec chaque offre avant d'envoyer quoi que ce soit. Postulez en connaissance de cause.</p>
             </div>
           </div>
           <div class="flex gap-4 p-4 rounded-xl border border-transparent hover:border-zinc-800 transition-colors">
-            <div class="text-xl">📋</div>
+             <flux:icon.document class="size-6 text-zinc-400 shrink-0" />
             <div>
               <h3 class="font-display font-bold text-sm mb-1" :class="dark ? 'text-zinc-100' : 'text-zinc-900'">Profil structuré, sans CV obligatoire</h3>
               <p class="text-xs leading-relaxed" :class="dark ? 'text-zinc-500' : 'text-zinc-400'">Renseignez vos compétences une seule fois. Votre profil parle pour vous, mieux qu'un PDF.</p>
             </div>
           </div>
           <div class="flex gap-4 p-4 rounded-xl border border-transparent hover:border-zinc-800 transition-colors">
-            <div class="text-xl">🎯</div>
+            <flux:icon.arrows-pointing-in class="size-6 text-zinc-400 shrink-0" />
             <div>
               <h3 class="font-display font-bold text-sm mb-1" :class="dark ? 'text-zinc-100' : 'text-zinc-900'">Offres recommandées selon votre profil</h3>
               <p class="text-xs leading-relaxed" :class="dark ? 'text-zinc-500' : 'text-zinc-400'">Le système suggère les offres où vous avez les meilleures chances pas les plus visibles.</p>
             </div>
           </div>
           <div class="flex gap-4 p-4 rounded-xl border border-transparent hover:border-zinc-800 transition-colors">
-            <div class="text-xl">💡</div>
+            <flux:icon.light-bulb class="size-6 text-zinc-400 shrink-0" />
             <div>
               <h3 class="font-display font-bold text-sm mb-1" :class="dark ? 'text-zinc-100' : 'text-zinc-900'">Comprendre pourquoi vous n'êtes pas retenu</h3>
               <p class="text-xs leading-relaxed" :class="dark ? 'text-zinc-500' : 'text-zinc-400'">Le détail de chaque score vous indique exactement ce qui vous a pénalisé. Progressez à chaque postulation.</p>
