@@ -20,25 +20,25 @@ class RoleAndPermissionSeeder extends Seeder
 
         // Create Permissions
         foreach (PermissionEnum::cases() as $permission) {
-            Permission::updateOrCreate(['name' => $permission->value, 'guard_name' => 'web']);
+            Permission::updateOrCreate(['name' => $permission->value]);
         }
 
         // Create Roles and Assign Permissions
-        $recruiterRole = Role::updateOrCreate(['name' => RoleEnum::RECRUITER->value, 'guard_name' => 'web']);
+        $recruiterRole = Role::updateOrCreate(['name' => RoleEnum::RECRUITER->value]);
         $recruiterRole->syncPermissions([
             PermissionEnum::POST_JOB->value,
             PermissionEnum::VIEW_CANDIDATES->value,
             PermissionEnum::MANAGE_OFFERS->value,
         ]);
 
-        $candidateRole = Role::updateOrCreate(['name' => RoleEnum::CANDIDATE->value, 'guard_name' => 'web']);
+        $candidateRole = Role::updateOrCreate(['name' => RoleEnum::CANDIDATE->value]);
         $candidateRole->syncPermissions([
             PermissionEnum::APPLY_JOB->value,
             PermissionEnum::UPDATE_PROFILE->value,
             PermissionEnum::VIEW_MATCHES->value,
         ]);
 
-        $adminRole = Role::updateOrCreate(['name' => RoleEnum::ADMIN->value, 'guard_name' => 'web']);
+        $adminRole = Role::updateOrCreate(['name' => RoleEnum::ADMIN->value]);
         $adminRole->syncPermissions(Permission::all());
     }
 }

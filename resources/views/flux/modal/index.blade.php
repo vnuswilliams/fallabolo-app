@@ -104,6 +104,12 @@ if (! $overflow) {
 @endphp
 
 <ui-modal {{ $attributes }} data-flux-modal>
+    <style>
+        [data-flux-modal] dialog::backdrop {
+            background-color: rgba(0, 0, 0, 0.4);
+            backdrop-filter: blur(4px);
+        }
+    </style>
     <?php if ($trigger): ?>
         {{ $trigger }}
     <?php endif; ?>

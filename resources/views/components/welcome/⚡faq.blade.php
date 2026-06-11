@@ -6,8 +6,17 @@ use App\Models\Faq;
 use App\Enums\ReportStatusEnum;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\FaqMail;
+use Spatie\Honeypot\Http\Livewire\Concerns\UsesSpamProtection;
+use Spatie\Honeypot\Http\Livewire\Concerns\HoneypotData;
 
 new class extends Component {
+    use UsesSpamProtection;
+    public HoneypotData $extraFields;
+
+    public function mount()
+    {
+        $this->extraFields = new HoneypotData();
+    }
 
     #[Validate('required|email|max:20')]
     public string $email = "";
@@ -18,7 +27,9 @@ new class extends Component {
     public int $loaded = 10;
     public function sendQuestion()
     {
+        $this->protectAgainstSpam(); // if is spam, will abort the request
         $this->validate();
+
         $faq = Faq::create([
             "email" => $this->email,
             "question" => $this->question
@@ -30,8 +41,13 @@ new class extends Component {
     }
     public function loadMore()
     {
+        $total = Faq::where('status', ReportStatusEnum::CONFIRMED)->count();
 
+        if ($this->loaded >= $total) {
+            return Flux::toast(variant:'caution', text:"Plus d'autre question disponible pour le moment.");
+        }
 
+        $this->loaded += 5;
     }
     public function with():array
     {
@@ -134,6 +150,8 @@ new class extends Component {
             </div>
 
             <form wire:submit="sendQuestion" class="space-y-4">
+                    <x-honeypot livewire-model="extraFields" />
+
 
                 <flux:field>
                     <flux:input label="Quel est votre email ?" wire:model="email" type="email" />

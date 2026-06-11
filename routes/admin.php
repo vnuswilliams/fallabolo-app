@@ -18,6 +18,9 @@ Route::middleware(['auth', 'verified', 'role:admin', 'check_suspension'])->prefi
     // Avis / Témoignages
     Route::livewire('/testimonials', 'pages::admin.testimonials.index')->name('testimonials.index');
 
+    // Gestion de la FAQ
+    Route::livewire('/faqs', 'pages::admin.faqs.index')->name('faqs.index');
+
     // Communications / Updates
     Route::livewire('/communications', 'pages::admin.communications.index')->name('communications.index');
 

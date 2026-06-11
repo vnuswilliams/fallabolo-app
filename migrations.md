@@ -23,8 +23,9 @@
 1. [Migration 12 — passkeys](#14-migration-12--passkeys)
 1. [Migration 13 — reports](#15-migration-13--reports)
 1. [Migration 14 — testimonials](#16-migration-14--testimonials)
-1. [Récapitulatif des enums](#17-récapitulatif-des-enums)
-1. [Récapitulatif des relations Eloquent](#18-récapitulatif-des-relations-eloquent)
+1. [Migration 15 — faqs](#17-migration-15--faqs)
+1. [Récapitulatif des enums](#18-récapitulatif-des-enums)
+1. [Récapitulatif des relations Eloquent](#19-récapitulatif-des-relations-eloquent)
 
 -----
 
@@ -47,6 +48,7 @@ L’ordre des migrations est **impératif** — chaque table qui porte une clé 
 12 → passkeys                    dépend de : users
 13 → reports                     dépend de : users (reporter, reviewer), polymorphique
 14 → testimonials                dépend de : users
+15 → faqs                        dépend de : users
 ```
 
 -----
@@ -72,6 +74,7 @@ users (1) ────────────────── (1) recruiter_p
 
 users (1) ─── (N) passkeys
 users (1) ─── (N) testimonials
+users (1) ─── (N) faqs
 users (1) ─── (N) reports (en tant que reporter ou reviewer)
 
 reports (N) ─── (1) reportable (Morph: JobOffer ou CandidateProfile)
@@ -362,7 +365,26 @@ assets  ← référencés uniquement dans le JSON required_assets de job_offers
 
 -----
 
-## 17. Récapitulatif des enums
+## 17. Migration 15 — `faqs`
+
+**Questions posées par les utilisateurs.**
+
+|Colonne         |Type           |Contraintes                      |Description             |
+|----------------|---------------|---------------------------------|------------------------|
+|`id`            |`id`           |PK                               |                        |
+|`user_id`       |`foreignId`    |nullable, FK → `users.id`        |Auteur si connecté      |
+|`email`         |`string`       |NOT NULL                         |Email de contact        |
+|`question`      |`string(200)`  |NOT NULL                         |La question posée       |
+|`answer`        |`string(500)`  |nullable                         |La réponse apportée     |
+|`status`        |`string` (enum)|NOT NULL, défaut `pending`       |Statut du traitement    |
+|`reviewed_by`   |`foreignId`    |nullable, FK → `users.id`        |Admin ayant répondu     |
+|`reviewed_at`   |`timestamp`    |nullable                         |Date de réponse         |
+|`created_at`    |`timestamp`    |nullable                         |                        |
+|`updated_at`    |`timestamp`    |nullable                         |                        |
+
+-----
+
+## 18. Récapitulatif des enums
 
 |Table               |Colonne                |Valeurs possibles                                                    |
 |--------------------|-----------------------|---------------------------------------------------------------------|
@@ -386,10 +408,11 @@ assets  ← référencés uniquement dans le JSON required_assets de job_offers
 |`reports`           |`reason`               |`fake_offer`, `misleading`, `discriminatory`, `suspicious_contact`, `duplicate`, `false_info`, `inappropriate`, `identity_theft`, `spam`|
 |`reports`           |`status`               |`pending`, `reviewed`, `dismissed`, `confirmed`                      |
 |`testimonials`      |`status`               |`pending`, `approved`, `rejected`                                    |
+|`faqs`              |`status`               |`pending`, `reviewed`, `dismissed`, `confirmed`                      |
 
 -----
 
-## 18. Récapitulatif des relations Eloquent
+## 19. Récapitulatif des relations Eloquent
 
 |Model             |Relation                 |Type       |Via                   |
 |------------------|-------------------------|-----------|----------------------|
@@ -422,6 +445,8 @@ assets  ← référencés uniquement dans le JSON required_assets de job_offers
 |`Report`          |`Reviewer`               |`belongsTo`|`reviewed_by` (User)  |
 |`Report`          |`Reportable`             |`morphTo`  |                      |
 |`Testimonial`     |`User`                   |`belongsTo`|`user_id`             |
+|`Faq`             |`User`                   |`belongsTo`|`user_id`             |
+|`Faq`             |`Reviewer`               |`belongsTo`|`reviewed_by` (User)  |
 
 -----
 

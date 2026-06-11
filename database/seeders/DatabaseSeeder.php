@@ -15,18 +15,21 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
+ /*$this->call([
+            //UserSeeder::class,
+            //SkillSeeder::class,
+            //AssetSeeder::class,
+            //RecruiterProfileSeeder::class,
+            //CandidateProfileSeeder::class,
+            //JobOfferSeeder::class,
+            //ApplicationSeeder::class,
+           // MatchRhSeeder::class,
+        ]);*/
+    //seeder in production
         $this->call([
             RoleAndPermissionSeeder::class,
-            UserSeeder::class,
-            SkillSeeder::class,
-            AssetSeeder::class,
-            RecruiterProfileSeeder::class,
-            CandidateProfileSeeder::class,
-            JobOfferSeeder::class,
-            ApplicationSeeder::class,
-            MatchRhSeeder::class,
+            TestimonialSeeder::class,
+            FaqSeeder::class,
         ]);
-        $this->call(TestimonialSeeder::class);
-        $this->call(FaqSeeder::class);
     }
 }

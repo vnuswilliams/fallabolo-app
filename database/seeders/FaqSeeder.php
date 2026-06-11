@@ -54,7 +54,8 @@ class FaqSeeder extends Seeder
 
         foreach ($faqs as $data) {
             Faq::create([
-                'user_id' => null, // témoignages de démonstration, sans utilisateur réel
+                'user_id' => null,
+                'email' => 'contact@matchrh.cm',
                 'question' => $data['question'],
                 'answer'  => $data['answer'],
                 'status'  => ReportStatusEnum::CONFIRMED,
