@@ -16,12 +16,23 @@ enum ApplicationStatusEnum: string
 
     public function label(): string
     {
-        return match($this) {
+        return match ($this) {
             self::PENDING => 'En attente',
             self::VIEWED => 'Consultée',
             self::SHORTLISTED => 'Présélectionnée',
             self::REJECTED => 'Refusée',
             self::HIRED => 'Recruté',
+        };
+    }
+
+    public function color(): string
+    {
+        return match ($this) {
+            self::PENDING => 'amber',
+            self::VIEWED => 'sky',
+            self::SHORTLISTED => 'indigo',
+            self::REJECTED => 'rose',
+            self::HIRED => 'emerald',
         };
     }
 }

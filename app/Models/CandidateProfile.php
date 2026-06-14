@@ -32,6 +32,7 @@ class CandidateProfile extends Model
         'salary_min',
         'salary_max',
         'cv_path',
+        'assets',
         'is_suspended',
         'suspended_at',
     ];
@@ -43,6 +44,7 @@ class CandidateProfile extends Model
             'availability' => AvailabilityEnum::class,
             'experience_tier' => ExperienceTierEnum::class,
             'education_level' => EducationLevelEnum::class,
+            'assets' => 'json',
             'is_suspended' => 'boolean',
             'suspended_at' => 'datetime',
         ];

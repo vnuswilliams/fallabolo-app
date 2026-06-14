@@ -16,6 +16,11 @@ class Testimonial extends Model
         'content',
         'rating',
         'status',
+        'author_name',
+        'author_role',
+        'author_company',
+        'author_color',
+        'author_badge',
     ];
 
     protected $casts = [

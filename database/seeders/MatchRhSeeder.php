@@ -2,20 +2,20 @@
 
 namespace Database\Seeders;
 
-use App\Models\User;
-use App\Models\Skill;
-use App\Models\Asset;
-use App\Models\RecruiterProfile;
-use App\Models\CandidateProfile;
-use App\Models\JobOffer;
-use App\Enums\RoleEnum;
 use App\Enums\AssetCategoryEnum;
+use App\Enums\AvailabilityEnum;
 use App\Enums\EducationLevelEnum;
 use App\Enums\ExperienceTierEnum;
-use App\Enums\AvailabilityEnum;
-use App\Enums\LanguageProfileEnum;
-use App\Enums\JobTemplateEnum;
 use App\Enums\JobStatusEnum;
+use App\Enums\JobTemplateEnum;
+use App\Enums\LanguageProfileEnum;
+use App\Enums\RoleEnum;
+use App\Models\Asset;
+use App\Models\CandidateProfile;
+use App\Models\JobOffer;
+use App\Models\RecruiterProfile;
+use App\Models\Skill;
+use App\Models\User;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
 
@@ -66,29 +66,32 @@ class MatchRhSeeder extends Seeder
 
         // 2. Assets
         $assets = [
-            ['name' => 'Expérience BTP', 'category' => AssetCategoryEnum::SECTORIEL],
-            ['name' => 'Expérience Banque', 'category' => AssetCategoryEnum::SECTORIEL],
-            ['name' => 'Expérience Santé', 'category' => AssetCategoryEnum::SECTORIEL],
-            ['name' => 'Expérience Télécoms', 'category' => AssetCategoryEnum::SECTORIEL],
-            ['name' => 'Expérience Agriculture', 'category' => AssetCategoryEnum::SECTORIEL],
-            ['name' => 'Certification PMP', 'category' => AssetCategoryEnum::CERTIFICATION],
-            ['name' => 'Certification CFA', 'category' => AssetCategoryEnum::CERTIFICATION],
-            ['name' => 'Certification AWS', 'category' => AssetCategoryEnum::CERTIFICATION],
-            ['name' => 'Certification Sage Paie', 'category' => AssetCategoryEnum::CERTIFICATION],
-            ['name' => 'OHSAS 18001', 'category' => AssetCategoryEnum::CERTIFICATION],
-            ['name' => 'Expérience télétravail', 'category' => AssetCategoryEnum::CONTEXTUEL],
-            ['name' => 'Management d’équipe', 'category' => AssetCategoryEnum::CONTEXTUEL],
-            ['name' => 'Expérience PME', 'category' => AssetCategoryEnum::CONTEXTUEL],
-            ['name' => 'Expérience multinationale', 'category' => AssetCategoryEnum::CONTEXTUEL],
-            ['name' => 'Expérience internationale', 'category' => AssetCategoryEnum::CONTEXTUEL],
-            ['name' => 'Allemand', 'category' => AssetCategoryEnum::LANGUE_SUPP],
-            ['name' => 'Espagnol', 'category' => AssetCategoryEnum::LANGUE_SUPP],
-            ['name' => 'Chinois mandarin', 'category' => AssetCategoryEnum::LANGUE_SUPP],
-            ['name' => 'Portugais', 'category' => AssetCategoryEnum::LANGUE_SUPP],
+            ['name' => 'Expérience BTP', 'category' => AssetCategoryEnum::SECTORIELLE],
+            ['name' => 'Expérience Banque', 'category' => AssetCategoryEnum::SECTORIELLE],
+            ['name' => 'Expérience Santé', 'category' => AssetCategoryEnum::SECTORIELLE],
+            ['name' => 'Expérience Télécoms', 'category' => AssetCategoryEnum::SECTORIELLE],
+            ['name' => 'Expérience Agriculture', 'category' => AssetCategoryEnum::SECTORIELLE],
+            ['name' => 'Certification PMP', 'category' => AssetCategoryEnum::CERTIFICAT],
+            ['name' => 'Certification CFA', 'category' => AssetCategoryEnum::CERTIFICAT],
+            ['name' => 'Certification AWS', 'category' => AssetCategoryEnum::CERTIFICAT],
+            ['name' => 'Certification Sage Paie', 'category' => AssetCategoryEnum::CERTIFICAT],
+            ['name' => 'OHSAS 18001', 'category' => AssetCategoryEnum::CERTIFICAT],
+            ['name' => 'Expérience télétravail', 'category' => AssetCategoryEnum::CONTEXTUELLES],
+            ['name' => 'Management d’équipe', 'category' => AssetCategoryEnum::CONTEXTUELLES],
+            ['name' => 'Expérience PME', 'category' => AssetCategoryEnum::CONTEXTUELLES],
+            ['name' => 'Expérience multinationale', 'category' => AssetCategoryEnum::CONTEXTUELLES],
+            ['name' => 'Expérience internationale', 'category' => AssetCategoryEnum::CONTEXTUELLES],
+            ['name' => 'Allemand', 'category' => AssetCategoryEnum::LANGUES],
+            ['name' => 'Espagnol', 'category' => AssetCategoryEnum::LANGUES],
+            ['name' => 'Chinois mandarin', 'category' => AssetCategoryEnum::LANGUES],
+            ['name' => 'Portugais', 'category' => AssetCategoryEnum::LANGUES],
         ];
 
         foreach ($assets as $asset) {
-            Asset::updateOrCreate(['name' => $asset['name']], $asset);
+            Asset::updateOrCreate(['name' => $asset['name']], [
+                'name' => $asset['name'],
+                'category' => $asset['category']->label(),
+            ]);
         }
 
         // 3. Users

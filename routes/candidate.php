@@ -14,10 +14,8 @@ Route::middleware(['auth', 'verified', 'role:candidate', 'check_suspension'])->p
         Route::livewire('{offer}', 'pages::candidate.offers.show')->name('offers.show');
 
     // Candidatures
-    Route::prefix('applications')->name('applications.')->group(function () {
-        Route::livewire('/', 'pages::candidate.applications.index')->name('index');
-        Route::livewire('{application}', 'pages::candidate.applications.show')->name('show');
-    });
+        Route::livewire('/applications', 'pages::candidate.applications.index')->name('applications.index');
+        Route::livewire('{application}', 'pages::candidate.applications.show')->name('applications.show');
 
     // Profil candidat
     Route::prefix('profile')->name('profile.')->group(function () {
@@ -33,5 +31,5 @@ Route::middleware(['auth', 'verified', 'role:candidate', 'check_suspension'])->p
 
 
     // Avis
-    Route::livewire('testimonial', 'pages::candidate.testimonial')->name('testimonial');
+    Route::livewire('/testimonial', 'pages::candidate.testimonial')->name('testimonial');
 });

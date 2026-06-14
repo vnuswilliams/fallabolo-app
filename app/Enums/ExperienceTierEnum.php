@@ -16,12 +16,17 @@ enum ExperienceTierEnum: string
 
     public function label(): string
     {
-        return match($this) {
+        return match ($this) {
             self::TIER_0 => 'Sans expérience',
             self::TIER_1 => '1 à 2 ans',
             self::TIER_2 => '3 à 4 ans',
             self::TIER_3 => '5 à 10 ans',
             self::TIER_4 => 'Plus de 10 ans',
         };
+    }
+
+    public function valueWeight(): int
+    {
+        return (int) $this->value;
     }
 }

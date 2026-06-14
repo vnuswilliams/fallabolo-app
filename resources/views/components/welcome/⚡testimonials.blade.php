@@ -1,69 +1,76 @@
 <?php
+
+use App\Models\Testimonial;
+use App\Enums\TestimonialStatusEnum;
+use App\Enums\RoleEnum;
+use Livewire\Attributes\Computed;
 use Livewire\Component;
+use Illuminate\Support\Str;
 
 new class extends Component {
-    public array $testimonials = [
-        [
-            'initials' => 'MK',
-            'name'     => 'Marie Kamga',
-            'role'     => 'Responsable RH',
-            'company'  => 'TechCom Cameroun',
-            'color'    => 'emerald',
-            'stars'    => 5,
-            'badge'    => 'Recruteur',
-            'quote'    => 'En 3 ans de recrutement je n\'avais jamais reçu des candidatures aussi qualifiées dès le premier jour. Le classement automatique m\'a fait économiser deux jours de travail sur notre dernière campagne.',
-        ],
-        [
-            'initials' => 'JN',
-            'name'     => 'Jean-Paul Nkoa',
-            'role'     => 'Développeur Full Stack',
-            'company'  => 'Indépendant, Yaoundé',
-            'color'    => 'indigo',
-            'stars'    => 5,
-            'badge'    => 'Candidat',
-            'quote'    => 'Voir mon score avant de postuler a tout changé. Je cible uniquement les offres où je dépasse 80 %. J\'ai décroché mon poste actuel en 12 jours.',
-        ],
-        [
-            'initials' => 'SB',
-            'name'     => 'Sophie Bello',
-            'role'     => 'DG',
-            'company'  => 'Agence Digit+ Douala',
-            'color'    => 'amber',
-            'stars'    => 5,
-            'badge'    => 'Recruteur',
-            'quote'    => 'On avait l\'habitude de recevoir 150 CVs par poste. Avec MatchRH on en reçoit 25, toutes pertinentes. Les critères bloquants font le filtre à notre place.',
-        ],
-        [
-            'initials' => 'AM',
-            'name'     => 'Alain Mfoumou',
-            'role'     => 'Comptable Senior',
-            'company'  => 'Bafoussam',
-            'color'    => 'sky',
-            'stars'    => 5,
-            'badge'    => 'Candidat',
-            'quote'    => 'Sans CV obligatoire, j\'ai pu me concentrer sur ce que je sais vraiment faire. Mon profil reflète mes vraies compétences — le recruteur m\'a rappelé en 48 h.',
-        ],
-        [
-            'initials' => 'FE',
-            'name'     => 'Fatima Essomba',
-            'role'     => 'Head of Talent',
-            'company'  => 'FinServ Africa',
-            'color'    => 'rose',
-            'stars'    => 5,
-            'badge'    => 'Recruteur',
-            'quote'    => 'L\'algorithme est transparent — chaque score est décomposé, explicable. Nos équipes l\'ont adopté sans résistance parce qu\'elles comprennent la logique. Pas de boîte noire.',
-        ],
-        [
-            'initials' => 'PN',
-            'name'     => 'Patrick Nguema',
-            'role'     => 'Ingénieur Réseaux',
-            'company'  => 'Douala',
-            'color'    => 'teal',
-            'stars'    => 5,
-            'badge'    => 'Candidat',
-            'quote'    => 'J\'ai passé des mois à adapter mon CV sans résultats. Sur MatchRH j\'ai rempli mon profil une fois et les offres viennent à moi. Le système de recommandations est vraiment efficace.',
-        ],
-    ];
+    #[Computed]
+    public function testimonials()
+    {
+        return Testimonial::with(['user.candidateProfile', 'user.recruiterProfile'])
+            ->where('status', TestimonialStatusEnum::APPROVED)
+            ->latest()
+            ->get()
+            ->map(function ($t) {
+                if ($t->user) {
+                    $role = $t->user->role;
+                    $company = '';
+                    $roleLabel = '';
+
+                    if ($role === RoleEnum::RECRUITER) {
+                        $company = $t->user->recruiterProfile?->company_name ?? 'Entreprise';
+                        $roleLabel = $t->user->recruiterProfile?->company_sector ?? 'Recruteur';
+                    } elseif ($role === RoleEnum::CANDIDATE) {
+                        $company = $t->user->candidateProfile?->city ?? 'Cameroun';
+                        $roleLabel = $t->user->candidateProfile?->education_field ?? 'Candidat';
+                    } else {
+                        $company = 'MatchRH';
+                        $roleLabel = 'Administrateur';
+                    }
+
+                    return [
+                        'initials' => $t->user->initials(),
+                        'name'     => $t->user->name,
+                        'role'     => $roleLabel,
+                        'company'  => $company,
+                        'color'    => $this->getColorForId($t->user_id),
+                        'stars'    => $t->rating,
+                        'badge'    => $t->user->role->label(),
+                        'quote'    => $t->content,
+                    ];
+                }
+
+                return [
+                    'initials' => $this->getInitials($t->author_name ?? 'AN'),
+                    'name'     => $t->author_name ?? 'Anonyme',
+                    'role'     => $t->author_role ?? 'Utilisateur',
+                    'company'  => $t->author_company ?? 'MatchRH',
+                    'color'    => $t->author_color ?? 'emerald',
+                    'stars'    => $t->rating,
+                    'badge'    => $t->author_badge ?? 'Témoignage',
+                    'quote'    => $t->content,
+                ];
+            });
+    }
+
+    private function getInitials($name)
+    {
+        return Str::of($name)
+            ->explode(' ')
+            ->take(2)
+            ->map(fn ($word) => Str::substr($word, 0, 1))
+            ->implode('');
+    }
+
+    private function getColorForId($id)
+    {
+        $colors = ['emerald', 'indigo', 'amber', 'sky', 'rose', 'teal'];
+        return $colors[$id % count($colors)];
+    }
 
     public array $palette = [
         'emerald' => [
@@ -134,8 +141,9 @@ new class extends Component {
     </div>
 
     {{-- ── Carrousel pleine largeur ── --}}
+    @if($this->testimonials->isNotEmpty())
     <div
-        x-data="testimonialCarousel({{ count($testimonials) }})"
+        x-data="testimonialCarousel({{ $this->testimonials->count() }})"
         x-init="init()"
         class="relative w-full"
     >
@@ -163,8 +171,8 @@ new class extends Component {
             @touchend="onTouchEnd($event)"
         >
             {{-- Les cards réelles --}}
-            @foreach ($testimonials as $t)
-                @php $c = $palette[$t['color']]; @endphp
+            @foreach ($this->testimonials as $t)
+                @php $c = $this->palette[$t['color']] ?? $this->palette['emerald']; @endphp
                 <div class="testimonial-card flex-shrink-0 w-[300px] sm:w-[340px] rounded-2xl border p-6 flex flex-col gap-4 transition-colors duration-200 cursor-default"
                      :class="dark ? 'bg-zinc-900 border-zinc-800' : 'bg-white border-zinc-200'">
 
@@ -214,7 +222,7 @@ new class extends Component {
 
             {{-- Dots (un par card réelle) --}}
             <div class="flex items-center gap-2">
-                @foreach ($testimonials as $i => $t)
+                @foreach ($this->testimonials as $i => $t)
                     <button
                         @click="goTo({{ $i }})"
                         :class="current === {{ $i }}
@@ -271,5 +279,6 @@ new class extends Component {
             </div>
         </div>
     </div>
+    @endif
 
 </section>

@@ -360,6 +360,11 @@ assets  ← référencés uniquement dans le JSON required_assets de job_offers
 |`content`       |`text`         |NOT NULL                         |Contenu du message      |
 |`rating`        |`integer`      |défaut `5`                       |Note (1 à 5)            |
 |`status`        |`string` (enum)|NOT NULL, défaut `pending`       |Statut de validation    |
+|`author_name`   |`string`       |nullable                         |Nom de l'auteur (si hors plateforme)|
+|`author_role`   |`string`       |nullable                         |Rôle de l'auteur        |
+|`author_company`|`string`       |nullable                         |Entreprise de l'auteur  |
+|`author_color`  |`string`       |nullable                         |Couleur de l'avatar     |
+|`author_badge`  |`string`       |nullable                         |Badge affiché           |
 |`created_at`    |`timestamp`    |nullable                         |                        |
 |`updated_at`    |`timestamp`    |nullable                         |                        |
 

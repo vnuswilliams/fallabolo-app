@@ -432,26 +432,34 @@
           Pour le recruteur
         </div>
         <div class="space-y-4">
-          <div class="p-6 rounded-2xl border transition-colors" :class="dark ? 'bg-zinc-900 border-zinc-800 hover:border-zinc-700' : 'bg-white border-zinc-200 hover:border-zinc-300'">
+          <div class="flex gap-2 items-center p-4 rounded-2xl border transition-colors" :class="dark ? 'bg-zinc-900 border-zinc-800 hover:border-zinc-700' : 'bg-white border-zinc-200 hover:border-zinc-300'">
             <div class="w-12 h-12 rounded-xl flex items-center justify-center text-xl mb-4 border" :class="dark ? 'bg-red-500/10 border-red-500/20' : 'bg-red-50 border-red-200'">
               <flux:icon.envelope class="size-6 text-red-500" />
             </div>
-            <h3 class="font-display font-bold text-lg mb-2" :class="dark ? 'text-zinc-100' : 'text-zinc-900'">Candidatures massives non pertinentes</h3>
-            <p class="text-sm leading-relaxed" :class="dark ? 'text-zinc-400' : 'text-zinc-500'">Chaque offre attire des dizaines de profils inadaptés, noyant les bons candidats dans la masse.</p>
+            <div>
+                            <h3 class="font-display font-bold text-lg mb-2" :class="dark ? 'text-zinc-100' : 'text-zinc-900'">Candidatures massives non pertinentes</h3>
+              <p class="text-sm leading-relaxed" :class="dark ? 'text-zinc-400' : 'text-zinc-500'">Chaque offre attire des dizaines de profils inadaptés, noyant les bons candidats dans la masse.</p>
+            </div>
           </div>
-          <div class="p-6 rounded-2xl border transition-colors" :class="dark ? 'bg-zinc-900 border-zinc-800 hover:border-zinc-700' : 'bg-white border-zinc-200 hover:border-zinc-300'">
+          <div class="flex gap-2 items-center p-4  rounded-2xl border transition-colors" :class="dark ? 'bg-zinc-900 border-zinc-800 hover:border-zinc-700' : 'bg-white border-zinc-200 hover:border-zinc-300'">
             <div class="w-12 h-12 rounded-xl flex items-center justify-center text-xl mb-4 border" :class="dark ? 'bg-red-500/10 border-red-500/20' : 'bg-red-50 border-red-200'">
               <flux:icon.clock class="size-6 text-red-500" />
             </div>
-            <h3 class="font-display font-bold text-lg mb-2" :class="dark ? 'text-zinc-100' : 'text-zinc-900'">Tri manuel chronophage</h3>
-            <p class="text-sm leading-relaxed" :class="dark ? 'text-zinc-400' : 'text-zinc-500'">6 secondes par CV en moyenne. La qualité de décision est sacrifiée pour la vitesse.</p>
+            <div>
+
+              <h3 class="font-display font-bold text-lg mb-2" :class="dark ? 'text-zinc-100' : 'text-zinc-900'">Tri manuel chronophage</h3>
+              <p class="text-sm leading-relaxed" :class="dark ? 'text-zinc-400' : 'text-zinc-500'">6 secondes par CV en moyenne. La qualité de décision est sacrifiée pour la vitesse.</p>
+            </div>
           </div>
-          <div class="p-6 rounded-2xl border transition-colors" :class="dark ? 'bg-zinc-900 border-zinc-800 hover:border-zinc-700' : 'bg-white border-zinc-200 hover:border-zinc-300'">
+          <div class="flex gap-2 items-center p-4 rounded-2xl border transition-colors" :class="dark ? 'bg-zinc-900 border-zinc-800 hover:border-zinc-700' : 'bg-white border-zinc-200 hover:border-zinc-300'">
             <div class="w-12 h-12 rounded-xl flex items-center justify-center text-xl mb-4 border" :class="dark ? 'bg-red-500/10 border-red-500/20' : 'bg-red-50 border-red-200'">
               <flux:icon.folder-open class="size-6 text-red-500" />
             </div>
-            <h3 class="font-display font-bold text-lg mb-2" :class="dark ? 'text-zinc-100' : 'text-zinc-900'">Données non comparables</h3>
-            <p class="text-sm leading-relaxed" :class="dark ? 'text-zinc-400' : 'text-zinc-500'">Compétences diversifiées dans des PDFs — impossible de comparer objectivement les profils.</p>
+            <div>
+
+              <h3 class="font-display font-bold text-lg mb-2" :class="dark ? 'text-zinc-100' : 'text-zinc-900'">Données non comparables</h3>
+              <p class="text-sm leading-relaxed" :class="dark ? 'text-zinc-400' : 'text-zinc-500'">Compétences diversifiées dans des PDFs impossible de comparer objectivement les profils.</p>
+            </div>
           </div>
         </div>
       </div>
@@ -463,26 +471,35 @@
           Pour le candidat
         </div>
         <div class="space-y-4">
-          <div class="p-6 rounded-2xl border transition-colors" :class="dark ? 'bg-zinc-900 border-zinc-800 hover:border-zinc-700' : 'bg-white border-zinc-200 hover:border-zinc-300'">
+          <div class="flex gap-2 items-center p-4  rounded-2xl border transition-colors" :class="dark ? 'bg-zinc-900 border-zinc-800 hover:border-zinc-700' : 'bg-white border-zinc-200 hover:border-zinc-300'">
             <div class="w-12 h-12 rounded-xl flex items-center justify-center text-xl mb-4 border" :class="dark ? 'bg-red-500/10 border-red-500/20' : 'bg-red-50 border-red-200'">
               <flux:icon.megaphone class="size-6 text-red-500" />
             </div>
-            <h3 class="font-display font-bold text-lg mb-2" :class="dark ? 'text-zinc-100' : 'text-zinc-900'">Postuler dans le vide</h3>
-            <p class="text-sm leading-relaxed" :class="dark ? 'text-zinc-400' : 'text-zinc-500'">Des dizaines de candidatures envoyées, aucun retour — même pas un refus. Le silence est la norme.</p>
+            <div>
+
+              <h3 class="font-display font-bold text-lg mb-2" :class="dark ? 'text-zinc-100' : 'text-zinc-900'">Postuler dans le vide</h3>
+              <p class="text-sm leading-relaxed" :class="dark ? 'text-zinc-400' : 'text-zinc-500'">Des dizaines de candidatures envoyées, aucun retour même pas un refus. Le silence est la norme.</p>
+            </div>
           </div>
-          <div class="p-6 rounded-2xl border transition-colors" :class="dark ? 'bg-zinc-900 border-zinc-800 hover:border-zinc-700' : 'bg-white border-zinc-200 hover:border-zinc-300'">
+          <div class="flex gap-2 items-center p-4  rounded-2xl border transition-colors" :class="dark ? 'bg-zinc-900 border-zinc-800 hover:border-zinc-700' : 'bg-white border-zinc-200 hover:border-zinc-300'">
             <div class="w-12 h-12 rounded-xl flex items-center justify-center text-xl mb-4 border" :class="dark ? 'bg-red-500/10 border-red-500/20' : 'bg-red-50 border-red-200'">
               <flux:icon.question-mark-circle class="size-6 text-red-500" />
             </div>
-            <h3 class="font-display font-bold text-lg mb-2" :class="dark ? 'text-zinc-100' : 'text-zinc-900'">Être éliminé sans explication</h3>
-            <p class="text-sm leading-relaxed" :class="dark ? 'text-zinc-400' : 'text-zinc-500'">Vous ne savez jamais pourquoi vous n'avez pas été retenu. Impossible de progresser sans feedback.</p>
+            <div>
+
+              <h3 class="font-display font-bold text-lg mb-2" :class="dark ? 'text-zinc-100' : 'text-zinc-900'">Être éliminé sans explication</h3>
+              <p class="text-sm leading-relaxed" :class="dark ? 'text-zinc-400' : 'text-zinc-500'">Vous ne savez jamais pourquoi vous n'avez pas été retenu. Impossible de progresser sans feedback.</p>
+            </div>
           </div>
-          <div class="p-6 rounded-2xl border transition-colors" :class="dark ? 'bg-zinc-900 border-zinc-800 hover:border-zinc-700' : 'bg-white border-zinc-200 hover:border-zinc-300'">
+          <div class="flex gap-2 items-center p-4  rounded-2xl border transition-colors" :class="dark ? 'bg-zinc-900 border-zinc-800 hover:border-zinc-700' : 'bg-white border-zinc-200 hover:border-zinc-300'">
             <div class="w-12 h-12 rounded-xl flex items-center justify-center text-xl mb-4 border" :class="dark ? 'bg-red-500/10 border-red-500/20' : 'bg-red-50 border-red-200'">
               <flux:icon.user-group class="size-6 text-red-500" />
             </div>
-            <h3 class="font-display font-bold text-lg mb-2" :class="dark ? 'text-zinc-100' : 'text-zinc-900'">Être jugé sur la forme, pas le fond</h3>
-            <p class="text-sm leading-relaxed" :class="dark ? 'text-zinc-400' : 'text-zinc-500'">Le meilleur CV designer gagne. Pas le meilleur profil. Vos vraies compétences restent invisibles.</p>
+            <div>
+
+              <h3 class="font-display font-bold text-lg mb-2" :class="dark ? 'text-zinc-100' : 'text-zinc-900'">Être jugé sur la forme, pas le fond</h3>
+              <p class="text-sm leading-relaxed" :class="dark ? 'text-zinc-400' : 'text-zinc-500'">Le meilleur CV designer gagne. Pas le meilleur profil. Vos vraies compétences restent invisibles.</p>
+            </div>
           </div>
         </div>
       </div>
@@ -506,7 +523,7 @@
         Matching en 4 étapes,<br><span class="grad-text">score transparent</span>
       </h2>
       <p class="text-lg max-w-lg mx-auto" :class="dark ? 'text-zinc-400' : 'text-zinc-500'">
-        Un algorithme déterministe. Pas de boîte noire — chaque score est expliqué, visible et compréhensible par tous.
+        Un algorithme déterministe. Pas de boîte noire chaque score est expliqué, visible et compréhensible par tous.
       </p>
     </div>
 
@@ -536,8 +553,8 @@
         <h3 class="font-display font-bold text-sm mb-2" :class="dark ? 'text-zinc-100' : 'text-zinc-900'">Atouts détectés</h3>
         <p class="text-sm leading-relaxed mb-4" :class="dark ? 'text-zinc-400' : 'text-zinc-500'">Certifications, expériences sectorielles, langues supplémentaires valorisés séparément.</p>
         <div class="space-y-2 pt-4 border-t border-zinc-800">
-          <p class="text-[10px] leading-tight"><strong :class="dark ? 'text-zinc-300' : 'text-zinc-700'">Recruteur :</strong> <span :class="dark ? 'text-zinc-500' : 'text-zinc-400'">départagez facilement les profils à score égal</span></p>
-          <p class="text-[10px] leading-tight"><strong :class="dark ? 'text-zinc-300' : 'text-zinc-700'">Candidat :</strong> <span :class="dark ? 'text-zinc-500' : 'text-zinc-400'">vos atouts sont visibles, pas enfouis dans un PDF</span></p>
+          <p class="text-xs leading-tight"><strong :class="dark ? 'text-zinc-300' : 'text-zinc-700'">Recruteur :</strong> <span :class="dark ? 'text-zinc-500' : 'text-zinc-400'">départagez facilement les profils à score égal</span></p>
+          <p class="text-xs leading-tight"><strong :class="dark ? 'text-zinc-300' : 'text-zinc-700'">Candidat :</strong> <span :class="dark ? 'text-zinc-500' : 'text-zinc-400'">vos atouts sont visibles, pas enfouis dans un PDF</span></p>
         </div>
       </div>
       <div class="p-6 reveal d4 transition-colors" :class="dark ? 'bg-zinc-900 hover:bg-zinc-800' : 'bg-white hover:bg-zinc-50'">
@@ -683,28 +700,28 @@
         </div>
 
         <div class="space-y-4">
-          <div class="flex gap-4 p-5 rounded-xl border border-transparent hover:border-zinc-800 transition-colors">
+          <div class="flex gap-4 p-5 rounded-xl border border-transparent  transition-colors">
             <flux:icon.no-symbol class="size-6 text-zinc-400 shrink-0" />
             <div>
               <h3 class="font-display font-bold text-base mb-1" :class="dark ? 'text-zinc-100' : 'text-zinc-900'">Critères bloquants configurables</h3>
               <p class="text-sm leading-relaxed" :class="dark ? 'text-zinc-500' : 'text-zinc-400'">Définissez vos exigences non-négociables. Tout profil non-conforme est filtré automatiquement.</p>
             </div>
           </div>
-          <div class="flex gap-4 p-5 rounded-xl border border-transparent hover:border-zinc-800 transition-colors">
+          <div class="flex gap-4 p-5 rounded-xl border border-transparent  transition-colors">
             <flux:icon.chart-bar class="size-6 text-zinc-400 shrink-0" />
             <div>
               <h3 class="font-display font-bold text-base mb-1" :class="dark ? 'text-zinc-100' : 'text-zinc-900'">Classement automatique</h3>
               <p class="text-sm leading-relaxed" :class="dark ? 'text-zinc-500' : 'text-zinc-400'">Les candidats arrivent déjà classés du plus compatible au moins compatible. Zéro tri manuel.</p>
             </div>
           </div>
-          <div class="flex gap-4 p-5 rounded-xl border border-transparent hover:border-zinc-800 transition-colors">
+          <div class="flex gap-4 p-5 rounded-xl border border-transparent  transition-colors">
             <flux:icon.bell class="size-6 text-zinc-400 shrink-0" />
             <div>
               <h3 class="font-display font-bold text-base mb-1" :class="dark ? 'text-zinc-100' : 'text-zinc-900'">Alertes & résumés périodiques</h3>
               <p class="text-sm leading-relaxed" :class="dark ? 'text-zinc-500' : 'text-zinc-400'">Notifié à chaque candidature qualifiée. Résumé quotidien avec top profils et score moyen.</p>
             </div>
           </div>
-          <div class="flex gap-4 p-5 rounded-xl border border-transparent hover:border-zinc-800 transition-colors">
+          <div class="flex gap-4 p-5 rounded-xl border border-transparent  transition-colors">
             <flux:icon.star class="size-6 text-zinc-400 shrink-0" />
             <div>
               <h3 class="font-display font-bold text-base mb-1" :class="dark ? 'text-zinc-100' : 'text-zinc-900'">Système de bonus flexible</h3>
@@ -715,47 +732,50 @@
       </div>
 
           <!-- Colonne Candidat -->
-          <div class="reveal-r space-y-6">
-          <div class="flex items-center gap-3 pb-4 border-b border-zinc-800">
-          <div class="w-8 h-8 rounded-lg bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center text-sm">🙋</div>
-          <span class="inline-block px-3 py-1 rounded-full border text-[10px] font-bold font-display uppercase tracking-widest"
-               :class="dark ? 'bg-emerald-500/10 border-emerald-500/20 text-emerald-400' : 'bg-emerald-50 border-emerald-200 text-emerald-700'">
-            Je cherche un emploi
-          </span>
+      <div class="reveal-l space-y-6">
+        <div class="flex items-center gap-3 pb-4 border-b border-zinc-800">
+          <div class="w-10 h-10 rounded-lg bg-indigo-500/10 border border-indigo-500/20 flex items-center justify-center text-sm">
+            <flux:icon.users class="size-5 text-indigo-400" />
           </div>
+          <span class="inline-block px-3 py-1 rounded-full border text-xs font-bold font-display uppercase tracking-widest"
+               :class="dark ? 'bg-indigo-500/10 border-indigo-500/20 text-indigo-400' : 'bg-indigo-50 border-indigo-200 text-indigo-700'">
+               Je cherche un emploi
+          </span>
+        </div>
 
-          <div class="space-y-4">
-          <div class="flex gap-4 p-4 rounded-xl border border-transparent hover:border-zinc-800 transition-colors">
-           <flux:icon.show class="size-6 text-zinc-400 shrink-0" />
+        <div class="space-y-4">
+        <div class="flex gap-4 p-4 rounded-xl border border-transparent  transition-colors">
+           <flux:icon.eye class="size-6 text-zinc-400 shrink-0" />
             <div>
-              <h3 class="font-display font-bold text-sm mb-1" :class="dark ? 'text-zinc-100' : 'text-zinc-900'">Score visible avant de postuler</h3>
-              <p class="text-xs leading-relaxed" :class="dark ? 'text-zinc-500' : 'text-zinc-400'">Voyez votre compatibilité avec chaque offre avant d'envoyer quoi que ce soit. Postulez en connaissance de cause.</p>
+              <h3 class="font-display font-bold text-base mb-1" :class="dark ? 'text-zinc-100' : 'text-zinc-900'">Score visible avant de postuler</h3>
+              <p class="text-sm leading-relaxed" :class="dark ? 'text-zinc-500' : 'text-zinc-400'">Voyez votre compatibilité avec chaque offre avant d'envoyer quoi que ce soit. Postulez en connaissance de cause.</p>
             </div>
           </div>
-          <div class="flex gap-4 p-4 rounded-xl border border-transparent hover:border-zinc-800 transition-colors">
+          <div class="flex gap-4 p-4 rounded-xl border border-transparent  transition-colors">
              <flux:icon.document class="size-6 text-zinc-400 shrink-0" />
             <div>
-              <h3 class="font-display font-bold text-sm mb-1" :class="dark ? 'text-zinc-100' : 'text-zinc-900'">Profil structuré, sans CV obligatoire</h3>
-              <p class="text-xs leading-relaxed" :class="dark ? 'text-zinc-500' : 'text-zinc-400'">Renseignez vos compétences une seule fois. Votre profil parle pour vous, mieux qu'un PDF.</p>
+              <h3 class="font-display font-bold text-base mb-1" :class="dark ? 'text-zinc-100' : 'text-zinc-900'">Profil structuré, sans CV obligatoire</h3>
+              <p class="text-sm leading-relaxed" :class="dark ? 'text-zinc-500' : 'text-zinc-400'">Renseignez vos compétences une seule fois. Votre profil parle pour vous, mieux qu'un PDF.</p>
             </div>
           </div>
-          <div class="flex gap-4 p-4 rounded-xl border border-transparent hover:border-zinc-800 transition-colors">
+          <div class="flex gap-4 p-4 rounded-xl border border-transparent  transition-colors">
             <flux:icon.arrows-pointing-in class="size-6 text-zinc-400 shrink-0" />
             <div>
-              <h3 class="font-display font-bold text-sm mb-1" :class="dark ? 'text-zinc-100' : 'text-zinc-900'">Offres recommandées selon votre profil</h3>
-              <p class="text-xs leading-relaxed" :class="dark ? 'text-zinc-500' : 'text-zinc-400'">Le système suggère les offres où vous avez les meilleures chances pas les plus visibles.</p>
+              <h3 class="font-display font-bold text-base mb-1" :class="dark ? 'text-zinc-100' : 'text-zinc-900'">Offres recommandées selon votre profil</h3>
+              <p class="text-sm leading-relaxed" :class="dark ? 'text-zinc-500' : 'text-zinc-400'">Le système suggère les offres où vous avez les meilleures chances pas les plus visibles.</p>
             </div>
           </div>
-          <div class="flex gap-4 p-4 rounded-xl border border-transparent hover:border-zinc-800 transition-colors">
+          <div class="flex gap-4 p-4 rounded-xl border border-transparent  transition-colors">
             <flux:icon.light-bulb class="size-6 text-zinc-400 shrink-0" />
             <div>
-              <h3 class="font-display font-bold text-sm mb-1" :class="dark ? 'text-zinc-100' : 'text-zinc-900'">Comprendre pourquoi vous n'êtes pas retenu</h3>
-              <p class="text-xs leading-relaxed" :class="dark ? 'text-zinc-500' : 'text-zinc-400'">Le détail de chaque score vous indique exactement ce qui vous a pénalisé. Progressez à chaque postulation.</p>
+              <h3 class="font-display font-bold text-base mb-1" :class="dark ? 'text-zinc-100' : 'text-zinc-900'">Comprendre pourquoi vous n'êtes pas retenu</h3>
+              <p class="text-sm leading-relaxed" :class="dark ? 'text-zinc-500' : 'text-zinc-400'">Le détail de chaque score vous indique exactement ce qui vous a pénalisé. Progressez à chaque postulation.</p>
             </div>
           </div>
-          </div>
-          </div>
-          </div>
+        </div>
+      </div>
+          
+    </div>
 </section>
 
 
@@ -763,7 +783,7 @@
 <section id="mcp" class="py-24 px-5 border-y transition-colors duration-300"
          :class="dark ? 'bg-zinc-900/40 border-zinc-800' : 'bg-white border-zinc-200'">
   <div class="max-w-5xl mx-auto">
-    <div class="reveal rounded-2xl border overflow-hidden relative"
+    <div class="reveal rounded-2xl overflow-hidden relative"
          :class="dark ? 'border-emerald-500/20' : 'border-emerald-300/60'">
       <div class="absolute inset-0 mcp-shimmer pointer-events-none"></div>
       <div class="relative p-8 md:p-12">
@@ -829,36 +849,6 @@
               </a>
             </div>
           </div>
-
-          <!-- Code block -->
-        <div class="shrink-0 flex  self-center">
-  <div class="rounded-xl overflow-hidden bg-zinc-900 border border-zinc-800 shadow-2xl font-mono text-xs text-zinc-300">
-
-    <div class="flex items-center gap-2 px-4 py-3 bg-zinc-900/50 border-b border-zinc-800 select-none">
-      <div class="flex gap-1.5">
-        <span class="w-3 h-3 rounded-full bg-red-500/80 block"></span>
-        <span class="w-3 h-3 rounded-full bg-amber-500/80 block"></span>
-        <span class="w-3 h-3 rounded-full bg-emerald-500/80 block"></span>
-      </div>
-      <span class="ml-2 text-zinc-500 text-[11px]">matchrh-mcp.ts</span>
-    </div>
-
-    <div class="p-5 overflow-x-auto space-y-1">
-      <div class="text-zinc-500">// Connexion MCP MatchRH</div>
-      <div><span class="text-emerald-400">import</span> { MatchRH } <span class="text-emerald-400">from</span> <span class="text-amber-300">'matchrh-mcp'</span></div>
-      <div class="h-2"></div>
-      <div class="text-zinc-500">// Demander les top candidats</div>
-      <div><span class="text-emerald-400">const</span> results = <span class="text-emerald-400">await</span> MatchRH.getTopCandidates({</div>
-      <div class="pl-4">offreId: <span class="text-amber-300">'dev-laravel-001'</span>,</div>
-      <div class="pl-4">limit: <span class="text-blue-400">5</span></div>
-      <div>})</div>
-      <div class="text-zinc-500">// [{ name: 'Jean', score: 92% },</div>
-      <div class="text-zinc-500">//  { name: 'Marie', score: 89% }]</div>
-    </div>
-
-  </div>
-</div>
-
         </div>
       </div>
     </div>
@@ -927,11 +917,11 @@
             </div>
             <div class="flex items-center gap-3 text-xs">
               <span class="w-20 shrink-0" :class="dark ? 'text-zinc-500' : 'text-zinc-400'">Excel avancé</span>
-              <span class="text-emerald-400">★★★★</span><span :class="dark ? 'text-zinc-700' : 'text-zinc-200'">★</span>
+              <span class="text-emerald-400">★★★★</span>
             </div>
             <div class="flex items-center gap-3 text-xs">
               <span class="w-20 shrink-0" :class="dark ? 'text-zinc-500' : 'text-zinc-400'">Sage Paie</span>
-              <span class="text-emerald-400">★★★</span><span :class="dark ? 'text-zinc-700' : 'text-zinc-200'">★★</span>
+              <span class="text-emerald-400">★★★</span>
             </div>
           </div>
         </div>
@@ -1033,19 +1023,6 @@
          La gratuité totale est notre avantage concurrentiel elle nous permet d'atteindre la masse critique des deux côtés plus vite que n'importe quel concurrent.
       </p>
     </div>
-
-    <!-- Argument marketing -->
-    <div class="reveal my-8 p-5 rounded-2xl border flex gap-4 items-start"
-         :class="dark ? 'bg-zinc-900 border-zinc-800' : 'bg-zinc-50 border-zinc-200'">
-      <span class="text-2xl shrink-0">        <flux:icon.light-bulb class="size-8"/></span>
-      <div>
-        <p class="font-display font-bold text-sm mb-1" :class="dark ? 'text-zinc-100' : 'text-zinc-900'">Notre avantage stratégique</p>
-        <p class="text-sm leading-relaxed" :class="dark ? 'text-zinc-400' : 'text-zinc-500'">
-          Les plateformes payantes créent une barrière les meilleurs talents ne paient pas pour chercher un emploi, et les PME ne paient pas pour recruter des profils incertains. En étant entièrement gratuit, MatchRH agrège le marché plus vite et construit la réputation qui fera sa pérennité.
-        </p>
-      </div>
-    </div>
-
     <!-- Plans -->
     <div class="grid sm:grid-cols-2 gap-5 mt-10">
 
@@ -1092,8 +1069,6 @@
             <div class="flex items-start gap-2.5 text-sm"><span class="shrink-0 mt-0.5 text-emerald-400">✓</span><span :class="dark ? 'text-zinc-300' : 'text-zinc-600'">Tableau de bord recruteur</span></div>
             <div class="flex items-start gap-2.5 text-sm"><span class="shrink-0 mt-0.5 text-emerald-400">✓</span><span :class="dark ? 'text-zinc-300' : 'text-zinc-600'">Support prioritaire</span></div>
          <div class="flex items-start gap-2.5 text-sm"><span class="shrink-0 mt-0.5 text-emerald-400 text-xs">🔜</span><span :class="dark ? 'text-zinc-400' : 'text-zinc-500'">Intégration MCP (à venir)</span></div>
-            <div class="flex items-start gap-2.5 text-sm"><span class="shrink-0 mt-0.5 text-emerald-400 text-xs">🔜</span><span :class="dark ? 'text-zinc-400' : 'text-zinc-500'">API privée & webhooks (à venir)</span></div>
-            <div class="flex items-start gap-2.5 text-sm"><span class="shrink-0 mt-0.5 text-emerald-400 text-xs">🔜</span><span :class="dark ? 'text-zinc-400' : 'text-zinc-500'">Account manager dédié (à venir)</span></div>
 
         </div>
           <flux:button variant="primary" color="emerald" href="{{ route('register') }}" class="w-full py-3 rounded-xl font-display font-bold text-sm bg-emerald-400 text-zinc-900 hover:bg-emerald-500 transition-all">
@@ -1116,290 +1091,13 @@
         <flux:icon.shield-check class="size-4 text-emerald-400" /> Données protégées · Loi camerounaise 2024
       </div>
       <div class="flex items-center gap-2 text-sm font-bold" :class="dark ? 'text-zinc-500' : 'text-zinc-400'">
-        <flux:icon.sparkles class="size-4 text-emerald-400" /> Gratuit pour toujours sur les offres de base
+        <flux:icon.sparkles class="size-4 text-emerald-400" /> Gratuit pour les fonctionnalités de base
       </div>
     </div>
   </div>
 </section>
-{{-- ═══════════════════════════════════════════════════════════════════════
-     SECTION TÉMOIGNAGES
-     À insérer après #utilisateurs, avant #tarifs
-     Le script Alpine est dans resources/js/testimonial-carousel.js
-       (importé dans app.js via : import './testimonial-carousel')
-     ═══════════════════════════════════════════════════════════════════════ --}}
+<livewire:welcome.testimonials />
 
-@php
-$testimonials = [
-    [
-        'initials' => 'MK',
-        'name'     => 'Marie Kamga',
-        'role'     => 'Responsable RH',
-        'company'  => 'TechCom Cameroun',
-        'color'    => 'emerald',
-        'stars'    => 5,
-        'badge'    => 'Recruteur',
-        'quote'    => 'En 3 ans de recrutement je n\'avais jamais reçu des candidatures aussi qualifiées dès le premier jour. Le classement automatique m\'a fait économiser deux jours de travail sur notre dernière campagne.',
-    ],
-    [
-        'initials' => 'JN',
-        'name'     => 'Jean-Paul Nkoa',
-        'role'     => 'Développeur Full Stack',
-        'company'  => 'Indépendant, Yaoundé',
-        'color'    => 'indigo',
-        'stars'    => 5,
-        'badge'    => 'Candidat',
-        'quote'    => 'Voir mon score avant de postuler a tout changé. Je cible uniquement les offres où je dépasse 80 %. J\'ai décroché mon poste actuel en 12 jours.',
-    ],
-    [
-        'initials' => 'SB',
-        'name'     => 'Sophie Bello',
-        'role'     => 'DG',
-        'company'  => 'Agence Digit+ Douala',
-        'color'    => 'amber',
-        'stars'    => 5,
-        'badge'    => 'Recruteur',
-        'quote'    => 'On avait l\'habitude de recevoir 150 CVs par poste. Avec MatchRH on en reçoit 25, toutes pertinentes. Les critères bloquants font le filtre à notre place.',
-    ],
-    [
-        'initials' => 'SE',
-        'name'     => 'Samuel Essomba',
-        'role'     => 'Gérant',
-        'company'  => 'PME Logistique, Douala',
-        'color'    => 'teal',
-        'stars'    => 5,
-        'badge'    => 'Recruteur',
-        'quote'    => "L'algorithme est transparent chaque score est décomposé. Mes équipes l'ont adopté sans résistance parce qu'elles comprennent la logique. Pas de boîte noire, pas de méfiance. Juste des décisions plus rapides et mieux justifiées.",
-    ],
-    [
-        'initials' => 'RN',
-        'name'     => 'Rose Nguefack',
-        'role'     => 'Ingénieure reconvertie RH',
-        'company'  => 'Ngaoundéré',
-        'color'    => 'rose',
-        'stars'    => 5,
-        'badge'    => 'Candidat',
-        'quote'    => "J'avais peur que mon parcours atypique me pénalise. Mais le score valorise ce que je sais faire pas la linéarité de mon CV. Mon double profil technique et RH est devenu un atout visible, pas une anomalie à expliquer.",
-    ],
-    [
-        'initials' => 'MK',
-        'name'     => 'Marie-Claire Kamto',
-        'role'     => 'Head of Talent',
-        'company'  => 'Banque régionale',
-        'color'    => 'indigo',
-        'stars'    => 5,
-        'badge'    => 'Recruteur',
-        'quote'    => "En 3 ans de recrutement je n'avais jamais reçu des candidatures aussi ciblées dès le premier jour. Et pour la première fois, je peux justifier mes sélections avec des données plus de décisions au feeling difficiles à défendre.",
-    ],
-];
-
-// Palette par couleur : classes Tailwind pour dark / light
-$palette = [
-    'emerald' => [
-        'avatar_dark'  => 'bg-emerald-500/15 text-emerald-300 border-emerald-500/25',
-        'avatar_light' => 'bg-emerald-50 text-emerald-700 border-emerald-200',
-        'badge_dark'   => 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20',
-        'badge_light'  => 'bg-emerald-50 text-emerald-700 border-emerald-200',
-        'stars'        => 'text-emerald-400',
-    ],
-    'indigo'  => [
-        'avatar_dark'  => 'bg-indigo-500/15 text-indigo-300 border-indigo-500/25',
-        'avatar_light' => 'bg-indigo-50 text-indigo-700 border-indigo-200',
-        'badge_dark'   => 'bg-indigo-500/10 text-indigo-400 border-indigo-500/20',
-        'badge_light'  => 'bg-indigo-50 text-indigo-700 border-indigo-200',
-        'stars'        => 'text-indigo-400',
-    ],
-    'amber'   => [
-        'avatar_dark'  => 'bg-amber-500/15 text-amber-300 border-amber-500/25',
-        'avatar_light' => 'bg-amber-50 text-amber-700 border-amber-200',
-        'badge_dark'   => 'bg-amber-500/10 text-amber-400 border-amber-500/20',
-        'badge_light'  => 'bg-amber-50 text-amber-700 border-amber-200',
-        'stars'        => 'text-amber-400',
-    ],
-    'sky'     => [
-        'avatar_dark'  => 'bg-sky-500/15 text-sky-300 border-sky-500/25',
-        'avatar_light' => 'bg-sky-50 text-sky-700 border-sky-200',
-        'badge_dark'   => 'bg-sky-500/10 text-sky-400 border-sky-500/20',
-        'badge_light'  => 'bg-sky-50 text-sky-700 border-sky-200',
-        'stars'        => 'text-sky-400',
-    ],
-    'rose'    => [
-        'avatar_dark'  => 'bg-rose-500/15 text-rose-300 border-rose-500/25',
-        'avatar_light' => 'bg-rose-50 text-rose-700 border-rose-200',
-        'badge_dark'   => 'bg-rose-500/10 text-rose-400 border-rose-500/20',
-        'badge_light'  => 'bg-rose-50 text-rose-700 border-rose-200',
-        'stars'        => 'text-rose-400',
-    ],
-    'teal'    => [
-        'avatar_dark'  => 'bg-teal-500/15 text-teal-300 border-teal-500/25',
-        'avatar_light' => 'bg-teal-50 text-teal-700 border-teal-200',
-        'badge_dark'   => 'bg-teal-500/10 text-teal-400 border-teal-500/20',
-        'badge_light'  => 'bg-teal-50 text-teal-700 border-teal-200',
-        'stars'        => 'text-teal-400',
-    ],
-];
-@endphp
-
-<section id="avis" class="py-24 overflow-hidden transition-colors duration-300"
-         :class="dark ? 'bg-zinc-950' : 'bg-slate-50'">
-
-    {{-- ── En-tête (centré, max-w pour lisibilité) ── --}}
-    <div class="max-w-5xl mx-auto px-5 mb-12 text-center reveal">
-        <div class="inline-block px-3 py-1 rounded-full border text-xs font-bold font-display uppercase tracking-widest mb-4"
-             :class="dark ? 'bg-emerald-500/10 border-emerald-500/20 text-emerald-400' : 'bg-emerald-50 border-emerald-200 text-emerald-700'">
-            Témoignages
-        </div>
-        <h2 class="font-display font-bold leading-tight mb-3"
-            style="font-size:clamp(1.8rem,4.5vw,3rem)"
-            :class="dark ? 'text-zinc-100' : 'text-zinc-900'">
-            Ils ont arrêté de trier des CVs.<br>
-            <span class="grad-text">Ils recrutent mieux.</span>
-        </h2>
-        <p class="text-base max-w-md mx-auto"
-           :class="dark ? 'text-zinc-400' : 'text-zinc-500'">
-            Candidats et recruteurs partagent leur expérience MatchRH.
-        </p>
-    </div>
-
-    {{-- ── Carrousel pleine largeur ── --}}
-    <div
-        x-data="testimonialCarousel({{ count($testimonials) }})"
-        x-init="init()"
-        class="relative w-full"
-    >
-        {{-- Masques de fondu pleine hauteur, pleine largeur de fenêtre --}}
-        <div class="pointer-events-none absolute inset-y-0 left-0 w-20 z-10"
-             :style="dark
-                 ? 'background:linear-gradient(to right,#09090b 0%,transparent 100%)'
-                 : 'background:linear-gradient(to right,#f8fafc 0%,transparent 100%)'">
-        </div>
-        <div class="pointer-events-none absolute inset-y-0 right-0 w-20 z-10"
-             :style="dark
-                 ? 'background:linear-gradient(to left,#09090b 0%,transparent 100%)'
-                 : 'background:linear-gradient(to left,#f8fafc 0%,transparent 100%)'">
-        </div>
-
-        {{-- Piste de défilement déborde volontairement hors du viewport --}}
-        <div
-            id="testimonial-track"
-            class="flex gap-5 pb-2"
-            style="will-change:transform; touch-action:pan-y;"
-            @mouseenter="pause()"
-            @mouseleave="play()"
-            @touchstart.passive="onTouchStart($event)"
-            @touchmove.passive="onTouchMove($event)"
-            @touchend="onTouchEnd($event)"
-        >
-            {{-- Les cards réelles --}}
-            @foreach ($testimonials as $t)
-                @php $c = $palette[$t['color']]; @endphp
-                <div class="testimonial-card flex-shrink-0 w-[300px] sm:w-[340px] rounded-2xl border p-6 flex flex-col gap-4 transition-colors duration-200 cursor-default"
-                     :class="dark ? 'bg-zinc-900 border-zinc-800' : 'bg-white border-zinc-200'">
-
-                    {{-- Avatar + nom + badge --}}
-                    <div class="flex items-start justify-between gap-3">
-                        <div class="flex items-center gap-3 min-w-0">
-                            <div class="grid size-10 shrink-0 place-items-center rounded-xl border font-bold text-sm font-display"
-                                 :class="dark ? '{{ $c['avatar_dark'] }}' : '{{ $c['avatar_light'] }}'">
-                                {{ $t['initials'] }}
-                            </div>
-                            <div class="min-w-0">
-                                <p class="font-display font-bold text-sm leading-tight truncate"
-                                   :class="dark ? 'text-zinc-100' : 'text-zinc-900'">
-                                    {{ $t['name'] }}
-                                </p>
-                                <p class="text-xs mt-0.5 truncate"
-                                   :class="dark ? 'text-zinc-500' : 'text-zinc-400'">
-                                    {{ $t['role'] }} · {{ $t['company'] }}
-                                </p>
-                            </div>
-                        </div>
-                        <span class="shrink-0 px-2.5 py-1 rounded-lg border text-xs font-semibold"
-                              :class="dark ? '{{ $c['badge_dark'] }}' : '{{ $c['badge_light'] }}'">
-                            {{ $t['badge'] }}
-                        </span>
-                    </div>
-
-                    {{-- Étoiles --}}
-                    <div class="flex gap-0.5 {{ $c['stars'] }}">
-                        @for ($s = 0; $s < $t['stars']; $s++)
-                            <flux:icon.star class="size-4" />
-                        @endfor
-                    </div>
-
-                    {{-- Citation --}}
-                    <blockquote class="text-sm leading-relaxed flex-1"
-                                :class="dark ? 'text-zinc-300' : 'text-zinc-600'">
-                        "{{ $t['quote'] }}"
-                    </blockquote>
-                </div>
-            @endforeach
-            {{-- Les clones Before/After sont injectés dynamiquement par le JS --}}
-        </div>
-
-        {{-- ── Contrôles : dots + flèches + play/pause ── --}}
-        <div class="max-w-5xl mx-auto px-5 mt-7 flex items-center justify-between gap-4">
-
-            {{-- Dots (un par card réelle) --}}
-            <div class="flex items-center gap-2">
-                @foreach ($testimonials as $i => $t)
-                    <button
-                        @click="goTo({{ $i }})"
-                        :class="current === {{ $i }}
-                            ? (dark ? 'bg-emerald-400 w-5' : 'bg-emerald-500 w-5')
-                            : (dark ? 'bg-zinc-700 w-2 hover:bg-zinc-500' : 'bg-zinc-300 w-2 hover:bg-zinc-400')"
-                        class="h-2 rounded-full transition-all duration-300 focus-visible:outline-none"
-                        :aria-label="'Aller au témoignage ' + ({{ $i }} + 1)"
-                        :aria-current="current === {{ $i }} ? 'true' : 'false'"
-                    ></button>
-                @endforeach
-            </div>
-
-            {{-- Flèches + Play/Pause --}}
-            <div class="flex items-center gap-2">
-
-                <button
-                    @click="prev()"
-                    class="grid size-9 place-items-center rounded-xl border transition-all"
-                    :class="dark
-                        ? 'border-zinc-800 bg-zinc-900 text-zinc-400 hover:border-zinc-600 hover:text-zinc-100'
-                        : 'border-zinc-200 bg-white text-zinc-500 hover:border-zinc-400 hover:text-zinc-800'"
-                    aria-label="Témoignage précédent"
-                >
-                    <flux:icon.arrow-left class="size-4" />
-                </button>
-
-                <button
-                    @click="togglePlay()"
-                    class="grid size-9 place-items-center rounded-xl border transition-all"
-                    :class="dark
-                        ? 'border-zinc-800 bg-zinc-900 text-zinc-400 hover:border-zinc-600 hover:text-zinc-100'
-                        : 'border-zinc-200 bg-white text-zinc-500 hover:border-zinc-400 hover:text-zinc-800'"
-                    :aria-label="playing ? 'Mettre en pause' : 'Reprendre le défilement'"
-                >
-                    <template x-if="playing">
-                        <flux:icon.pause class="size-4" />
-                    </template>
-                    <template x-if="!playing">
-                        <flux:icon.play class="size-4" />
-                    </template>
-                </button>
-
-                <button
-                    @click="next()"
-                    class="grid size-9 place-items-center rounded-xl border transition-all"
-                    :class="dark
-                        ? 'border-zinc-800 bg-zinc-900 text-zinc-400 hover:border-zinc-600 hover:text-zinc-100'
-                        : 'border-zinc-200 bg-white text-zinc-500 hover:border-zinc-400 hover:text-zinc-800'"
-                    aria-label="Témoignage suivant"
-                >
-                    <flux:icon.arrow-right class="size-4" />
-                </button>
-
-            </div>
-        </div>
-    </div>
-
-</section>
 <!-- ===== CONTACT ===== -->
 <section id="contact" class="py-24 px-5 transition-colors duration-300"
          :class="dark ? 'bg-zinc-950' : 'bg-slate-50'">

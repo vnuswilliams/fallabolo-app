@@ -13,7 +13,7 @@ export default defineConfig({
                 'resources/js/app.js',
                 'resources/js/passkeys.js',
             ],
-            refresh: true,
+            refresh: false,
             fonts: [
                 bunny('Instrument Sans', {
                     weights: [400, 500, 600],

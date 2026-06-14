@@ -18,13 +18,92 @@ use App\Enums\RegionEnum;
 use App\Enums\JobStatusEnum;
 use App\Enums\SkillEnum;
 use App\Enums\AssetEnum;
+use App\Services\Scoring\MatchingService;
+use Livewire\Attributes\Computed;
 use Illuminate\Support\Facades\Auth;
 use Flux\Flux;
 
 new #[Title('Créer une offre')] class extends Component {
     public int $step = 1;
 
-    // Step 1: Context
+    // ... (rest of properties)
+    
+    #[Computed]
+    public function simulations()
+    {
+        if ($this->step < 3 || empty($this->selected_skills)) {
+            return collect();
+        }
+
+        $service = new MatchingService();
+        
+        // Création d'une offre temporaire pour le calcul
+        $offer = new JobOffer([
+            'template' => JobTemplateEnum::tryFrom($this->template) ?? JobTemplateEnum::TECHNICIEN,
+            'required_experience' => ExperienceTierEnum::tryFrom($this->min_experience) ?? ExperienceTierEnum::TIER_1,
+            'required_education' => EducationLevelEnum::tryFrom($this->min_education) ?? EducationLevelEnum::BAC,
+            'required_availability' => AvailabilityEnum::tryFrom($this->max_availability) ?? AvailabilityEnum::IMMEDIATE,
+            'city' => $this->city,
+            'budget_max' => $this->budget_max,
+            'blocking_language' => $this->block_language ? LanguageProfileEnum::tryFrom($this->language) : null,
+            'blocking_education' => $this->block_education ? EducationLevelEnum::tryFrom($this->min_education) : null,
+            'blocking_experience' => $this->block_experience ? ExperienceTierEnum::tryFrom($this->min_experience) : null,
+            'blocking_availability' => $this->block_availability ? AvailabilityEnum::tryFrom($this->max_availability) : null,
+        ]);
+
+        $requiredSkills = collect();
+        foreach ($this->selected_skills as $id => $level) {
+            $requiredSkills->push(new JobRequiredSkill(['skill_id' => $id, 'level_required' => $level]));
+        }
+        $offer->setRelation('jobRequiredSkills', $requiredSkills);
+
+        // Profils types pour la simulation
+        $profiles = [
+            [
+                'name' => 'Candidat Idéal',
+                'data' => [
+                    'language_profile' => LanguageProfileEnum::tryFrom($this->language) ?? LanguageProfileEnum::BILINGUE,
+                    'education_level' => EducationLevelEnum::from($this->min_education),
+                    'experience_tier' => ExperienceTierEnum::from($this->min_experience),
+                    'availability' => AvailabilityEnum::from($this->max_availability),
+                    'city' => $this->city,
+                    'skills' => $this->selected_skills,
+                    'salary_min' => $this->budget_min,
+                    'salary_max' => $this->budget_max,
+                ]
+            ],
+            [
+                'name' => 'Candidat Junior',
+                'data' => [
+                    'language_profile' => LanguageProfileEnum::FRANCOPHONE,
+                    'education_level' => EducationLevelEnum::BAC,
+                    'experience_tier' => ExperienceTierEnum::TIER_0,
+                    'availability' => AvailabilityEnum::IMMEDIATE,
+                    'city' => $this->city,
+                    'skills' => array_map(fn($l) => max(1, $l - 2), $this->selected_skills),
+                    'salary_min' => $this->budget_min ? $this->budget_min * 0.8 : null,
+                ]
+            ],
+            [
+                'name' => 'Candidat Expérimenté (Hors-Ville)',
+                'data' => [
+                    'language_profile' => LanguageProfileEnum::BILINGUE,
+                    'education_level' => EducationLevelEnum::MASTER,
+                    'experience_tier' => ExperienceTierEnum::TIER_4,
+                    'availability' => AvailabilityEnum::THIRTY_DAYS,
+                    'city' => $this->city === 'Douala' ? 'Yaoundé' : 'Douala',
+                    'skills' => array_map(fn($l) => min(5, $l + 1), $this->selected_skills),
+                    'salary_min' => $this->budget_max ? $this->budget_max * 1.1 : null,
+                ]
+            ]
+        ];
+
+        return collect($profiles)->map(function($profile) use ($service, $offer) {
+            return array_merge($profile, [
+                'result' => $service->calculate($offer, $profile['data'])
+            ]);
+        });
+    }
     public string $publish_as = 'my_company';
     public ?string $managed_recruiter_id = null;
 
@@ -377,6 +456,13 @@ new #[Title('Créer une offre')] class extends Component {
                 <div class="space-y-4">
                     <flux:heading size="lg">Compétences requises</flux:heading>
                     <div class="relative">
+                        <flux:select >
+                            <flux:select.option value="">Choisir une option</flux:select.option>
+                    @foreach (SkillEnum::options() as $skill)
+                    <flux:select.option value="{{ $skill['value'] }}">{{ $skill['label'] }}</flux:select.option>
+                                    
+                                @endforeach
+                        </flux:select>
                         <flux:input wire:model.live.debounce.300ms="skill_search" icon="magnifying-glass" placeholder="Rechercher une compétence..." />
                         @if ($available_skills->isNotEmpty())
                             <div class="absolute z-10 w-full mt-1 bg-white dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 rounded-lg shadow-lg max-h-60 overflow-y-auto">
@@ -456,6 +542,49 @@ new #[Title('Créer une offre')] class extends Component {
                     </div>
                 </div>
             </div>
+
+            @if($this->simulations->isNotEmpty())
+                <div class="mt-12 p-6 rounded-2xl border border-emerald-500/20 bg-emerald-50/30 dark:bg-emerald-500/5 space-y-6">
+                    <div class="flex items-center gap-3">
+                        <div class="p-2 rounded-lg bg-emerald-500/10 text-emerald-600 dark:text-emerald-400">
+                            <flux:icon.chart-bar-square class="size-6" />
+                        </div>
+                        <div>
+                            <flux:heading size="lg">Simulation de l'impact</flux:heading>
+                            <flux:subheading>Voici comment différents profils de candidats scoreraient avec vos critères actuels.</flux:subheading>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        @foreach($this->simulations as $sim)
+                            <div class="p-4 rounded-xl border bg-white dark:bg-zinc-900 border-zinc-200 dark:border-zinc-800 space-y-3">
+                                <div class="flex justify-between items-start">
+                                    <flux:text class="font-bold leading-tight">{{ $sim['name'] }}</flux:text>
+                                    @if(!$sim['result']['passed_blocking'])
+                                        <flux:badge color="red" size="xs">Bloqué</flux:badge>
+                                    @else
+                                        <flux:text class="font-display font-black text-xl text-emerald-500">{{ $sim['result']['score_principal'] }}%</flux:text>
+                                    @endif
+                                </div>
+                                
+                                <div class="space-y-1">
+                                    <div class="flex justify-between text-[10px] uppercase font-bold opacity-50">
+                                        <span>Compétences</span>
+                                        <span>{{ $sim['result']['scores_details']['skills'] ?? 0 }}%</span>
+                                    </div>
+                                    <div class="h-1 w-full bg-zinc-100 dark:bg-zinc-800 rounded-full overflow-hidden">
+                                        <div class="h-full bg-emerald-500 transition-all duration-500" style="width: {{ $sim['result']['scores_details']['skills'] ?? 0 }}%"></div>
+                                    </div>
+                                </div>
+
+                                @if(!$sim['result']['passed_blocking'])
+                                    <flux:text size="xs" color="red" class="italic">Ce candidat ne passe pas vos critères bloquants.</flux:text>
+                                @endif
+                            </div>
+                        @endforeach
+                    </div>
+                </div>
+            @endif
         @elseif ($step === 4)
             {{-- Étape 4 — Récapitulatif et publication --}}
             <div class="space-y-8">
@@ -527,6 +656,34 @@ new #[Title('Créer une offre')] class extends Component {
                         </div>
                     </div>
                 </div>
+
+                @if($this->simulations->isNotEmpty())
+                <flux:separator />
+                <div class="space-y-6">
+                    <div>
+                        <flux:heading size="md">Simulation de l'impact</flux:heading>
+                        <flux:subheading>Scoring estimé des profils types</flux:subheading>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        @foreach($this->simulations as $sim)
+                            <div class="p-4 rounded-xl border bg-zinc-50 dark:bg-zinc-900/30 border-zinc-200 dark:border-zinc-800 flex flex-col justify-between">
+                                <div class="flex justify-between items-start mb-2">
+                                    <flux:text size="sm" class="font-bold">{{ $sim['name'] }}</flux:text>
+                                    @if(!$sim['result']['passed_blocking'])
+                                        <flux:badge color="red" size="xs">Bloqué</flux:badge>
+                                    @else
+                                        <flux:text class="font-black text-emerald-500">{{ $sim['result']['score_principal'] }}%</flux:text>
+                                    @endif
+                                </div>
+                                <div class="h-1.5 w-full bg-zinc-200 dark:bg-zinc-800 rounded-full overflow-hidden">
+                                    <div class="h-full bg-emerald-500" style="width: {{ $sim['result']['score_principal'] }}%"></div>
+                                </div>
+                            </div>
+                        @endforeach
+                    </div>
+                </div>
+                @endif
             </div>
         @endif
     </flux:card>

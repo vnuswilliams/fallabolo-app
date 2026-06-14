@@ -3,105 +3,221 @@
 use Livewire\Attributes\Title;
 use Livewire\Component;
 use App\Models\CandidateProfile;
+use App\Enums\EducationLevelEnum;
+use App\Enums\ExperienceTierEnum;
+use App\Enums\AvailabilityEnum;
+use App\Enums\LanguageProfileEnum;
+use App\Enums\CityEnum;
+use App\Enums\RegionEnum;
 use Illuminate\Support\Facades\Auth;
+use Flux\Flux;
 
-new #[Title('Mon Profil')] class extends Component {
-    public function candidateProfile()
+new #[Title('Modifier mon Profil')] class extends Component {
+    public string $name = '';
+    public string $phone = '';
+    public string $city = '';
+    public string $region = '';
+    public string $language = '';
+    public string $education_level = '';
+    public string $education_field = '';
+    public string $experience = '';
+    public string $availability = '';
+    public ?int $salary_min = null;
+    public ?int $salary_max = null;
+
+    public function mount()
     {
-        return Auth::user()->candidateProfile;
+        $user = Auth::user();
+        $profile = $user->candidateProfile;
+
+        $this->name = $user->name;
+
+        if ($profile) {
+            $this->phone = $profile->phone ?? '';
+            $this->city = $profile->city ?? 'Douala';
+            $this->region = $profile->region ?? 'Littoral';
+            $this->language = $profile->language_profile->value;
+            $this->education_level = $profile->education_level->value;
+            $this->education_field = $profile->education_field ?? '';
+            $this->experience = $profile->experience_tier->value;
+            $this->availability = $profile->availability->value;
+            $this->salary_min = $profile->salary_min;
+            $this->salary_max = $profile->salary_max;
+        }
+    }
+
+    public function save()
+    {
+        $this->validate([
+            'name' => 'required|string|min:3',
+            'phone' => 'required|string|min:9',
+            'city' => 'required|string',
+            'region' => 'required|string',
+            'language' => 'required|string',
+            'education_level' => 'required|string',
+            'experience' => 'required|string',
+            'availability' => 'required|string',
+        ]);
+
+        $user = Auth::user();
+        $user->update(['name' => $this->name]);
+
+        $user->candidateProfile()->updateOrCreate(
+            ['user_id' => $user->id],
+            [
+                'phone' => $this->phone,
+                'city' => $this->city,
+                'region' => $this->region,
+                'language_profile' => $this->language,
+                'education_level' => $this->education_level,
+                'education_field' => $this->education_field,
+                'experience_tier' => $this->experience,
+                'availability' => $this->availability,
+                'salary_min' => $this->salary_min,
+                'salary_max' => $this->salary_max,
+            ]
+        );
+
+        Flux::toast(
+            variant: 'success',
+            heading: 'Profil mis à jour',
+            text: 'Vos informations ont été enregistrées avec succès.',
+        );
+
+        return redirect()->route('candidate.profile.index');
     }
 }; ?>
 
 <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
     <div class="mb-8">
-        <a href="{{ route('candidate.profile.index') }}" class="text-sm text-gray-600 hover:text-gray-900 font-medium flex items-center gap-1 mb-4">
-            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
-            </svg>
+        <flux:button :href="route('candidate.profile.index')" variant="ghost" icon="arrow-left" size="sm" class="mb-4" wire:navigate>
             Retour au profil
-        </a>
-        <h1 class="text-3xl font-serif font-semibold text-gray-900">Éditer mon profil</h1>
+        </flux:button>
+        <flux:heading size="xl">Modifier mon profil</flux:heading>
+        <flux:subheading>Mettez à jour vos informations personnelles et professionnelles.</flux:subheading>
     </div>
 
-    <div class="bg-white rounded-2xl border border-gray-100 shadow-sm p-8">
-        <form class="space-y-6">
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-2">Prénom *</label>
-                    <input type="text" placeholder="Jean" class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:outline-none focus:border-brand-500 focus:ring-2 focus:ring-brand-50">
+    <flux:card class="p-8">
+        <form wire:submit="save" class="space-y-8">
+            {{-- Informations de base --}}
+            <div class="space-y-6">
+                <flux:heading size="lg">Informations de base</flux:heading>
+                
+                <flux:field>
+                    <flux:label>Nom complet</flux:label>
+                    <flux:input wire:model="name" />
+                    <flux:error name="name" />
+                </flux:field>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <flux:field>
+                        <flux:label>Téléphone</flux:label>
+                        <flux:input wire:model="phone" type="tel" placeholder="6XX XX XX XX" />
+                        <flux:error name="phone" />
+                    </flux:field>
+
+                    <flux:field>
+                        <flux:label>Profil linguistique</flux:label>
+                        <flux:select wire:model="language">
+                            @foreach(LanguageProfileEnum::cases() as $item)
+                                <flux:select.option value="{{ $item->value }}">{{ $item->label() }}</flux:select.option>
+                            @endforeach
+                        </flux:select>
+                    </flux:field>
                 </div>
 
-                <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-2">Nom *</label>
-                    <input type="text" placeholder="Dupont" class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:outline-none focus:border-brand-500 focus:ring-2 focus:ring-brand-50">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <flux:field>
+                        <flux:label>Ville</flux:label>
+                        <flux:select wire:model="city">
+                            @foreach(CityEnum::cases() as $item)
+                                <flux:select.option value="{{ $item->value }}">{{ $item->label() }}</flux:select.option>
+                            @endforeach
+                        </flux:select>
+                    </flux:field>
+
+                    <flux:field>
+                        <flux:label>Région</flux:label>
+                        <flux:select wire:model="region">
+                            @foreach(RegionEnum::cases() as $item)
+                                <flux:select.option value="{{ $item->value }}">{{ $item->label() }}</flux:select.option>
+                            @endforeach
+                        </flux:select>
+                    </flux:field>
                 </div>
             </div>
 
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-2">Ville *</label>
-                    <input type="text" placeholder="Douala" class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:outline-none focus:border-brand-500 focus:ring-2 focus:ring-brand-50">
+            <flux:separator />
+
+            {{-- Parcours & Formation --}}
+            <div class="space-y-6">
+                <flux:heading size="lg">Parcours & Formation</flux:heading>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <flux:field>
+                        <flux:label>Niveau de formation</flux:label>
+                        <flux:select wire:model="education_level">
+                            @foreach (EducationLevelEnum::cases() as $level)
+                                <flux:select.option value="{{ $level->value }}">{{ $level->label() }}</flux:select.option>
+                            @endforeach
+                        </flux:select>
+                    </flux:field>
+
+                    <flux:field>
+                        <flux:label>Domaine d'études</flux:label>
+                        <flux:input wire:model="education_field" placeholder="Ex: Génie Logiciel" />
+                    </flux:field>
                 </div>
 
-                <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-2">Pays *</label>
-                    <input type="text" placeholder="Cameroon" class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:outline-none focus:border-brand-500 focus:ring-2 focus:ring-brand-50">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <flux:field>
+                        <flux:label>Expérience globale</flux:label>
+                        <flux:select wire:model="experience">
+                            @foreach (ExperienceTierEnum::cases() as $tier)
+                                <flux:select.option value="{{ $tier->value }}">{{ $tier->label() }}</flux:select.option>
+                            @endforeach
+                        </flux:select>
+                    </flux:field>
+
+                    <flux:field>
+                        <flux:label>Votre disponibilité</flux:label>
+                        <flux:select wire:model="availability">
+                            @foreach (AvailabilityEnum::cases() as $avail)
+                                <flux:select.option value="{{ $avail->value }}">{{ $avail->label() }}</flux:select.option>
+                            @endforeach
+                        </flux:select>
+                    </flux:field>
                 </div>
             </div>
 
-            <div>
-                <label class="block text-sm font-medium text-gray-700 mb-2">Palier d'expérience *</label>
-                <select class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:outline-none focus:border-brand-500 focus:ring-2 focus:ring-brand-50">
-                    <option value="">Sélectionnez</option>
-                    <option value="0-2">0-2 ans</option>
-                    <option value="2-5">2-5 ans</option>
-                    <option value="5-10">5-10 ans</option>
-                    <option value="10+">10+ ans</option>
-                </select>
+            <flux:separator />
+
+            {{-- Prétentions --}}
+            <div class="space-y-6">
+                <flux:heading size="lg">Prétentions salariales</flux:heading>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <flux:field>
+                        <flux:label>Salaire min. souhaité (FCFA)</flux:label>
+                        <flux:input wire:model="salary_min" type="number" placeholder="Ex: 250000" />
+                    </flux:field>
+
+                    <flux:field>
+                        <flux:label>Salaire max. souhaité (FCFA)</flux:label>
+                        <flux:input wire:model="salary_max" type="number" placeholder="Ex: 500000" />
+                    </flux:field>
+                </div>
             </div>
 
-            <div>
-                <label class="block text-sm font-medium text-gray-700 mb-2">Niveau de formation *</label>
-                <select class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:outline-none focus:border-brand-500 focus:ring-2 focus:ring-brand-50">
-                    <option value="">Sélectionnez</option>
-                    <option value="bac">Baccalauréat</option>
-                    <option value="bac+2">Bac+2</option>
-                    <option value="bac+3">Bac+3</option>
-                    <option value="bac+5">Bac+5</option>
-                    <option value="master">Master</option>
-                </select>
-            </div>
-
-            <div>
-                <label class="block text-sm font-medium text-gray-700 mb-2">Disponibilité *</label>
-                <select class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:outline-none focus:border-brand-500 focus:ring-2 focus:ring-brand-50">
-                    <option value="">Sélectionnez</option>
-                    <option value="immediate">Immédiatement</option>
-                    <option value="2weeks">2 semaines</option>
-                    <option value="1month">1 mois</option>
-                    <option value="2months">2 mois</option>
-                </select>
-            </div>
-
-            <div>
-                <label class="block text-sm font-medium text-gray-700 mb-2">Langue *</label>
-                <select class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:outline-none focus:border-brand-500 focus:ring-2 focus:ring-brand-50">
-                    <option value="">Sélectionnez</option>
-                    <option value="french">Francophone</option>
-                    <option value="english">Anglophone</option>
-                    <option value="bilingual">Bilingue</option>
-                </select>
-            </div>
-
-            <div class="flex gap-3 pt-6 border-t border-gray-200">
-                <a href="{{ route('candidate.profile.index') }}" class="flex-1 px-4 py-3 text-center rounded-xl border border-gray-200 text-gray-700 font-medium hover:bg-gray-50 transition">
+            <div class="flex gap-4 pt-4">
+                <flux:button type="submit" variant="primary" class="flex-1">
+                    Enregistrer les modifications
+                </flux:button>
+                <flux:button :href="route('candidate.profile.index')" variant="ghost" class="flex-1" wire:navigate>
                     Annuler
-                </a>
-                <button type="submit" class="flex-1 px-4 py-3 rounded-xl bg-brand-500 text-white font-medium hover:bg-brand-600 transition">
-                    Enregistrer
-                </button>
+                </flux:button>
             </div>
         </form>
-    </div>
+    </flux:card>
 </div>
+
 
