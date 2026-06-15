@@ -365,11 +365,12 @@ class MatchingService
      */
     protected function getMatchedAssets(JobOffer $offer, array $candidateData): array
     {
-        $requiredAssets = collect($offer->required_assets ?? []);
+        $requiredAssets = collect($offer->required_assets ?? []); // [asset_id => priority]
         $candidateAssets = collect($candidateData['assets'] ?? []);
-
-        return $requiredAssets->filter(function ($asset) use ($candidateAssets) {
-            return $candidateAssets->contains($asset['asset_id']);
+    
+        // Les clés sont les asset_ids, les valeurs sont les priorités
+        return $requiredAssets->keys()->filter(function ($assetId) use ($candidateAssets) {
+            return $candidateAssets->contains($assetId);
         })->values()->all();
     }
 

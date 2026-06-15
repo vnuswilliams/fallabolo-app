@@ -7,16 +7,16 @@ use App\Enums\EducationLevelEnum;
 use App\Enums\ExperienceTierEnum;
 use App\Enums\AvailabilityEnum;
 use App\Enums\LanguageProfileEnum;
-use App\Enums\CityEnum;
-use App\Enums\RegionEnum;
+use App\Services\GeoService;
 use Illuminate\Support\Facades\Auth;
 use Flux\Flux;
 
 new #[Title('Modifier mon Profil')] class extends Component {
     public string $name = '';
     public string $phone = '';
-    public string $city = '';
-    public string $region = '';
+    public string $country = 'Cameroon';
+    public ?string $region = null;
+    public ?string $city = null;
     public string $language = '';
     public string $education_level = '';
     public string $education_field = '';
@@ -25,6 +25,10 @@ new #[Title('Modifier mon Profil')] class extends Component {
     public ?int $salary_min = null;
     public ?int $salary_max = null;
 
+    public array $availableCountries = [];
+    public array $availableRegions = [];
+    public array $availableCities = [];
+
     public function mount()
     {
         $user = Auth::user();
@@ -32,10 +36,14 @@ new #[Title('Modifier mon Profil')] class extends Component {
 
         $this->name = $user->name;
 
+        $geo = app(GeoService::class);
+        $this->availableCountries = $geo->getCountries();
+
         if ($profile) {
             $this->phone = $profile->phone ?? '';
-            $this->city = $profile->city ?? 'Douala';
-            $this->region = $profile->region ?? 'Littoral';
+            $this->country = $profile->country ?? 'Cameroon';
+            $this->region = $profile->region;
+            $this->city = $profile->city;
             $this->language = $profile->language_profile->value;
             $this->education_level = $profile->education_level->value;
             $this->education_field = $profile->education_field ?? '';
@@ -44,6 +52,29 @@ new #[Title('Modifier mon Profil')] class extends Component {
             $this->salary_min = $profile->salary_min;
             $this->salary_max = $profile->salary_max;
         }
+
+        $this->availableRegions = $geo->getStatesByCountry($this->country);
+        if ($this->region) {
+            $this->availableCities = $geo->getCitiesByState($this->country, $this->region);
+        } else {
+            $this->availableCities = $geo->getCitiesByCountry($this->country);
+        }
+    }
+
+    public function updatedCountry($value)
+    {
+        $geo = app(GeoService::class);
+        $this->region = '';
+        $this->city   = '';
+        $this->availableRegions = $geo->getStatesByCountry($value);
+        $this->availableCities  = $geo->getCitiesByCountry($value);
+    }
+
+    public function updatedRegion($value)
+    {
+        $this->city = '';
+        $this->availableCities = app(GeoService::class)
+            ->getCitiesByState($this->country, $value);
     }
 
     public function save()
@@ -51,6 +82,7 @@ new #[Title('Modifier mon Profil')] class extends Component {
         $this->validate([
             'name' => 'required|string|min:3',
             'phone' => 'required|string|min:9',
+            'country' => 'required|string',
             'city' => 'required|string',
             'region' => 'required|string',
             'language' => 'required|string',
@@ -66,6 +98,7 @@ new #[Title('Modifier mon Profil')] class extends Component {
             ['user_id' => $user->id],
             [
                 'phone' => $this->phone,
+                'country' => $this->country,
                 'city' => $this->city,
                 'region' => $this->region,
                 'language_profile' => $this->language,
@@ -103,17 +136,29 @@ new #[Title('Modifier mon Profil')] class extends Component {
             <div class="space-y-6">
                 <flux:heading size="lg">Informations de base</flux:heading>
                 
-                <flux:field>
-                    <flux:label>Nom complet</flux:label>
-                    <flux:input wire:model="name" />
-                    <flux:error name="name" />
-                </flux:field>
-
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <flux:field>
+                        <flux:label>Nom complet</flux:label>
+                        <flux:input wire:model="name" />
+                        <flux:error name="name" />
+                    </flux:field>
+
                     <flux:field>
                         <flux:label>Téléphone</flux:label>
                         <flux:input wire:model="phone" type="tel" placeholder="6XX XX XX XX" />
                         <flux:error name="phone" />
+                    </flux:field>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <flux:field>
+                        <flux:label>Pays</flux:label>
+                        <flux:select wire:model.live="country">
+                            @foreach($availableCountries as $c)
+                                <flux:select.option value="{{ $c }}">{{ $c }}</flux:select.option>
+                            @endforeach
+                        </flux:select>
+                        <flux:error name="country" />
                     </flux:field>
 
                     <flux:field>
@@ -128,21 +173,23 @@ new #[Title('Modifier mon Profil')] class extends Component {
 
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <flux:field>
-                        <flux:label>Ville</flux:label>
-                        <flux:select wire:model="city">
-                            @foreach(CityEnum::cases() as $item)
-                                <flux:select.option value="{{ $item->value }}">{{ $item->label() }}</flux:select.option>
+                        <flux:label>Région</flux:label>
+                        <flux:select wire:model.live="region">
+                            @foreach($availableRegions as $r)
+                                <flux:select.option value="{{ $r }}">{{ $r }}</flux:select.option>
                             @endforeach
                         </flux:select>
+                        <flux:error name="region" />
                     </flux:field>
 
                     <flux:field>
-                        <flux:label>Région</flux:label>
-                        <flux:select wire:model="region">
-                            @foreach(RegionEnum::cases() as $item)
-                                <flux:select.option value="{{ $item->value }}">{{ $item->label() }}</flux:select.option>
+                        <flux:label>Ville</flux:label>
+                        <flux:select wire:model="city">
+                            @foreach($availableCities as $c)
+                                <flux:select.option value="{{ $c }}">{{ $c }}</flux:select.option>
                             @endforeach
                         </flux:select>
+                        <flux:error name="city" />
                     </flux:field>
                 </div>
             </div>

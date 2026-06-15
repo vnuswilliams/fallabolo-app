@@ -6,6 +6,7 @@ use Livewire\Component;
 use App\Models\JobOffer;
 use App\Models\Skill;
 use App\Services\Scoring\MatchingService;
+use App\Services\GeoService;
 use Illuminate\Support\Facades\Auth;
 use Livewire\Attributes\Computed;
 use Flux\Flux;
@@ -13,6 +14,12 @@ use Flux\Flux;
 new #[Title('Offres disponibles')] class extends Component {
     public string $search = '';
     public string $city_filter = '';
+    public array $available_cities = [];
+
+    public function mount()
+    {
+        $this->available_cities = app(GeoService::class)->getCitiesByCountry('Cameroon');
+    }
 
     #[Computed]
     public function is_profile_complete(): bool
@@ -82,8 +89,8 @@ new #[Title('Offres disponibles')] class extends Component {
         <flux:input wire:model.live.debounce.300ms="search" placeholder="Rechercher un poste..." class="flex-1" icon="magnifying-glass" />
         <flux:select wire:model.live="city_filter" placeholder="Ville" class="w-full md:w-48">
             <flux:select.option value="">Toutes les villes</flux:select.option>
-            @foreach(\App\Enums\CityEnum::cases() as $city)
-                <flux:select.option value="{{ $city->value }}">{{ $city->label() }}</flux:select.option>
+            @foreach($available_cities as $city)
+                <flux:select.option value="{{ $city }}">{{ $city }}</flux:select.option>
             @endforeach
         </flux:select>
     </flux:card>

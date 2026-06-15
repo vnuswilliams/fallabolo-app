@@ -8,13 +8,12 @@ use App\Models\Asset;
 use App\Models\JobOffer;
 use App\Models\JobRequiredSkill;
 use App\Enums\JobTemplateEnum;
+use App\Services\GeoService;
 use App\Enums\EducationLevelEnum;
 use App\Enums\ExperienceTierEnum;
 use App\Enums\AvailabilityEnum;
 use App\Enums\LanguageProfileEnum;
 use App\Enums\DrivingPermitEnum;
-use App\Enums\CityEnum;
-use App\Enums\RegionEnum;
 use App\Enums\JobStatusEnum;
 use App\Enums\SkillEnum;
 use App\Enums\AssetEnum;
@@ -27,6 +26,40 @@ new #[Title('Créer une offre')] class extends Component {
     public int $step = 1;
 
     // ... (rest of properties)
+
+    // Dans le composant Livewire
+    // Dans le composant
+    public ?string $country = 'Cameroon';
+    public ?string $region = null;
+    public ?string $city = null;
+    
+    public array $availableCountries = [];
+    public array $availableRegions = [];
+    public array $availableCities = [];
+    
+    public function mount()
+    {
+        $geo = app(GeoService::class);
+        $this->availableCountries = $geo->getCountries();
+        $this->availableRegions   = $geo->getStatesByCountry($this->country);
+        $this->availableCities    = $geo->getCitiesByCountry($this->country);
+    }
+    
+    public function updatedCountry(string $value)
+    {
+        $geo = app(GeoService::class);
+        $this->region = '';
+        $this->city   = '';
+        $this->availableRegions = $geo->getStatesByCountry($value);
+        $this->availableCities  = $geo->getCitiesByCountry($value);
+    }
+
+    public function updatedRegion(string $value)
+{
+    $this->city = '';
+    $this->availableCities = app(GeoService::class)
+        ->getCitiesByState($this->country, $value);
+}
     
     #[Computed]
     public function simulations()
@@ -111,8 +144,6 @@ new #[Title('Créer une offre')] class extends Component {
     public string $title = '';
     public string $template = 'technicien';
     public string $description = '';
-    public string $city = 'Douala';
-    public string $region = 'Littoral';
     public ?int $budget_min = null;
     public ?int $budget_max = null;
     public string $language = 'bilingue';
@@ -160,7 +191,7 @@ new #[Title('Créer une offre')] class extends Component {
             $this->validate([
                 'title' => 'required|string|min:5|max:100',
                 'template' => 'required|string',
-                'description' => 'required|string|min:20',
+                'description' => 'required|string|max:200',
                 'city' => 'required|string',
                 'language' => 'required|string',
             ]);
@@ -175,7 +206,24 @@ new #[Title('Créer une offre')] class extends Component {
              ]);
         }
     }
-
+    public string $skill_search_select = '';
+    public string $asset_search_select = '';
+    
+    public function updatedSkillSearchSelect($value): void
+    {
+        if ($value) {
+            $this->addSkill((int) $value);
+            $this->skill_search_select = '';
+        }
+    }
+    
+    public function updatedAssetSearchSelect($value): void
+    {
+        if ($value) {
+            $this->addAsset((int) $value);
+            $this->asset_search_select = '';
+        }
+    }
     public function addSkill($skillId)
     {
         if (!isset($this->selected_skills[$skillId])) {
@@ -225,6 +273,7 @@ new #[Title('Créer une offre')] class extends Component {
             'title' => $this->title,
             'description' => $this->description,
             'template' => $this->template,
+            'country' => $this->country,
             'city' => $this->city,
             'region' => $this->region,
             'blocking_language' => $this->block_language ? $this->language : null,
@@ -263,11 +312,11 @@ new #[Title('Créer une offre')] class extends Component {
     {
         return [
             'managed_companies' => RecruiterProfile::where('is_managed_by', Auth::id())->get(),
-            'available_skills' => $this->skill_search ? Skill::where('name', 'like', "%{$this->skill_search}%")
+                        'available_skills' => $this->skill_search ? Skill::whereAny(['name', 'category'], 'like', "%{$this->skill_search}%")
                 ->whereNotIn('id', array_keys($this->selected_skills))
                 ->limit(10)->get() : collect(),
-            'available_assets' => $this->asset_search ? Asset::where('name', 'like', "%{$this->asset_search}%")
-                ->whereNotIn('id', array_keys($this->selected_assets))
+            'available_assets' => $this->asset_search ? Asset::whereAny(['name', 'category'], 'like', "%{$this->asset_search}%")
+                ->whereNotIn('id', $this->selected_assets)
                 ->limit(10)->get() : collect(),
              'selected_skills_models' => Skill::whereIn('id', array_keys($this->selected_skills))->get(),
              'selected_assets_models' => Asset::whereIn('id', array_keys($this->selected_assets))->get(),
@@ -362,24 +411,35 @@ new #[Title('Créer une offre')] class extends Component {
                         <flux:error name="description" />
                     </flux:field>
 
-                    <flux:field>
-                        <flux:label>Ville</flux:label>
-                        <flux:select wire:model="city">
-                            @foreach (CityEnum::cases() as $item)
-                                <flux:select.option value="{{ $item->value }}">{{ $item->label() }}</flux:select.option>
-                            @endforeach
-                        </flux:select>
-                    </flux:field>
+                    {{-- Pays --}}
+<flux:field>
+    <flux:label>Pays</flux:label>
+    <flux:select wire:model.live="country">
+        @foreach ($availableCountries as $c)
+            <flux:select.option value="{{ $c }}">{{ $c }}</flux:select.option>
+        @endforeach
+    </flux:select>
+</flux:field>
 
-                    <flux:field>
-                        <flux:label>Région</flux:label>
-                        <flux:select wire:model="region">
-                            @foreach (RegionEnum::cases() as $item)
-                                <flux:select.option value="{{ $item->value }}">{{ $item->label() }}</flux:select.option>
-                            @endforeach
-                        </flux:select>
-                    </flux:field>
+{{-- Région/State --}}
+<flux:field>
+    <flux:label>Région</flux:label>
+    <flux:select wire:model.live="region">
+        @foreach ($availableRegions as $r)
+            <flux:select.option value="{{ $r }}">{{ $r }}</flux:select.option>
+        @endforeach
+    </flux:select>
+</flux:field>
 
+{{-- Ville --}}
+<flux:field>
+    <flux:label>Ville</flux:label>
+    <flux:select wire:model="city">
+        @foreach ($availableCities as $c)
+            <flux:select.option value="{{ $c }}">{{ $c }}</flux:select.option>
+        @endforeach
+    </flux:select>
+</flux:field>
                     <flux:field>
                         <flux:label>Budget minimum (FCFA)</flux:label>
                         <flux:input wire:model="budget_min" type="number" placeholder="Optionnel" />
@@ -452,93 +512,142 @@ new #[Title('Créer une offre')] class extends Component {
 
                 <flux:separator />
 
-                {{-- Bloc B — Compétences requises --}}
-                <div class="space-y-4">
-                    <flux:heading size="lg">Compétences requises</flux:heading>
-                    <div class="relative">
-                        <flux:select >
-                            <flux:select.option value="">Choisir une option</flux:select.option>
-                    @foreach (SkillEnum::options() as $skill)
-                    <flux:select.option value="{{ $skill['value'] }}">{{ $skill['label'] }}</flux:select.option>
-                                    
-                                @endforeach
-                        </flux:select>
-                        <flux:input wire:model.live.debounce.300ms="skill_search" icon="magnifying-glass" placeholder="Rechercher une compétence..." />
-                        @if ($available_skills->isNotEmpty())
-                            <div class="absolute z-10 w-full mt-1 bg-white dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 rounded-lg shadow-lg max-h-60 overflow-y-auto">
-                                @foreach ($available_skills as $skill)
-                                    <button wire:click="addSkill({{ $skill->id }})" class="w-full text-left px-4 py-2 hover:bg-zinc-50 dark:hover:bg-zinc-700/50 transition-colors">
-                                        <flux:text class="font-medium">
-                                            {{ \App\Enums\SkillEnum::tryFrom(Str::lower($skill->name))?->label() ?? $skill->name }}
-                                        </flux:text>
-                                        <flux:text size="xs" class="block">{{ $skill->category }}</flux:text>
-                                    </button>
-                                @endforeach
-                            </div>
-                        @endif
-                    </div>
+                
+                <div class="space-y-8" wire:key="step-3-container">
+                    <div class="space-y-4" wire:key="skills-section">
+                        <flux:heading size="lg" class="text-white">Vos compétences</flux:heading>
+                        <flux:text >Ajoutez vos compétences clés et évaluez votre niveau (1 à 5).</flux:text>
 
-                    <div class="space-y-4 bg-zinc-50 dark:bg-zinc-900/50 p-4 rounded-xl">
-                        @forelse ($selected_skills_models as $skill)
-                            <div class="flex items-center justify-between" wire:key="skill-{{ $skill->id }}">
-                                <flux:text class="font-medium">
-                                    {{ \App\Enums\SkillEnum::tryFrom(Str::lower($skill->name))?->label() ?? $skill->name }}
-                                </flux:text>
-                                <div class="flex items-center gap-4">
-                                    <div class="flex gap-1">
-                                        @for ($i = 1; $i <= 5; $i++)
-                                            <button wire:click="updateSkillLevel({{ $skill->id }}, {{ $i }})" @class([
-                                                'w-3 h-3 rounded-full transition-colors',
-                                                'bg-emerald-500' => $i <= $selected_skills[$skill->id],
-                                                'bg-zinc-300 dark:bg-zinc-700 hover:bg-emerald-300' => $i > $selected_skills[$skill->id],
-                                            ]) title="Niveau {{ $i }}/5"></button>
-                                        @endfor
+                        <div class="space-y-2" wire:key="skills-search-container">
+                            {{-- Select groupé par catégorie --}}
+                            <flux:select
+                                wire:model.live="skill_search_select"
+                                placeholder="Choisir depuis la liste..."
+                                searchable
+                                class="bg-zinc-800 border-zinc-700 text-white"
+                            >
+                                @foreach (\App\Enums\SkillCategoryEnum::cases() as $cat)
+                                    @php
+                                        $skillsInCat = \App\Models\Skill::where('category', $cat->label())
+                                            ->whereNotIn('id', array_keys($selected_skills))
+                                            ->get();
+                                    @endphp
+                                    @if ($skillsInCat->isNotEmpty())
+                                        <flux:select.option  class="text-zinc-500 font-bold text-xs uppercase">
+                                            ── {{ $cat->label() }}
+                                        </flux:select.option>
+                                        @foreach ($skillsInCat as $skill)
+                                            <flux:select.option value="{{ $skill->id }}">
+                                                {{ \App\Enums\SkillEnum::tryFrom(Str::lower($skill->name))?->label() ?? $skill->name }}
+                                            </flux:select.option>
+                                        @endforeach
+                                    @endif
+                                @endforeach
+                            </flux:select>
+
+                            {{-- Barre de recherche libre (existante) --}}
+                            <div class="relative" wire:key="skills-search-input-wrapper">
+                                <flux:input wire:model.live.debounce.300ms="skill_search" icon="magnifying-glass" placeholder="Ou rechercher librement..." class="bg-zinc-800 border-zinc-700 text-white" />
+                                @if ($available_skills->isNotEmpty())
+                                    <div class="absolute z-10 w-full mt-1 bg-zinc-800 border border-zinc-700 rounded-lg shadow-lg max-h-60 overflow-y-auto">
+                                        @foreach ($available_skills as $skill)
+                                            <button wire:click="addSkill({{ $skill->id }})" class="w-full text-left px-4 py-2 hover:bg-zinc-700 transition-colors" wire:key="available-skill-{{ $skill->id }}">
+                                                <flux:text class="text-white font-medium">
+                                                    {{ \App\Enums\SkillEnum::tryFrom(Str::lower($skill->name))?->label() ?? $skill->name }}
+                                                </flux:text>
+                                                <flux:text size="xs" class="block text-zinc-400">{{ $skill->category }}</flux:text>
+                                            </button>
+                                        @endforeach
                                     </div>
-                                    <flux:button size="xs" variant="ghost" icon="x-mark" wire:click="removeSkill({{ $skill->id }})" />
-                                </div>
+                                @endif
                             </div>
-                        @empty
-                            <flux:text class="text-center py-4 italic">Aucune compétence sélectionnée.</flux:text>
-                        @endforelse
+                        </div>
+
+                        <div class="space-y-3" wire:key="selected-skills-list">
+                            @foreach ($selected_skills_models as $skill)
+                                <div class="flex items-center justify-between p-3 bg-zinc-800/30 rounded-xl border border-zinc-800" wire:key="skill-{{ $skill->id }}">
+                                    <flux:text class="text-white font-medium">
+                                        {{ \App\Enums\SkillEnum::tryFrom(Str::lower($skill->name))?->label() ?? $skill->name }}
+                                    </flux:text>
+                                    <div class="flex items-center gap-4">
+                                        <div class="flex gap-1">
+                                            @for ($i = 1; $i <= 5; $i++)
+                                                <button wire:click="updateSkillLevel({{ $skill->id }}, {{ $i }})" @class([
+                                                    'w-5 h-5 rounded-md text-[10px] font-bold flex items-center justify-center transition-colors',
+                                                    'bg-emerald-500 text-zinc-950' => $i <= $selected_skills[$skill->id],
+                                                    'bg-zinc-800 text-zinc-500 border border-zinc-700 hover:border-emerald-500' => $i > $selected_skills[$skill->id],
+                                                ]) wire:key="skill-{{ $skill->id }}-level-{{ $i }}">
+                                                    {{ $i }}
+                                                </button>
+                                            @endfor
+                                        </div>
+                                        <flux:button size="xs" variant="ghost" icon="x-mark" class="text-zinc-500" wire:click="removeSkill({{ $skill->id }})" />
+                                    </div>
+                                </div>
+                            @endforeach
+                        </div>
                     </div>
-                    <flux:error name="selected_skills" />
-                </div>
 
-                <flux:separator />
+                    <flux:separator class="bg-zinc-800" />
 
-                {{-- Bloc C — Atouts recherchés (bonus) --}}
-                <div class="space-y-4">
-                    <flux:heading size="lg">Atouts recherchés (bonus)</flux:heading>
-                    <div class="relative">
-                        <flux:input wire:model.live.debounce.300ms="asset_search" icon="magnifying-glass" placeholder="Rechercher un atout..." />
-                        @if ($available_assets->isNotEmpty())
-                            <div class="absolute z-10 w-full mt-1 bg-white dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 rounded-lg shadow-lg max-h-60 overflow-y-auto">
-                                @foreach ($available_assets as $asset)
-                                    <button wire:click="addAsset({{ $asset->id }})" class="w-full text-left px-4 py-2 hover:bg-zinc-50 dark:hover:bg-zinc-700/50 transition-colors">
-                                        <flux:text class="font-medium">{{ $asset->name }}</flux:text>
-                                        <flux:text size="xs" class="block">{{ \App\Enums\AssetEnum::from($asset->category)->label() }}</flux:text>
-                                    </button>
+                    <div class="space-y-4" wire:key="assets-section">
+                        <flux:heading size="lg" class="text-white">Vos atouts supplémentaires</flux:heading>
+                        <flux:text >Secteurs d'expérience, certifications, soft skills...</flux:text>
+                        
+                        <div class="space-y-2" wire:key="assets-search-container">
+                            {{-- Select groupé par catégorie --}}
+                            <flux:select
+                                wire:model.live="asset_search_select"
+                                placeholder="Choisir depuis la liste..."
+                                searchable
+                                class="bg-zinc-800 border-zinc-700 text-white"
+                            >
+                                @foreach (\App\Enums\AssetCategoryEnum::cases() as $cat)
+                                    @php
+                                        $assetsInCat = \App\Models\Asset::where('category', $cat->label())
+                                            ->whereNotIn('id', $selected_assets)
+                                            ->where('is_active', true)
+                                            ->get();
+                                    @endphp
+                                    @if ($assetsInCat->isNotEmpty())
+                                        <flux:select.option  class="text-zinc-500 font-bold text-xs uppercase">
+                                            ── {{ $cat->label() }}
+                                        </flux:select.option>
+                                        @foreach ($assetsInCat as $asset)
+                                            <flux:select.option value="{{ $asset->id }}">
+                                                {{ \App\Enums\AssetEnum::tryFrom(Str::lower($asset->name))?->label() ?? $asset->name }}
+                                                </flux:select.option>
+                                        @endforeach
+                                    @endif
                                 @endforeach
+                            </flux:select>
+
+                            {{-- Barre de recherche libre (existante) --}}
+                            <div class="relative" wire:key="assets-search-input-wrapper">
+                                <flux:input wire:model.live.debounce.300ms="asset_search" icon="magnifying-glass" placeholder="Ou rechercher librement..." class="bg-zinc-800 border-zinc-700 text-white" />
+                                @if ($available_assets->isNotEmpty())
+                                    <div class="absolute z-10 w-full mt-1 bg-zinc-800 border border-zinc-700 rounded-lg shadow-lg max-h-60 overflow-y-auto">
+                                        @foreach ($available_assets as $asset)
+                                            <button wire:click="addAsset({{ $asset->id }})" class="w-full text-left px-4 py-2 hover:bg-zinc-700 transition-colors" wire:key="available-asset-{{ $asset->id }}">
+                                                <flux:text class="text-white font-medium">{{ $asset->name }}</flux:text>
+                                                <flux:text size="xs" class="block text-zinc-400">{{ \App\Enums\AssetCategoryEnum::from($asset->category)->label() }}</flux:text>
+                                            </button>
+                                        @endforeach
+                                    </div>
+                                @endif
                             </div>
-                        @endif
-                    </div>
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        @foreach ($selected_assets_models as $asset)
-                            <div class="flex items-center justify-between p-3 border border-zinc-200 dark:border-zinc-800 rounded-lg bg-zinc-50 dark:bg-zinc-900/50" wire:key="asset-{{ $asset->id }}">
-                                <div class="flex flex-col">
-                                    <flux:text size="sm" class="font-medium">{{ $asset->name }}</flux:text>
-                                    <flux:text size="xs" class="opacity-70">{{ \App\Enums\AssetEnum::from($asset->category)->label() }}</flux:text>
-                                </div>
-                                <div class="flex items-center gap-2">
-                                    <flux:select wire:change="updateAssetPriority({{ $asset->id }}, $event.target.value)" size="sm" class="w-24">
-                                        <option value="Faible" @selected($selected_assets[$asset->id] === 'Faible')>Faible</option>
-                                        <option value="Moyen" @selected($selected_assets[$asset->id] === 'Moyen')>Moyen</option>
-                                        <option value="Fort" @selected($selected_assets[$asset->id] === 'Fort')>Fort</option>
-                                    </flux:select>
-                                    <flux:button size="xs" variant="ghost" icon="x-mark" wire:click="removeAsset({{ $asset->id }})" />
-                                </div>
-                            </div>
-                        @endforeach
+                        </div>
+
+                        <div class="flex flex-wrap gap-2" wire:key="selected-assets-list">
+                            @foreach ($selected_assets_models as $asset)
+                                <flux:badge color="emerald" variant="pill" class="pl-3 pr-1 py-1 gap-2 bg-emerald-500/10 border-emerald-500/20 text-emerald-400" wire:key="asset-badge-{{ $asset->id }}">
+                        {{ \App\Enums\AssetEnum::tryFrom(Str::lower($asset->name))?->label() ?? $asset->name }}
+                                    <button wire:click="removeAsset({{ $asset->id }})" class="hover:text-white">
+                                        <flux:icon.x-mark class="size-3" />
+                                    </button>
+                                </flux:badge>
+                            @endforeach
+                        </div>
                     </div>
                 </div>
             </div>

@@ -1,8 +1,11 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+Route::middleware(['auth', 'verified', 'role:candidate', 'check_suspension'])
+    ->prefix('candidate')
+    ->name('candidate.')
+    ->group(function () {
 
-Route::middleware(['auth', 'verified', 'role:candidate', 'check_suspension'])->prefix('candidate')->name('candidate.')->group(function () {
     // Onboarding
     Route::livewire('onboarding', 'pages::candidate.onboarding')->name('onboarding');
 
@@ -10,12 +13,16 @@ Route::middleware(['auth', 'verified', 'role:candidate', 'check_suspension'])->p
     Route::livewire('/', 'pages::candidate.dashboard')->name('dashboard');
 
     // Offres d'emploi
-        Route::livewire('offers', 'pages::candidate.offers.index')->name('offers.index');
-        Route::livewire('{offer}', 'pages::candidate.offers.show')->name('offers.show');
+    Route::prefix('offers')->name('offers.')->group(function () {
+        Route::livewire('/', 'pages::candidate.offers.index')->name('index');
+        Route::livewire('{offer}', 'pages::candidate.offers.show')->name('show');
+    });
 
     // Candidatures
-        Route::livewire('/applications', 'pages::candidate.applications.index')->name('applications.index');
-        Route::livewire('{application}', 'pages::candidate.applications.show')->name('applications.show');
+    Route::prefix('applications')->name('applications.')->group(function () {
+        Route::livewire('/', 'pages::candidate.applications.index')->name('index');
+        Route::livewire('{application}', 'pages::candidate.applications.show')->name('show');
+    });
 
     // Profil candidat
     Route::prefix('profile')->name('profile.')->group(function () {
@@ -29,7 +36,6 @@ Route::middleware(['auth', 'verified', 'role:candidate', 'check_suspension'])->p
         Route::livewire('/', 'pages::candidate.settings')->name('index');
     });
 
-
     // Avis
-    Route::livewire('/testimonial', 'pages::candidate.testimonial')->name('testimonial');
+    Route::livewire('testimonial', 'pages::candidate.testimonial')->name('testimonial');
 });

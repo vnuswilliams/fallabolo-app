@@ -24,7 +24,8 @@ class RecruiterProfileFactory extends Factory
             'company_sector' => 'Technologie',
             'phone' => '690000000',
             'city' => 'Douala',
-            'country' => 'Cameroun',
+            'region' => 'Littoral',
+            'country' => 'Cameroon',
         ];
     }
 }

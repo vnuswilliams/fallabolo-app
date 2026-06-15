@@ -8,13 +8,12 @@ use App\Models\Asset;
 use App\Models\JobOffer;
 use App\Models\JobRequiredSkill;
 use App\Enums\JobTemplateEnum;
+use App\Services\GeoService;
 use App\Enums\EducationLevelEnum;
 use App\Enums\ExperienceTierEnum;
 use App\Enums\AvailabilityEnum;
 use App\Enums\LanguageProfileEnum;
 use App\Enums\DrivingPermitEnum;
-use App\Enums\CityEnum;
-use App\Enums\RegionEnum;
 use App\Enums\JobStatusEnum;
 use App\Enums\SkillEnum;
 use App\Enums\AssetEnum;
@@ -27,8 +26,31 @@ new #[Title('Modifier l\'offre')] class extends Component {
     public JobOffer $offer;
     public int $step = 1;
 
-    // ... (rest of properties)
+    // Geographic properties
+    public string $country = 'Cameroon';
+    public ?string $region = null;
+    public ?string $city = null;
     
+    public array $availableCountries = [];
+    public array $availableRegions = [];
+    public array $availableCities = [];
+
+    public function updatedCountry(string $value)
+    {
+        $geo = app(GeoService::class);
+        $this->region = '';
+        $this->city   = '';
+        $this->availableRegions = $geo->getStatesByCountry($value);
+        $this->availableCities  = $geo->getCitiesByCountry($value);
+    }
+
+    public function updatedRegion(string $value)
+    {
+        $this->city = '';
+        $this->availableCities = app(GeoService::class)
+            ->getCitiesByState($this->country, $value);
+    }
+
     #[Computed]
     public function simulations()
     {
@@ -112,8 +134,6 @@ new #[Title('Modifier l\'offre')] class extends Component {
     public string $title = '';
     public string $template = 'technicien';
     public string $description = '';
-    public string $city = 'Douala';
-    public string $region = 'Littoral';
     public ?int $budget_min = null;
     public ?int $budget_max = null;
     public string $language = 'bilingue';
@@ -150,8 +170,22 @@ new #[Title('Modifier l\'offre')] class extends Component {
         $this->title = $offer->title;
         $this->template = $offer->template->value;
         $this->description = $offer->description;
-        $this->city = $offer->city;
+        
+        // Load Geo data
+        $geo = app(GeoService::class);
+        $this->availableCountries = $geo->getCountries();
+        
+        $this->country = $offer->country ?? 'Cameroon';
         $this->region = $offer->region;
+        $this->city = $offer->city;
+
+        $this->availableRegions = $geo->getStatesByCountry($this->country);
+        if ($this->region) {
+            $this->availableCities = $geo->getCitiesByState($this->country, $this->region);
+        } else {
+            $this->availableCities = $geo->getCitiesByCountry($this->country);
+        }
+
         $this->budget_min = $offer->budget_min;
         $this->budget_max = $offer->budget_max;
 
@@ -263,6 +297,7 @@ new #[Title('Modifier l\'offre')] class extends Component {
             'title' => $this->title,
             'description' => $this->description,
             'template' => $this->template,
+            'country' => $this->country,
             'city' => $this->city,
             'region' => $this->region,
             'blocking_language' => $this->block_language ? $this->language : null,
@@ -398,20 +433,32 @@ new #[Title('Modifier l\'offre')] class extends Component {
                         <flux:error name="description" />
                     </flux:field>
 
+                    {{-- Pays --}}
                     <flux:field>
-                        <flux:label>Ville</flux:label>
-                        <flux:select wire:model="city">
-                            @foreach (CityEnum::cases() as $item)
-                                <flux:select.option value="{{ $item->value }}">{{ $item->label() }}</flux:select.option>
+                        <flux:label>Pays</flux:label>
+                        <flux:select wire:model.live="country">
+                            @foreach ($availableCountries as $c)
+                                <flux:select.option value="{{ $c }}">{{ $c }}</flux:select.option>
                             @endforeach
                         </flux:select>
                     </flux:field>
 
+                    {{-- Région/State --}}
                     <flux:field>
                         <flux:label>Région</flux:label>
-                        <flux:select wire:model="region">
-                            @foreach (RegionEnum::cases() as $item)
-                                <flux:select.option value="{{ $item->value }}">{{ $item->label() }}</flux:select.option>
+                        <flux:select wire:model.live="region">
+                            @foreach ($availableRegions as $r)
+                                <flux:select.option value="{{ $r }}">{{ $r }}</flux:select.option>
+                            @endforeach
+                        </flux:select>
+                    </flux:field>
+
+                    {{-- Ville --}}
+                    <flux:field>
+                        <flux:label>Ville</flux:label>
+                        <flux:select wire:model="city">
+                            @foreach ($availableCities as $c)
+                                <flux:select.option value="{{ $c }}">{{ $c }}</flux:select.option>
                             @endforeach
                         </flux:select>
                     </flux:field>

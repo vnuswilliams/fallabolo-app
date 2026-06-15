@@ -37,3 +37,4 @@ require __DIR__.'/recruiter.php';
 require __DIR__.'/admin.php';
 require __DIR__.'/candidate.php';
 require __DIR__.'/settings.php';
+require __DIR__.'/api.php';

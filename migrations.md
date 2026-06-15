@@ -196,6 +196,7 @@ assets  ← référencés uniquement dans le JSON required_assets de job_offers
 |`company_sector`|`string`       |nullable                         |Secteur d’activité      |
 |`phone`         |`string`       |nullable                         |Téléphone de contact    |
 |`city`          |`string`       |nullable                         |Ville du siège          |
+|`region`        |`string`       |nullable                         |Région                  |
 |`country`       |`string`       |NOT NULL, défaut `Cameroun`      |Pays                    |
 |`is_managed_by` |`foreignId`    |nullable, FK → `users.id`        |Gestionnaire du compte  |
 |`is_suspended`  |`boolean`      |défaut `false`                  |Si le profil est suspendu|

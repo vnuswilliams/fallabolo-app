@@ -20,6 +20,7 @@ class RecruiterProfile extends Model
         'company_sector',
         'phone',
         'city',
+        'region',
         'country',
         'is_managed_by',
         'is_suspended',

@@ -12,7 +12,6 @@ new #[Title('Mon Profil')] class extends Component {
     }
 }; ?>
 
-<x-layouts::app>
     <div class="max-w-4xl mx-auto">
         <div class="mb-8 flex items-center justify-between">
             <div>
@@ -102,4 +101,3 @@ new #[Title('Mon Profil')] class extends Component {
             </div>
         </div>
     </div>
-</x-layouts::app>

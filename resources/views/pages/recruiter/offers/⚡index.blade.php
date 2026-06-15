@@ -5,6 +5,12 @@ use Livewire\Component;
 use App\Models\JobOffer;
 
 new #[Title('Mes Offres d\'Emploi')] class extends Component {
+    #[Computed]
+    public function baseRoute()
+    {
+        return request()->is('admin/*') ? 'admin.recruitment' : 'recruiter.offers';
+    }
+
     public function offers()
     {
         return auth()->user()->recruiterProfile
@@ -19,7 +25,7 @@ new #[Title('Mes Offres d\'Emploi')] class extends Component {
                 <flux:heading size="xl" level="1">Mes Offres d'Emploi</flux:heading>
                 <flux:subheading>Gérez vos recrutements en cours et passés</flux:subheading>
             </div>
-            <flux:button :href="route('recruiter.offers.create')" variant="primary" icon="plus" wire:navigate>
+            <flux:button :href="route($this->baseRoute.'.create')" variant="primary" icon="plus" wire:navigate>
                 Créer une offre
             </flux:button>
         </div>
@@ -44,10 +50,10 @@ new #[Title('Mes Offres d\'Emploi')] class extends Component {
                         </div>
                     </div>
                     <div class="flex items-center gap-2">
-                        <flux:button :href="route('recruiter.offers.applications', $offer)" variant="ghost" size="sm" icon="users" wire:navigate>
+                        <flux:button :href="route($this->baseRoute.'.applications', $offer)" variant="ghost" size="sm" icon="users" wire:navigate>
                             Candidatures
                         </flux:button>
-                        <flux:button :href="route('recruiter.offers.edit', $offer)" variant="ghost" size="sm" icon="pencil-square" wire:navigate />
+                        <flux:button :href="route($this->baseRoute.'.edit', $offer)" variant="ghost" size="sm" icon="pencil-square" wire:navigate />
                     </div>
                 </flux:card>
             @empty
@@ -56,7 +62,7 @@ new #[Title('Mes Offres d\'Emploi')] class extends Component {
                         <flux:icon.briefcase class="size-12 text-zinc-300 mb-4" />
                         <flux:heading>Aucune offre pour le moment</flux:heading>
                         <flux:subheading class="mb-6">Commencez par publier votre première offre d'emploi.</flux:subheading>
-                        <flux:button :href="route('recruiter.offers.create')" variant="primary" wire:navigate>Créer une offre</flux:button>
+                        <flux:button :href="route($this->baseRoute.'.create')" variant="primary" wire:navigate>Créer une offre</flux:button>
                     </div>
                 </flux:card>
             @endforelse
